@@ -21,9 +21,21 @@ ClaimDesk is a working slice of that product: a case workspace where an attorney
 
 **Policy Q&A with citations and refusal.** Upload a policy → structure-aware ingestion chunks it along the document's own section hierarchy (with true printed page numbers parsed from page footers) → pgvector retrieval → Claude answers strictly from retrieved passages, citing `[Section, p.N]` for every claim. Two independent refusal layers: a retrieval-similarity gate that declines before the model is even called, and a prompt-layer contract that returns exactly "I can't find this in the policy." when the evidence doesn't support an answer. In testing, the refusal answer returns in ~1.5s versus 5–13s for substantive answers — the cheap gate is also the fast path.
 
+![Policy Q&A with section and page citations](images/Maria%27s%20Q%26A.png)
+
 **Demand letter drafting with dynamic retrieval planning.** Instead of hardcoded lookups, a planning step reads the case facts and generates the retrieval queries for *this* claim: the flood case plans NFIP proof-of-loss and federal-suit-limitation queries; the Texas hail case plans "hail damage exclusions cosmetic roof Texas" and appraisal-clause queries. The plan is persisted with every letter and displayed in the UI — explainability, not just logging. Hard drafting rules: cite only provisions verbatim present in retrieved passages; if the passages don't affirmatively support coverage for the claimed peril, omit the coverage argument and flag for attorney review; cases with no policy document get a clean facts-and-damages letter. Every letter carries a prompt version and an attorney-review banner.
 
+*NFIP flood case (Maria Reyes) — retrieval plan tailored to federal flood policy:*
+
+![NFIP flood case retrieval plan](images/maria%20case%20retrieval%20queries%20for%20draft.png)
+
+*Texas hail case (Daniel Okafor) — different peril, different queries:*
+
+![Texas hail case retrieval plan](images/Daniel%20Okafor%20retrieval%20queires%20for%20draft.png)
+
 **Deadline tracking that knows NFIP is different.** Flood claims under the NFIP are governed by a one-year federal suit limitation running from written denial, filed in US District Court — state statutes of limitation do not control (SFIP §VII.O, p.22, the one rule in the table verified from the policy text itself). Other jurisdictions show computed deadlines from clearly-labeled demo data with verify-before-relying disclaimers.
+
+![Case details and jurisdiction-aware deadline tracker](images/deadline%20card.png)
 
 ## The eval suite (the part I'm proudest of)
 
