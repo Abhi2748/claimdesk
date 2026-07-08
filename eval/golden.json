@@ -1,0 +1,220 @@
+{
+  "document": {
+    "title": "NFIP Standard Flood Insurance Policy — Dwelling Form",
+    "form": "F-122",
+    "edition": "October 2021",
+    "pages": 30,
+    "source": "FEMA (public federal document)"
+  },
+  "scoring_rules": {
+    "pass_cite": "Answer must cite at least one section listed in must_cite (page numbers are a bonus check).",
+    "pass_refuse": "If must_refuse is true, the answer must state the policy does not address this, and must NOT invent coverage or exclusions.",
+    "fail_conditions": [
+      "Cites a section that does not exist in the document",
+      "Answers a must_refuse question with invented content",
+      "Gives the opposite coverage conclusion from expected_answer"
+    ]
+  },
+  "questions": [
+    {
+      "id": 1,
+      "difficulty": "easy",
+      "question": "How does this policy define a 'flood'?",
+      "expected_answer": "A general and temporary condition of partial or complete inundation of two or more acres of normally dry land, OR of two or more properties (one of which is yours), from overflow of inland/tidal waters, unusual and rapid accumulation or runoff of surface waters from any source, or mudflow. Also includes collapse/subsidence of land along a lake shore caused by waves/currents exceeding anticipated cyclical levels.",
+      "must_cite": ["II.B"],
+      "pages": [1, 2],
+      "must_refuse": false,
+      "trap_notes": "Baseline lookup. Answer must include the '2+ acres OR 2+ properties' requirement — that detail powers several hard questions below."
+    },
+    {
+      "id": 2,
+      "difficulty": "easy",
+      "question": "What does 'actual cash value' mean under this policy?",
+      "expected_answer": "The cost to replace an insured item of property at the time of loss, less the value of its physical depreciation.",
+      "must_cite": ["II.C.2"],
+      "pages": [2],
+      "must_refuse": false,
+      "trap_notes": "Simple definition lookup."
+    },
+    {
+      "id": 3,
+      "difficulty": "easy",
+      "question": "Is my detached garage covered, and are there any limits or conditions?",
+      "expected_answer": "Yes, under Coverage A, but limited to no more than 10 percent of the dwelling's limit of liability, and using it reduces the building limit. NOT covered if the garage is used or held for use for residential, business, or farming purposes.",
+      "must_cite": ["III.A.3"],
+      "pages": [3],
+      "must_refuse": false,
+      "trap_notes": "Good answers include both the 10% cap AND the use restriction."
+    },
+    {
+      "id": 4,
+      "difficulty": "easy",
+      "question": "My jewelry and my wife's fur coat were destroyed in the flood. How much can we recover for them?",
+      "expected_answer": "Special Limits apply: no more than $2,500 total for any one loss to jewelry, watches, precious stones, gold/silver/platinum articles, furs, artwork, collectibles, rare books, or business personal property (combined).",
+      "must_cite": ["III.B.8"],
+      "pages": [6],
+      "must_refuse": false,
+      "trap_notes": "The $2,500 is a combined per-loss cap across these categories, not per item."
+    },
+    {
+      "id": 5,
+      "difficulty": "easy",
+      "question": "How long do I have to submit a proof of loss, and what form must it take?",
+      "expected_answer": "Within 60 days after the loss, you must send a proof of loss: a statement of the amount claimed, signed and sworn to, with required details (date/time of loss, how it happened, interest of parties, other insurance, repair estimates, inventory of damaged property, etc.). The adjuster helping you does not waive this requirement.",
+      "must_cite": ["VII.G.4"],
+      "pages": [19],
+      "must_refuse": false,
+      "trap_notes": "Critical for a law firm — missed proof-of-loss deadlines kill NFIP claims. 'Signed and sworn' matters."
+    },
+    {
+      "id": 6,
+      "difficulty": "easy",
+      "question": "A flood is coming and I spent money on sandbags and pumps to protect my house. Is that reimbursable?",
+      "expected_answer": "Yes — Loss Avoidance Measures pay up to $1,000 for sandbags (and sand), fill for temporary levees, pumps, plastic sheeting and lumber, plus the value of your own labor at federal minimum wage, provided flood damage was imminent and a general flooding condition occurred nearby or an official evacuation/civil order was issued.",
+      "must_cite": ["III.C.2.a"],
+      "pages": [6, 7],
+      "must_refuse": false,
+      "trap_notes": "Answer should include the $1,000 cap and at least one trigger condition."
+    },
+    {
+      "id": 7,
+      "difficulty": "medium",
+      "question": "What is Increased Cost of Compliance coverage, what is its limit, and does a deductible apply to it?",
+      "expected_answer": "Coverage D pays to comply with state/local floodplain management laws after flood damage (elevation, floodproofing, relocation, demolition), up to $30,000, in addition to Coverage A (but combined A+D cannot exceed the maximum permitted under the Act). No separate deductible is charged for Coverage D claims.",
+      "must_cite": ["III.D.2"],
+      "pages": [8],
+      "must_refuse": false,
+      "trap_notes": "Two-part answer: $30,000 limit AND no deductible. VI.C also confirms the deductible exemption."
+    },
+    {
+      "id": 8,
+      "difficulty": "medium",
+      "question": "I moved my furniture to a storage unit before the flood hit. Is it still covered there, and for how long?",
+      "expected_answer": "Yes — property removed to protect it from flood or imminent danger of flood is covered at the other location for 45 consecutive days from the date you begin moving it there. It must be in a fully enclosed building or reasonably protected, and placed above ground level or outside the SFHA. Up to $1,000 of reasonable moving expenses is also payable.",
+      "must_cite": ["III.C.2.b"],
+      "pages": [7],
+      "must_refuse": false,
+      "trap_notes": "The 45-day window is the key fact; the $1,000 moving expense is separate from the 45-day coverage."
+    },
+    {
+      "id": 9,
+      "difficulty": "medium",
+      "question": "My washer and dryer are in the basement. Are they covered?",
+      "expected_answer": "Yes — clothes washers and dryers are one of only three categories of personal property covered in a basement (along with portable/window air conditioning units and food freezers with their food), provided they are installed in their functioning locations and connected to a power source if necessary for operation, and personal property coverage was purchased.",
+      "must_cite": ["III.B.5"],
+      "pages": [5, 6],
+      "must_refuse": false,
+      "trap_notes": "Trap direction: most basement contents are NOT covered — washer/dryer is a narrow exception. Wrong answer patterns: 'no basement contents are covered' or 'all contents covered.'"
+    },
+    {
+      "id": 10,
+      "difficulty": "medium",
+      "question": "Which coverages under this policy are NOT subject to the deductible?",
+      "expected_answer": "The deductible does not apply to: Loss Avoidance Measures (III.C.2), Condominium Loss Assessments (III.C.3), and Increased Cost of Compliance (III.D).",
+      "must_cite": ["VI.C"],
+      "pages": [14],
+      "must_refuse": false,
+      "trap_notes": "Exact three-item list; partial answers should score partial/fail."
+    },
+    {
+      "id": 11,
+      "difficulty": "medium",
+      "question": "Will my dwelling loss be paid at replacement cost or actual cash value?",
+      "expected_answer": "Replacement cost applies only if the dwelling is a single-family dwelling that is your PRINCIPAL RESIDENCE (lived in ≥80% of the preceding 365 days) AND insured to at least 80 percent of its full replacement cost (or the NFIP maximum). Otherwise, actual cash value settlement applies. Personal property, appliances, carpets, detached garages, and non-principal residences are always ACV.",
+      "must_cite": ["VII.R.1.a", "VII.R.4"],
+      "pages": [26, 27],
+      "must_refuse": false,
+      "trap_notes": "Multi-condition reasoning; both the principal-residence test and the 80% insurance-to-value test must appear. II.C.25 defines principal residence."
+    },
+    {
+      "id": 12,
+      "difficulty": "medium",
+      "question": "The insurer denied my claim. How long do I have to sue, and where must I file?",
+      "expected_answer": "Suit must be started within ONE YEAR after the date of the written denial of all or part of the claim, and must be filed in the United States District Court for the district where the insured property was located at the time of loss. You must also have complied with all policy requirements first.",
+      "must_cite": ["VII.O"],
+      "pages": [22],
+      "must_refuse": false,
+      "trap_notes": "Gold for a law firm demo: NFIP suits are federal with a 1-year clock — NOT state statutes of limitation. Wrong answer pattern: citing generic state SOL periods."
+    },
+    {
+      "id": 13,
+      "difficulty": "medium",
+      "question": "Our in-ground swimming pool and its pump equipment were wrecked by the flood. Covered?",
+      "expected_answer": "No. Swimming pools and their equipment (heaters, filters, pumps, pipes), wherever located, are listed under Property Not Insured. Hot tubs and spas are also excluded unless they are bathroom fixtures.",
+      "must_cite": ["IV.14"],
+      "pages": [12],
+      "must_refuse": false,
+      "trap_notes": "Must be answered from Section IV (Property Not Insured), not V (Exclusions) — tests whether retrieval distinguishes the two lists."
+    },
+    {
+      "id": 14,
+      "difficulty": "hard",
+      "question": "A pipe burst inside my house and flooded my kitchen and living room. Is this water damage covered?",
+      "expected_answer": "No. Two independent reasons: (1) this event does not meet the policy's definition of flood, which requires a general and temporary condition of inundation of 2+ acres or 2+ properties (II.B); and (2) the policy expressly excludes water damage resulting primarily from a condition substantially confined to the dwelling or within your control, including failure, stoppage, or breakage of water or sewer lines, drains, pumps, fixtures, or equipment (V.D.4).",
+      "must_cite": ["V.D.4", "II.B"],
+      "pages": [13, 1],
+      "must_refuse": false,
+      "trap_notes": "THE flagship trap. Naive systems retrieve 'water damage' language and answer yes. Correct answer requires the flood definition and/or the V.D.4 exclusion. Citing only one of the two grounds = pass; citing neither = fail."
+    },
+    {
+      "id": 15,
+      "difficulty": "hard",
+      "question": "During heavy rains, sewage backed up through my drains and damaged my floors. Am I covered?",
+      "expected_answer": "It depends — covered ONLY IF there is a flood in the area and the flood is the proximate cause of the sewer/drain backup. Sewer backup, sump pump discharge/overflow, or seepage without a proximate-cause flood in the area is excluded (V.D.5). Heavy rain alone is not a flood unless it meets the II.B definition (2+ acres or 2+ properties inundated).",
+      "must_cite": ["V.D.5"],
+      "pages": [13, 14],
+      "must_refuse": false,
+      "trap_notes": "Conditional answer required. Systems that answer flatly 'yes' or 'no' without the proximate-cause condition fail. This is the classic NFIP confusion cited in FEMA's own consumer guidance."
+    },
+    {
+      "id": 16,
+      "difficulty": "hard",
+      "question": "Floodwaters saturated the hillside behind my house and triggered a landslide that damaged my foundation. Since the flood caused it, I'm covered, right?",
+      "expected_answer": "No. Earth movement is excluded EVEN IF caused by flood — including landslide, land subsidence, sinkholes, destabilization from subsurface water accumulation, and gradual erosion (V.C). However, MUDFLOW (a river of liquid flowing mud on the surface of normally dry land) IS covered because it is part of the definition of flood (II.B.1.c, II.C.20) — and the definition explicitly distinguishes mudflow from landslide/slope failure/saturated soil mass movement.",
+      "must_cite": ["V.C", "II.C.20"],
+      "pages": [13, 2, 3],
+      "must_refuse": false,
+      "trap_notes": "Hardest reasoning question: 'caused by flood' does NOT defeat the earth-movement exclusion, yet mudflow is covered. Requires connecting an exclusion, a definition, and the flood definition. LLMs frequently conflate mudflow and landslide."
+    },
+    {
+      "id": 17,
+      "difficulty": "hard",
+      "question": "My house is uninhabitable during repairs. Will the policy pay for our hotel and extra meal costs?",
+      "expected_answer": "No. The policy expressly excludes additional living expenses incurred while the insured building is being repaired or is unable to be occupied, as well as loss of use, loss of access, loss of revenue/profits, and any other economic loss (V.A).",
+      "must_cite": ["V.A.5"],
+      "pages": [12],
+      "must_refuse": false,
+      "trap_notes": "Trap for models trained on standard homeowners policies where ALE/Coverage D loss-of-use is standard. This is NOT a refusal question — the policy explicitly addresses and excludes it. A refusal here = fail."
+    },
+    {
+      "id": 18,
+      "difficulty": "hard",
+      "question": "My finished basement rec room — painted drywall, taped seams, and wall-to-wall carpet over the concrete — was destroyed. What exactly will the policy pay for?",
+      "expected_answer": "Very little of it. In a basement, building coverage for drywall is limited to drywall for walls and ceilings that is UNFINISHED, unfloated, and NOT TAPED, plus the labor to nail it to framing (III.A.8.a(3)) — so finished/painted/taped drywall exceeds what is covered. Carpet is not in the basement building list, and basement personal-property coverage is limited to portable AC units, washers/dryers, and food freezers (III.B.5) — so the carpet is not covered. Clean-up is covered (III.A.8.b).",
+      "must_cite": ["III.A.8", "III.B.5"],
+      "pages": [5, 6],
+      "must_refuse": false,
+      "trap_notes": "Multi-hop across two lists. The 'unfinished, unfloated, not taped' drywall detail is a famous NFIP gotcha; a correct answer must convey the finished materials are NOT fully covered."
+    },
+    {
+      "id": 19,
+      "difficulty": "hard",
+      "question": "I own a condo unit with this Dwelling Form policy, and my condo association also has an RCBAP. Can I collect under both policies for the same damage?",
+      "expected_answer": "Both policies may exist, but no more than $250,000 may be paid in combined benefits for a single unit under the Dwelling Form policy and the RCBAP, damage is only paid once, and items paid under the RCBAP cannot also be claimed under the Dwelling Form policy (I.G). The Dwelling policy is generally excess over the association's NFIP insurance (VII.B.2).",
+      "must_cite": ["I.G"],
+      "pages": [1],
+      "must_refuse": false,
+      "trap_notes": "Numeric precision + anti-double-recovery rule. The $250,000 combined cap is the key fact."
+    },
+    {
+      "id": 20,
+      "difficulty": "refusal",
+      "question": "A guest slipped in my flooded living room and broke her arm. Does this policy cover my personal liability for her injury?",
+      "expected_answer": "REFUSAL REQUIRED: This policy does not address personal liability coverage anywhere. The system must say it cannot find this in the policy (the SFIP insures property only — building and personal property — and provides no liability coverage), and must NOT invent a liability provision or cite an unrelated section.",
+      "must_cite": [],
+      "pages": [],
+      "must_refuse": true,
+      "trap_notes": "The pure refusal gate. Any invented section citation here is an automatic, severe fail — this is the malpractice scenario the whole system exists to prevent."
+    }
+  ]
+}
