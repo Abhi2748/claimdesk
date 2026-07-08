@@ -3,6 +3,7 @@ import { resolve } from "node:path";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { REFUSAL_MESSAGE } from "../lib/qa/constants";
 import { answerPolicyQuestion } from "../lib/qa/pipeline";
+import type { PolicyCitation } from "../lib/qa/types";
 
 loadEnvLocal();
 
@@ -34,8 +35,10 @@ interface EvalRow {
   status: EvalStatus;
   topSimilarity: string;
   latencyMs: number;
+  question: string;
   answer: string;
   notes: string;
+  retrievedChunks: PolicyCitation[];
 }
 
 function loadEnvLocal() {
@@ -271,6 +274,37 @@ function writeMarkdown(rows: EvalRow[], documentId: string) {
   console.log(`\nWrote ${outPath}`);
 }
 
+function writeTranscripts(rows: EvalRow[]) {
+  const failures = rows.filter((r) => r.status === "FAIL");
+  if (failures.length === 0) {
+    return;
+  }
+
+  let md = `# Eval Failure Transcripts\n\n`;
+  md += `Run: ${new Date().toISOString()}\n\n`;
+  md += `${failures.length} FAIL(s) — full question, model answer, and retrieved chunks.\n\n`;
+
+  for (const row of failures) {
+    md += `---\n\n`;
+    md += `## Q${row.id} (${row.difficulty}) — ${row.notes}\n\n`;
+    md += `### Question\n\n${row.question}\n\n`;
+    md += `### Model answer\n\n${row.answer || "_(empty)_"}\n\n`;
+    md += `### Retrieved chunks (${row.retrievedChunks.length})\n\n`;
+    if (row.retrievedChunks.length === 0) {
+      md += `_No chunks retrieved._\n\n`;
+    } else {
+      for (const [i, chunk] of row.retrievedChunks.entries()) {
+        md += `${i + 1}. **${chunk.sectionLabel}** — similarity ${chunk.similarity.toFixed(3)}\n`;
+      }
+      md += `\n`;
+    }
+  }
+
+  const outPath = resolve(process.cwd(), "eval/transcripts.md");
+  writeFileSync(outPath, md, "utf-8");
+  console.log(`Wrote ${outPath}`);
+}
+
 async function main() {
   const url = requireEnv("NEXT_PUBLIC_SUPABASE_URL");
   const anonKey = requireEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY");
@@ -310,8 +344,10 @@ async function main() {
         status: "FAIL",
         topSimilarity: "—",
         latencyMs,
+        question: q.question,
         answer: "",
         notes: err instanceof Error ? err.message : "Unknown error",
+        retrievedChunks: [],
       });
       if (i < golden.questions.length - 1) await sleep(DELAY_MS);
       continue;
@@ -327,8 +363,10 @@ async function main() {
       topSimilarity:
         result.topSimilarity != null ? result.topSimilarity.toFixed(3) : "—",
       latencyMs,
+      question: q.question,
       answer: result.answer,
       notes,
+      retrievedChunks: result.retrievedChunks,
     });
 
     if (i < golden.questions.length - 1) {
@@ -352,6 +390,7 @@ async function main() {
   );
 
   writeMarkdown(rows, documentId);
+  writeTranscripts(rows);
 }
 
 main().catch((err) => {

@@ -14,6 +14,8 @@ const ROMAN_SECTION =
   /^(I{1,3}|IV|V|VI{0,3}|IX|X|XI|XII)\.\s+(.+)$/;
 const LETTER_SUBSECTION = /^([A-Z])\.\s+(.+)$/;
 const NUMBER_SUBSECTION = /^(\d+)\.\s+(.+)$/;
+/** Third-level lettered items e.g. "a. Sandbags, Supplies, and Labor" under III.C.2 */
+const SUB_LETTER_SUBSECTION = /^([a-z])\.\s+(.+)$/;
 /** Printed page footers e.g. "NFIP DWELLING FORM SFIP PAGE 3 OF 30" */
 const PAGE_FOOTER = /PAGE\s+(\d+)\s+OF\s+(\d+)/i;
 
@@ -160,6 +162,7 @@ function splitByHeadings(lines: LineWithPage[]): SectionDraft[] {
   let roman: string | null = null;
   let letter: string | null = null;
   let number: string | null = null;
+  let subLetter: string | null = null;
   let currentLabel = "Preamble";
   let currentLines: LineWithPage[] = [];
 
@@ -175,6 +178,7 @@ function splitByHeadings(lines: LineWithPage[]): SectionDraft[] {
     if (roman) parts.push(roman);
     if (letter) parts.push(letter);
     if (number) parts.push(number);
+    if (subLetter) parts.push(subLetter);
     const prefix = parts.join(".");
     if (title && prefix) return `${prefix} ${title}`;
     if (prefix) return prefix;
@@ -193,6 +197,7 @@ function splitByHeadings(lines: LineWithPage[]): SectionDraft[] {
         roman = numeral;
         letter = null;
         number = null;
+        subLetter = null;
         currentLabel = buildLabel(title);
         currentLines.push(line);
         continue;
@@ -204,6 +209,7 @@ function splitByHeadings(lines: LineWithPage[]): SectionDraft[] {
       flush();
       letter = letterMatch[1]!;
       number = null;
+      subLetter = null;
       currentLabel = buildLabel(letterMatch[2]!.trim());
       currentLines.push(line);
       continue;
@@ -213,7 +219,17 @@ function splitByHeadings(lines: LineWithPage[]): SectionDraft[] {
     if (numberMatch && roman) {
       flush();
       number = numberMatch[1]!;
+      subLetter = null;
       currentLabel = buildLabel(numberMatch[2]!.trim());
+      currentLines.push(line);
+      continue;
+    }
+
+    const subLetterMatch = line.text.match(SUB_LETTER_SUBSECTION);
+    if (subLetterMatch && roman && number) {
+      flush();
+      subLetter = subLetterMatch[1]!;
+      currentLabel = buildLabel(subLetterMatch[2]!.trim());
       currentLines.push(line);
       continue;
     }

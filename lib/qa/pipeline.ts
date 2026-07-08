@@ -41,19 +41,7 @@ export async function answerPolicyQuestion(
   const chunks = (matches ?? []) as MatchChunkResult[];
   const topSimilarity = chunks[0]?.similarity ?? null;
 
-  if (
-    chunks.length === 0 ||
-    (chunks[0]?.similarity ?? 0) < REFUSAL_SIMILARITY_THRESHOLD
-  ) {
-    return {
-      answer: REFUSAL_MESSAGE,
-      citations: [],
-      refused: true,
-      topSimilarity,
-    };
-  }
-
-  const citations: PolicyCitation[] = chunks.map((c) => ({
+  const retrievedChunks: PolicyCitation[] = chunks.map((c) => ({
     id: c.id,
     sectionLabel: c.section_label ?? "Section",
     pageStart: c.page_start,
@@ -61,6 +49,21 @@ export async function answerPolicyQuestion(
     content: c.content,
     similarity: c.similarity,
   }));
+
+  if (
+    chunks.length === 0 ||
+    (chunks[0]?.similarity ?? 0) < REFUSAL_SIMILARITY_THRESHOLD
+  ) {
+    return {
+      answer: REFUSAL_MESSAGE,
+      citations: [],
+      retrievedChunks,
+      refused: true,
+      topSimilarity,
+    };
+  }
+
+  const citations = retrievedChunks;
 
   const passages = citations.map((c, i) => ({
     index: i + 1,
@@ -76,6 +79,7 @@ export async function answerPolicyQuestion(
   return {
     answer,
     citations: refused ? [] : citations,
+    retrievedChunks,
     refused,
     topSimilarity,
   };

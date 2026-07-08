@@ -10,6 +10,8 @@ export interface PolicyCitation {
 export interface PolicyQAResult {
   answer: string;
   citations: PolicyCitation[];
+  /** All chunks returned by match_chunks (even when similarity gate refuses). */
+  retrievedChunks: PolicyCitation[];
   refused: boolean;
   topSimilarity: number | null;
 }

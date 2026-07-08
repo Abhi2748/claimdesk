@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ClaimDesk
 
-## Getting Started
+**AI-native case management for policyholder-side insurance law — with citations you can trust.**
 
-First, run the development server:
+Built solo in one sprint, in the exact stack a modern legal-tech product runs on: Next.js 15 (App Router) · TypeScript · Supabase (Postgres, Auth, Storage, RLS, pgvector) · Anthropic Claude · Vercel.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+> **Live demo:** [URL] · **4-minute walkthrough:** [Loom link]
+> All client data is fictional. The insurance policy analyzed is a real, public federal document: the NFIP Standard Flood Insurance Policy, Dwelling Form F-122 (October 2021).
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## The problem
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Attorneys who represent policyholders against insurance carriers live inside two documents: the client's policy (60–100 pages of dense, hierarchical legalese) and the insurer's lowball or denial letter. Answering "is this covered, and up to how much?" means an hour of page-flipping, and drafting the demand letter that follows means two more. An AI assistant can collapse that to minutes — but only if it never invents a provision, because a demand letter citing a section that doesn't exist loses the firm's credibility in one click.
 
-## Learn More
+ClaimDesk is a working slice of that product: a case workspace where an attorney uploads a policy, asks coverage questions and gets answers with pinpoint section-and-page citations (or an honest refusal), generates a first-draft demand letter that can only cite provisions actually present in the policy, and sees jurisdiction-aware deadlines — all behind row-level security, all measured by an eval suite that gates every change.
 
-To learn more about Next.js, take a look at the following resources:
+## What it does
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**Case workspace.** Cases with claim type, insurer, state, dates, amounts, and a status pipeline; document upload into private storage; five seeded fictional matters across KY, TX, FL, TN, and MT.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**Policy Q&A with citations and refusal.** Upload a policy → structure-aware ingestion chunks it along the document's own section hierarchy (with true printed page numbers parsed from page footers) → pgvector retrieval → Claude answers strictly from retrieved passages, citing `[Section, p.N]` for every claim. Two independent refusal layers: a retrieval-similarity gate that declines before the model is even called, and a prompt-layer contract that returns exactly "I can't find this in the policy." when the evidence doesn't support an answer. In testing, the refusal answer returns in ~1.5s versus 5–13s for substantive answers — the cheap gate is also the fast path.
 
-## Deploy on Vercel
+**Demand letter drafting with dynamic retrieval planning.** Instead of hardcoded lookups, a planning step reads the case facts and generates the retrieval queries for *this* claim: the flood case plans NFIP proof-of-loss and federal-suit-limitation queries; the Texas hail case plans "hail damage exclusions cosmetic roof Texas" and appraisal-clause queries. The plan is persisted with every letter and displayed in the UI — explainability, not just logging. Hard drafting rules: cite only provisions verbatim present in retrieved passages; if the passages don't affirmatively support coverage for the claimed peril, omit the coverage argument and flag for attorney review; cases with no policy document get a clean facts-and-damages letter. Every letter carries a prompt version and an attorney-review banner.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Deadline tracking that knows NFIP is different.** Flood claims under the NFIP are governed by a one-year federal suit limitation running from written denial, filed in US District Court — state statutes of limitation do not control (SFIP §VII.O, p.22, the one rule in the table verified from the policy text itself). Other jurisdictions show computed deadlines from clearly-labeled demo data with verify-before-relying disclaimers.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## The eval suite (the part I'm proudest of)
+
+Before writing any pipeline code, I read the full 30-page policy and wrote a 20-question golden test set with verified answers and citations — including deliberate traps: a burst-pipe question where naive RAG confidently answers wrong (the correct answer requires the policy's definition of "flood" plus an exclusion), a mudflow-vs-landslide question that requires connecting a definition to an exclusion that applies "even if caused by flood," an additional-living-expenses question where *refusing* is the failure (the policy explicitly excludes it), and a liability question the policy never addresses, where anything but refusal is a severe failure.
+
+**Current result: 17/20 pass, 0 severe failures.** Scoring is strict: a pass requires citing the exact expected section; a severe failure is an invented citation or a substantive answer to a must-refuse question.
+
+| Outcome | Count | Notes |
+|---|---|---|
+| PASS | 17/20 | includes all five designed trap questions |
+| FAIL | 3/20 | all three are citation-granularity / similarity-vs-relevance retrieval misses; answers were substantively correct or honestly hedged, never fabricated |
+| SEVERE | 0/20 | no invented citations; refusal contract intact |
+
+**The eval earned its keep three times in one afternoon.** It detected a silent no-op deployment (identical similarity scores across runs revealed the re-indexing never took effect). It caught chunks inserted without embeddings — invisible to search, invisible to eyeballing. And most importantly, it **rejected one of my own improvements**: a multi-granularity chunking experiment lifted the score to 18/20 — including fixing the hardest question — but broke the refusal contract with one severe failure. Per the gate's hard constraints, I reverted the change and shipped 17/0 instead of 18/1; the experiment lives on a branch as the seed of the retrieval roadmap below. For a legal tool, a system that fails honestly beats a system that occasionally invents.
+
+## Architecture notes
+
+**Security is enforced at the database layer.** Every table carries Row Level Security scoped to the owning user; the storage bucket is private with owner-only policies; the vector-search RPC runs as SECURITY INVOKER so RLS applies inside retrieval too. Even a bug in application code cannot serve one client's documents to another user.
+
+**Chunking follows the document's own structure.** Insurance policies are hierarchical legal machines; chunks are cut along the policy's section seams and carry section labels plus true printed page numbers (parsed from "PAGE N OF M" footers — the PDF's file page index is off by the front matter, a bug this project found the hard way when a drafted letter cited correct quotes with wrong section numbers). A structural-consistency rule resolves the classic Roman-numeral-vs-letter ambiguity ("I. No Benefit to Bailee" under Section VII is the letter I, not a new Section I: after VII, only VIII can follow).
+
+**Grounding prevents fabrication — not misapplication.** An adversarial test (drafting a hail-claim letter against a deliberately mismatched flood policy) produced a letter whose every citation was real but whose coverage argument was wrong: retrieval returned peril-neutral passages that "looked supportive." The fix is a coverage gate in the drafting prompt plus exclusion-targeted planning queries; the deeper fix is on the roadmap. Layered defenses, each catching a different failure class: retrieval gate → grounding prompt → coverage gate → eval traps → attorney-review banner.
+
+## Honest limitations & roadmap
+
+The three remaining eval failures share one root cause: **similarity is not relevance.** Embedding retrieval ranks passages by vocabulary resemblance, and questions whose surface wording points away from their legal subject (a "what will the policy pay" question retrieving loss-*settlement* sections instead of the basement-*items* provisions) can miss the controlling text. My rejected experiment showed hierarchical context largely fixes this — at the cost of a refusal regression — which motivates the next milestone: **reasoning-based retrieval** (a table-of-contents tree the model navigates like a human expert, in the spirit of vectorless/PageIndex-style approaches), benchmarked head-to-head against the pgvector baseline on this same golden set, with accuracy, trap-catch rate, latency, and cost reported. The harness for that bake-off is already built.
+
+Also on the roadmap: multi-format ingestion (the current parser is calibrated to this document family; ingestion-quality metrics flag low-confidence documents rather than silently degrading), LLM-generated document trees for format-agnostic structure extraction, a legal-domain embeddings A/B (voyage-law-2), DOCX export, and CI that runs the eval on every prompt change.
+
+Known scope cuts, deliberately: single-document depth over multi-document breadth; no OCR for scanned PDFs; state deadline data is demo-labeled, not legal advice.
+
+## Running locally
+
+Clone; `npm install`; create a Supabase project with the `vector` extension enabled; run `supabase/migrations/*.sql` in order (create your auth user first and paste its UUID into the seed block of 001); copy `.env.example` to `.env.local` and fill in Supabase URL/anon key, `ANTHROPIC_API_KEY`, `OPENAI_API_KEY` (embeddings), and eval credentials; `npm run dev`. Run the eval with `npx tsx eval/run-eval.ts` — results land in `eval/results.md`, failure transcripts in `eval/transcripts.md`.
+
+---
+
+*Built by Abhishek Reddy Gorla — [GitHub] · [email] · [LinkedIn]*
+*Fictional demo. Not legal advice. The NFIP policy form is a public FEMA document analyzed for demonstration.*
