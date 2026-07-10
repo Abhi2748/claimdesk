@@ -1,0 +1,2813 @@
+{
+  "generatedAt": "2026-07-10T02:55:54.311Z",
+  "documentId": "e11b7bdf-948c-4fb8-9b63-1d8a462ce57e",
+  "documentTitle": "NFIP Standard Flood Insurance Policy — Dwelling Form",
+  "questions": [
+    {
+      "id": 1,
+      "difficulty": "easy",
+      "question": "How does this policy define a 'flood'?",
+      "trap_notes": "Baseline lookup. Answer must include the '2+ acres OR 2+ properties' requirement — that detail powers several hard questions below.",
+      "must_cite": [
+        "II.B"
+      ],
+      "must_refuse": false,
+      "vector": {
+        "answer": "The policy passage for the definition of \"flood\" ([II.B Flood, as used in this flood insurance policy, means:, p.1]) is referenced in the provided materials, but the actual definitional text that follows the heading was not included in the passages supplied.\n\nI can't find this in the policy.",
+        "refused": false,
+        "status": "PASS",
+        "notes": "Cited II.B",
+        "latencyMs": 4421,
+        "topSimilarity": 0.735672994138689,
+        "navigationPath": [],
+        "navigationBreadcrumb": "",
+        "citations": [
+          {
+            "sectionLabel": "II.B Flood, as used in this flood insurance policy, means:",
+            "pageStart": 1,
+            "pageEnd": 1
+          },
+          {
+            "sectionLabel": "III.D.1 General",
+            "pageStart": 8,
+            "pageEnd": 8
+          },
+          {
+            "sectionLabel": "V.B Flood in Progress. If this policy",
+            "pageStart": 12,
+            "pageEnd": 13
+          },
+          {
+            "sectionLabel": "Preamble",
+            "pageStart": 1,
+            "pageEnd": 1
+          },
+          {
+            "sectionLabel": "X WHAT LAW GOVERNS",
+            "pageStart": 30,
+            "pageEnd": 30
+          },
+          {
+            "sectionLabel": "V.D.10 Alteration of the insured property",
+            "pageStart": 14,
+            "pageEnd": 14
+          }
+        ]
+      },
+      "tree": {
+        "answer": "Under this policy, \"flood\" is defined as encompassing two distinct scenarios:\n\n**Scenario 1 – General Inundation:**\nA general and temporary condition of partial or complete inundation of either two or more acres of normally dry land, or two or more properties (one of which must be the insured's property), caused by any of the following: [II.B.1, p.1]\n\n- **Overflow of inland or tidal waters** [II.B.1.a, p.1]\n- **Unusual and rapid accumulation or runoff of surface waters from any source** [II.B.1.b, p.1]\n- **Mudflow** [II.B.1.c, p.1]\n\n**Scenario 2 – Shoreline Collapse:**\nCollapse or subsidence of land along the shore of a lake or similar body of water, provided it results from erosion or undermining caused by waves or currents of water exceeding anticipated cyclical levels, and that it results in a flood as defined under the overflow of inland or tidal waters provision above. [II.B.2, p.1-2]\n\nIt is worth noting that both scenarios require either the two-acre or two-property threshold to be met, and the cause must fall within one of the enumerated categories. No broader or alternative definitions are supported by the available policy passages.",
+        "refused": false,
+        "status": "PASS",
+        "notes": "Cited II.B",
+        "latencyMs": 8939,
+        "topSimilarity": null,
+        "navigationPath": [
+          {
+            "hop": 1,
+            "consideredNodeIds": [
+              "0001",
+              "0002",
+              "0006",
+              "0026",
+              "0027",
+              "0034",
+              "0035",
+              "0059",
+              "0065",
+              "0066"
+            ],
+            "pickedNodeIds": [
+              "0002"
+            ],
+            "reasoning": "Section II (Definitions) explicitly defines 'flood' and other key terms used throughout the policy, making it the direct source for the policy's definition of 'flood.'"
+          },
+          {
+            "hop": 2,
+            "consideredNodeIds": [
+              "0003",
+              "0004",
+              "0005"
+            ],
+            "pickedNodeIds": [
+              "0004"
+            ],
+            "reasoning": "Section II.B is specifically dedicated to defining 'flood' and its summary directly covers the question."
+          }
+        ],
+        "navigationBreadcrumb": "II → II.B",
+        "citations": [
+          {
+            "sectionLabel": "II.B Flood, as used in this flood insurance policy, means:",
+            "pageStart": 1,
+            "pageEnd": 1
+          },
+          {
+            "sectionLabel": "II.B.1 A general and temporary condition of partial",
+            "pageStart": 1,
+            "pageEnd": 1
+          },
+          {
+            "sectionLabel": "II.B.1.a Overflow of inland or tidal waters;",
+            "pageStart": 1,
+            "pageEnd": 1
+          },
+          {
+            "sectionLabel": "II.B.1.b Unusual and rapid accumulation or runoff of",
+            "pageStart": 1,
+            "pageEnd": 1
+          },
+          {
+            "sectionLabel": "II.B.1.c Mudflow.",
+            "pageStart": 1,
+            "pageEnd": 1
+          },
+          {
+            "sectionLabel": "II.B.2 Collapse or subsidence of land along the shore of a",
+            "pageStart": 1,
+            "pageEnd": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "difficulty": "easy",
+      "question": "What does 'actual cash value' mean under this policy?",
+      "trap_notes": "Simple definition lookup.",
+      "must_cite": [
+        "II.C.2"
+      ],
+      "must_refuse": false,
+      "vector": {
+        "answer": "Under this policy, **actual cash value** is defined as the cost to replace an insured item of property at the time of loss, **less the value of its physical depreciation** [II.C.2, p.2].\n\nIt is worth noting that actual cash value loss settlement is one of three available loss settlement methods under the policy — the others being Replacement Cost and Special Loss Settlement — with each method applying to different types of property [VII.R.1, p.26]. Actual cash value settlement applies specifically to a single-family dwelling not subject to replacement cost or special loss settlement, as well as to certain other listed property [VII.R.1.c, p.26].",
+        "refused": false,
+        "status": "PASS",
+        "notes": "Cited II.C.2",
+        "latencyMs": 3813,
+        "topSimilarity": 0.72639200513096,
+        "navigationPath": [],
+        "navigationBreadcrumb": "",
+        "citations": [
+          {
+            "sectionLabel": "II.C.2 Actual Cash Value. The cost to replace an insured",
+            "pageStart": 2,
+            "pageEnd": 2
+          },
+          {
+            "sectionLabel": "VII.H.2.b Actual cash values or",
+            "pageStart": 20,
+            "pageEnd": 20
+          },
+          {
+            "sectionLabel": "VII.R.4 Actual Cash Value Loss Settlement",
+            "pageStart": 27,
+            "pageEnd": 27
+          },
+          {
+            "sectionLabel": "VII.R.1.c Actual Cash Value Loss Settlement applies",
+            "pageStart": 26,
+            "pageEnd": 26
+          },
+          {
+            "sectionLabel": "VII.R.1 Introduction",
+            "pageStart": 26,
+            "pageEnd": 26
+          },
+          {
+            "sectionLabel": "VII.R.2.d You may disregard the replacement cost",
+            "pageStart": 26,
+            "pageEnd": 26
+          }
+        ]
+      },
+      "tree": {
+        "answer": "Under this policy, **Actual Cash Value** is defined as the cost to replace an insured item of property at the time of loss, **less the value of its physical depreciation** [II.C.2, p.2].\n\nIn practical terms for claims purposes, this means any settlement for a covered item would account for wear and tear or age-related reduction in value — the insurer would not pay the full replacement cost, but rather the depreciated value of the property at the time the loss occurred.",
+        "refused": false,
+        "status": "PASS",
+        "notes": "Cited II.C.2",
+        "latencyMs": 6784,
+        "topSimilarity": null,
+        "navigationPath": [
+          {
+            "hop": 1,
+            "consideredNodeIds": [
+              "0001",
+              "0002",
+              "0006",
+              "0026",
+              "0027",
+              "0034",
+              "0035",
+              "0059",
+              "0065",
+              "0066"
+            ],
+            "pickedNodeIds": [
+              "0002"
+            ],
+            "reasoning": "Section II (Definitions) explicitly lists 'actual cash value' among the key terms it defines."
+          },
+          {
+            "hop": 2,
+            "consideredNodeIds": [
+              "0003",
+              "0004",
+              "0005"
+            ],
+            "pickedNodeIds": [
+              "0005"
+            ],
+            "reasoning": "Section II.C explicitly lists 'Actual Cash Value' among its alphabetical definitions, making it the most specific and direct source for this term's meaning under the policy."
+          }
+        ],
+        "navigationBreadcrumb": "II → II.C",
+        "citations": [
+          {
+            "sectionLabel": "II.C The following are the other key definitions we use in",
+            "pageStart": 2,
+            "pageEnd": 2
+          },
+          {
+            "sectionLabel": "II.C.1 Act. The National Flood Insurance Act of 1968 and",
+            "pageStart": 2,
+            "pageEnd": 2
+          },
+          {
+            "sectionLabel": "II.C.2 Actual Cash Value. The cost to replace an insured",
+            "pageStart": 2,
+            "pageEnd": 2
+          },
+          {
+            "sectionLabel": "II.C.3 Application. The statement made and signed by",
+            "pageStart": 2,
+            "pageEnd": 2
+          },
+          {
+            "sectionLabel": "II.C.4 Base Flood. A flood having a one percent chance",
+            "pageStart": 2,
+            "pageEnd": 2
+          },
+          {
+            "sectionLabel": "II.C.5 Basement. Any area of a building, including any",
+            "pageStart": 2,
+            "pageEnd": 2
+          },
+          {
+            "sectionLabel": "II.C.6 Building",
+            "pageStart": 2,
+            "pageEnd": 2
+          },
+          {
+            "sectionLabel": "II.C.6.a A structure with two or more outside rigid walls",
+            "pageStart": 2,
+            "pageEnd": 2
+          },
+          {
+            "sectionLabel": "II.C.6.b A manufactured home, also known as a mobile",
+            "pageStart": 2,
+            "pageEnd": 2
+          },
+          {
+            "sectionLabel": "II.C.6.c A travel trailer without wheels, built on a chassis",
+            "pageStart": 2,
+            "pageEnd": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": 3,
+      "difficulty": "easy",
+      "question": "Is my detached garage covered, and are there any limits or conditions?",
+      "trap_notes": "Good answers include both the 10% cap AND the use restriction.",
+      "must_cite": [
+        "III.A.3"
+      ],
+      "must_refuse": false,
+      "vector": {
+        "answer": "## Detached Garage Coverage Analysis\n\n### Yes, your detached garage is covered, subject to the following limits and conditions:\n\n---\n\n### Coverage Limit\nThe coverage for a detached garage is **capped at no more than 10% of the limit of liability on the dwelling** [III.A.3, p.3]. This means if your dwelling is insured for, say, $300,000, the detached garage coverage would be limited to a maximum of $30,000.\n\n---\n\n### Important Financial Condition\nUse of this detached garage coverage is **at your option**, but be aware that **it reduces your building limit of liability** — meaning the amount used for the garage comes out of your overall dwelling coverage [III.A.3, p.3].\n\n---\n\n### Exclusions — When the Garage is NOT Covered\nThe policy explicitly states that **no coverage applies** to any detached garage that is **used or held for use for**:\n- **Residential (dwelling) purposes**\n- **Business purposes**\n- **Farming purposes**\n\n[III.A.3, p.3]\n\n---\n\n### Related Coverage: Construction Materials\nIf you have **materials and supplies stored for construction, alteration, or repair** of the detached garage, those may also be covered, provided they are stored in a **fully enclosed building** at the described location or on adjacent property [III.A.4, p.4].\n\n---\n\n### Bottom Line\nCoverage exists but is **optional, capped, and subject to strict use restrictions**. If the garage is being used for any residential, business, or farming purpose, coverage would be denied entirely.",
+        "refused": false,
+        "status": "PASS",
+        "notes": "Cited III.A.3",
+        "latencyMs": 8732,
+        "topSimilarity": 0.676671519737587,
+        "navigationPath": [],
+        "navigationBreadcrumb": "",
+        "citations": [
+          {
+            "sectionLabel": "III.A.3 A detached garage at the described location.",
+            "pageStart": 3,
+            "pageEnd": 3
+          },
+          {
+            "sectionLabel": "VII.R.4.d Detached garages.",
+            "pageStart": 27,
+            "pageEnd": 27
+          },
+          {
+            "sectionLabel": "III.A.4 Materials and supplies to be used for construction,",
+            "pageStart": 4,
+            "pageEnd": 4
+          },
+          {
+            "sectionLabel": "III.D.5.j Increased Cost of Compliance",
+            "pageStart": 10,
+            "pageEnd": 10
+          },
+          {
+            "sectionLabel": "IV.9 Those portions of walks, walkways,",
+            "pageStart": 11,
+            "pageEnd": 11
+          },
+          {
+            "sectionLabel": "III.A.2 Additions and extensions attached to and in",
+            "pageStart": 3,
+            "pageEnd": 3
+          }
+        ]
+      },
+      "tree": {
+        "answer": "Based on the policy, a detached garage at the described location **is covered** under Coverage A—Building Property, but with several important limits and conditions:\n\n**Coverage Limit:**\nThe coverage for a detached garage is capped at **no more than 10 percent of the limit of liability on the dwelling**. Importantly, using this coverage **reduces your overall building limit of liability** — it is not additional coverage on top of your dwelling limit. [III.A.4, p.3]\n\n**Optional Use:**\nApplying this coverage is **at your option**, meaning you are not required to use it. [III.A.4, p.3]\n\n**Excluded Uses:**\nThe policy explicitly states that **no coverage is provided** for any detached garage that is **used or held for use for**:\n- Residential (i.e., dwelling) purposes\n- Business purposes\n- Farming purposes\n\n[III.A.4, p.3]\n\n**Practical Takeaway for Claims:**\nIf your client's detached garage is being used for any residential, business, or farming purpose — even if only partially — coverage may be denied entirely. Additionally, attorneys should confirm the dwelling's limit of liability to calculate the maximum available garage coverage, and be aware that electing garage coverage will draw down the building limit available for the dwelling itself.",
+        "refused": false,
+        "status": "FAIL",
+        "notes": "Missing required cite: III.A.3",
+        "latencyMs": 12586,
+        "topSimilarity": null,
+        "navigationPath": [
+          {
+            "hop": 1,
+            "consideredNodeIds": [
+              "0001",
+              "0002",
+              "0006",
+              "0026",
+              "0027",
+              "0034",
+              "0035",
+              "0059",
+              "0065",
+              "0066"
+            ],
+            "pickedNodeIds": [
+              "0006",
+              "0026"
+            ],
+            "reasoning": "Section III (Property Insured) would describe whether a detached garage is covered and any applicable limits or conditions, while Section IV (Property Not Insured) would clarify if it falls under any exclusion categories."
+          },
+          {
+            "hop": 2,
+            "consideredNodeIds": [
+              "0007",
+              "0011",
+              "0015",
+              "0019"
+            ],
+            "pickedNodeIds": [
+              "0007"
+            ],
+            "reasoning": "Coverage A – Building Property explicitly mentions detached garages as one of the insured structures, making it the most relevant section for coverage, limits, and conditions on detached garages."
+          },
+          {
+            "hop": 3,
+            "consideredNodeIds": [
+              "0008",
+              "0009",
+              "0010"
+            ],
+            "pickedNodeIds": [
+              "0008"
+            ],
+            "reasoning": "Section III.A.1–6 explicitly covers detached garages along with conditions applicable to that coverage, directly answering the question."
+          }
+        ],
+        "navigationBreadcrumb": "III → III.A → III.A.1–6",
+        "citations": [
+          {
+            "sectionLabel": "III.A Coverage A—Building Property",
+            "pageStart": 3,
+            "pageEnd": 3
+          },
+          {
+            "sectionLabel": "III.A.1 The dwelling at the described location, or for a",
+            "pageStart": 3,
+            "pageEnd": 3
+          },
+          {
+            "sectionLabel": "III.A.2 Additions and extensions attached to and in",
+            "pageStart": 3,
+            "pageEnd": 3
+          },
+          {
+            "sectionLabel": "III.A.3 A detached garage at the described location.",
+            "pageStart": 3,
+            "pageEnd": 3
+          },
+          {
+            "sectionLabel": "III.A.4 Materials and supplies to be used for construction,",
+            "pageStart": 4,
+            "pageEnd": 4
+          },
+          {
+            "sectionLabel": "III.A.5 A building under construction, alteration, or repair",
+            "pageStart": 4,
+            "pageEnd": 4
+          },
+          {
+            "sectionLabel": "III.A.5.a If the structure is not yet walled",
+            "pageStart": 4,
+            "pageEnd": 4
+          },
+          {
+            "sectionLabel": "III.A.5.b However, coverage does not",
+            "pageStart": 4,
+            "pageEnd": 4
+          },
+          {
+            "sectionLabel": "III.A.6 A manufactured home or a travel trailer, as",
+            "pageStart": 4,
+            "pageEnd": 4
+          },
+          {
+            "sectionLabel": "III.A.6.a By over-the-top or frame ties to ground",
+            "pageStart": 4,
+            "pageEnd": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": 4,
+      "difficulty": "easy",
+      "question": "My jewelry and my wife's fur coat were destroyed in the flood. How much can we recover for them?",
+      "trap_notes": "The $2,500 is a combined per-loss cap across these categories, not per item.",
+      "must_cite": [
+        "III.B.8"
+      ],
+      "must_refuse": false,
+      "vector": {
+        "answer": "I can't find this in the policy.",
+        "refused": true,
+        "status": "FAIL",
+        "notes": "Missing required cite: III.B.8",
+        "latencyMs": 1622,
+        "topSimilarity": 0.416664304737695,
+        "navigationPath": [],
+        "navigationBreadcrumb": "",
+        "citations": [
+          {
+            "sectionLabel": "I.C We will pay you for direct physical loss by or from flood",
+            "pageStart": 1,
+            "pageEnd": 1
+          },
+          {
+            "sectionLabel": "VII.R.3.b If such a dwelling is totally destroyed or damaged",
+            "pageStart": 27,
+            "pageEnd": 27
+          },
+          {
+            "sectionLabel": "VII.M Appraisal",
+            "pageStart": 21,
+            "pageEnd": 21
+          },
+          {
+            "sectionLabel": "VII.H.3.b Take all or any part of the",
+            "pageStart": 20,
+            "pageEnd": 20
+          },
+          {
+            "sectionLabel": "VII.G Requirements in Case of Loss",
+            "pageStart": 18,
+            "pageEnd": 18
+          },
+          {
+            "sectionLabel": "VII.R.4.a A dwelling, at the time of loss, when the",
+            "pageStart": 27,
+            "pageEnd": 27
+          }
+        ]
+      },
+      "tree": {
+        "answer": "I can't find this in the policy.\n\nThe passages provided do not contain any information about coverage limits or specific provisions for jewelry or fur coats. While the policy does cover personal property owned by you or your household family members that suffers direct physical loss from flood [III.B.1 and III.B.1.a, p.5], the provided passages do not include any dollar limits, sublimits, or specific provisions addressing jewelry or fur coats that would allow me to determine a recovery amount.",
+        "refused": false,
+        "status": "FAIL",
+        "notes": "Missing required cite: III.B.8",
+        "latencyMs": 9935,
+        "topSimilarity": null,
+        "navigationPath": [
+          {
+            "hop": 1,
+            "consideredNodeIds": [
+              "0001",
+              "0002",
+              "0006",
+              "0026",
+              "0027",
+              "0034",
+              "0035",
+              "0059",
+              "0065",
+              "0066"
+            ],
+            "pickedNodeIds": [
+              "0026",
+              "0006"
+            ],
+            "reasoning": "Jewelry and fur coats may be excluded or subject to special limits under 'Property Not Insured' (0026) or have specific coverage rules under 'Property Insured' (0006), so both sections need to be examined for limits or exclusions on these items."
+          },
+          {
+            "hop": 2,
+            "consideredNodeIds": [
+              "0007",
+              "0011",
+              "0015",
+              "0019"
+            ],
+            "pickedNodeIds": [
+              "0011"
+            ],
+            "reasoning": "Coverage B – Personal Property is the relevant section for jewelry and fur coats, and its child nodes likely contain the special limits applicable to those items."
+          },
+          {
+            "hop": 3,
+            "consideredNodeIds": [
+              "0012",
+              "0013",
+              "0014"
+            ],
+            "pickedNodeIds": [
+              "0014"
+            ],
+            "reasoning": "Section III.B.6–9 explicitly imposes a $2,500 special limit on valuables, which would cover jewelry and furs, directly answering the recovery question."
+          }
+        ],
+        "navigationBreadcrumb": "IV → III.B → III.B.6–9",
+        "citations": [
+          {
+            "sectionLabel": "III.B Coverage B—Personal Property",
+            "pageStart": 5,
+            "pageEnd": 5
+          },
+          {
+            "sectionLabel": "III.B.1 If you have purchased personal property coverage,",
+            "pageStart": 5,
+            "pageEnd": 5
+          },
+          {
+            "sectionLabel": "III.B.1.a The property is owned by you or your household",
+            "pageStart": 5,
+            "pageEnd": 5
+          },
+          {
+            "sectionLabel": "III.B.1.b At your option, the property is owned by",
+            "pageStart": 5,
+            "pageEnd": 5
+          },
+          {
+            "sectionLabel": "III.B.2 Personal property is also insured for a period of 45",
+            "pageStart": 5,
+            "pageEnd": 5
+          },
+          {
+            "sectionLabel": "III.B.3 Personal property in a building that is not fully",
+            "pageStart": 5,
+            "pageEnd": 5
+          },
+          {
+            "sectionLabel": "III.B.4 Coverage for personal property includes the",
+            "pageStart": 5,
+            "pageEnd": 5
+          },
+          {
+            "sectionLabel": "III.B.4.a Air conditioning units, portable or window type;",
+            "pageStart": 5,
+            "pageEnd": 5
+          },
+          {
+            "sectionLabel": "III.B.4.b Carpets, not permanently installed, over",
+            "pageStart": 5,
+            "pageEnd": 5
+          },
+          {
+            "sectionLabel": "III.B.4.c Carpets over finished flooring;",
+            "pageStart": 5,
+            "pageEnd": 5
+          }
+        ]
+      }
+    },
+    {
+      "id": 5,
+      "difficulty": "easy",
+      "question": "How long do I have to submit a proof of loss, and what form must it take?",
+      "trap_notes": "Critical for a law firm — missed proof-of-loss deadlines kill NFIP claims. 'Signed and sworn' matters.",
+      "must_cite": [
+        "VII.G.4"
+      ],
+      "must_refuse": false,
+      "vector": {
+        "answer": "Based on the policy passages provided, here is what is required:\n\n**Deadline**\nYou must send a proof of loss **within 60 days after the loss** [VII.G.4, p.19]. Note that even if the insurance adjuster assigned to your claim does not provide you with a form or offer assistance, this deadline still applies and remains your responsibility to meet [VII.G.7, p.19].\n\n**Form and Content Requirements**\nThe proof of loss must be:\n- A **statement of the amount you are claiming** under the policy [VII.G.4, p.19]\n- **Signed and sworn to by you** [VII.G.4, p.19]\n- Completed using **your own judgment** concerning the amount of loss, and you must **justify that amount** [VII.G.5, p.19]\n\n**Additional Notes**\n- While an insurance adjuster *may* furnish you with a proof of loss form and *may* help you complete it, this is characterized as \"a matter of courtesy only\" and creates no obligation on the adjuster's part [VII.G.7, p.19].\n- If your proof of loss is rejected, you have the option to file an **amended proof of loss**, provided it is filed within 60 days of the date of the loss [VII.J.2.c, p.21].",
+        "refused": false,
+        "status": "PASS",
+        "notes": "Cited VII.G.4",
+        "latencyMs": 6753,
+        "topSimilarity": 0.704388009699486,
+        "navigationPath": [],
+        "navigationBreadcrumb": "",
+        "citations": [
+          {
+            "sectionLabel": "VII.J.2.c File an amended proof of loss as long as it is",
+            "pageStart": 21,
+            "pageEnd": 21
+          },
+          {
+            "sectionLabel": "VII.N.3.c Submits a signed, sworn proof",
+            "pageStart": 21,
+            "pageEnd": 21
+          },
+          {
+            "sectionLabel": "VII.G.4 Within 60 days after the loss,",
+            "pageStart": 19,
+            "pageEnd": 19
+          },
+          {
+            "sectionLabel": "VII.G.7 The insurance adjuster whom we hire to investigate",
+            "pageStart": 19,
+            "pageEnd": 19
+          },
+          {
+            "sectionLabel": "VII.G.5 In completing the proof of loss,",
+            "pageStart": 19,
+            "pageEnd": 19
+          },
+          {
+            "sectionLabel": "VII.J.2 If we reject your proof of loss in whole or in part",
+            "pageStart": 21,
+            "pageEnd": 21
+          }
+        ]
+      },
+      "tree": {
+        "answer": "Based on the policy, you have **60 days after the loss** to submit your proof of loss [VII.G.4, p.19].\n\nAs for its form and content, the proof of loss must be:\n\n- A **written statement of the amount you are claiming** under the policy [VII.G.4, p.19]\n- **Signed and sworn to by you** [VII.G.4, p.19]\n\nThe proof of loss must also furnish the following specific information:\n\n1. The **date and time of loss** [VII.G.4.a, p.19]\n2. A **brief explanation of how the loss happened** [VII.G.4.b, p.19]\n3. Your **interest** in the damaged property (e.g., \"owner\") and the interest of any others in the property [VII.G.4.c, p.19]\n4. **Details of any other insurance** that may cover the loss [VII.G.4.d, p.19]\n5. Any **changes in title or occupancy** of the insured property during the policy term [VII.G.4.e, p.19]\n\nNote that prior to submitting the proof of loss, you are also required to **separate damaged and undamaged property** and put it in the best possible order for examination [VII.G.2, p.18-19], and **prepare a detailed inventory** of damaged property including quantity, description, actual cash value, amount of loss, and all supporting bills and receipts [VII.G.3, p.19].",
+        "refused": false,
+        "status": "PASS",
+        "notes": "Cited VII.G.4",
+        "latencyMs": 11928,
+        "topSimilarity": null,
+        "navigationPath": [
+          {
+            "hop": 1,
+            "consideredNodeIds": [
+              "0001",
+              "0002",
+              "0006",
+              "0026",
+              "0027",
+              "0034",
+              "0035",
+              "0059",
+              "0065",
+              "0066"
+            ],
+            "pickedNodeIds": [
+              "0035"
+            ],
+            "reasoning": "Proof of loss requirements (deadline and form) are operational/claims conditions typically found under General Conditions; need to descend into child sections of Section VII."
+          },
+          {
+            "hop": 2,
+            "consideredNodeIds": [
+              "0036",
+              "0037",
+              "0038",
+              "0039",
+              "0040",
+              "0041",
+              "0042",
+              "0043",
+              "0044",
+              "0045",
+              "0046",
+              "0047",
+              "0048",
+              "0049",
+              "0050",
+              "0051",
+              "0052",
+              "0053"
+            ],
+            "pickedNodeIds": [
+              "0042"
+            ],
+            "reasoning": "Section VII.G explicitly covers the requirements in case of loss, including the 60-day deadline and the requirement for a signed sworn proof of loss, directly answering both parts of the question."
+          }
+        ],
+        "navigationBreadcrumb": "VII → VII.G",
+        "citations": [
+          {
+            "sectionLabel": "VII.G Requirements in Case of Loss",
+            "pageStart": 18,
+            "pageEnd": 18
+          },
+          {
+            "sectionLabel": "VII.G.1 Give prompt written notice to us.",
+            "pageStart": 18,
+            "pageEnd": 18
+          },
+          {
+            "sectionLabel": "VII.G.2 As soon as reasonably possible,",
+            "pageStart": 18,
+            "pageEnd": 19
+          },
+          {
+            "sectionLabel": "VII.G.3 Prepare an inventory of damaged",
+            "pageStart": 19,
+            "pageEnd": 19
+          },
+          {
+            "sectionLabel": "VII.G.4 Within 60 days after the loss,",
+            "pageStart": 19,
+            "pageEnd": 19
+          },
+          {
+            "sectionLabel": "VII.G.4.a The date and time of loss;",
+            "pageStart": 19,
+            "pageEnd": 19
+          },
+          {
+            "sectionLabel": "VII.G.4.b A brief explanation of how the",
+            "pageStart": 19,
+            "pageEnd": 19
+          },
+          {
+            "sectionLabel": "VII.G.4.c Your interest (for example,",
+            "pageStart": 19,
+            "pageEnd": 19
+          },
+          {
+            "sectionLabel": "VII.G.4.d Details of any other insurance",
+            "pageStart": 19,
+            "pageEnd": 19
+          },
+          {
+            "sectionLabel": "VII.G.4.e Changes in title or occupancy",
+            "pageStart": 19,
+            "pageEnd": 19
+          }
+        ]
+      }
+    },
+    {
+      "id": 6,
+      "difficulty": "easy",
+      "question": "A flood is coming and I spent money on sandbags and pumps to protect my house. Is that reimbursable?",
+      "trap_notes": "Answer should include the $1,000 cap and at least one trigger condition.",
+      "must_cite": [
+        "III.C.2.a"
+      ],
+      "must_refuse": false,
+      "vector": {
+        "answer": "Yes, those expenses are reimbursable, subject to certain conditions and a dollar limit.\n\n**What's Covered**\n\nThe policy will pay up to **$1,000** for reasonable expenses you incur to protect your insured building from a flood or imminent danger of flood, including the costs of purchasing **sandbags** (including sand to fill them) and **pumps** [III.C.2.a, p.6-7].\n\n**Conditions That Must Be Met**\n\nTo qualify for this coverage, two things must be true:\n\n1. Damage to your insured property by or from flood must be **imminent**, and the threat must be apparent enough that a person of common prudence would anticipate flood damage [III.C.2.a, p.6-7]; AND\n2. **At least one** of the following must also occur:\n   - A **general and temporary condition of flooding** in the area near your location must occur, even if the flood does not actually reach your building; **or**\n   - A **legally authorized official** must issue an evacuation order or other civil order for your community calling for measures to preserve life and property from the peril of flood [III.C.2.a, p.6-7].\n\n**Important Limitation**\n\nThis coverage **does not increase** your Coverage A or Coverage B limit of liability [III.C.2.a, p.6-7].",
+        "refused": false,
+        "status": "PASS",
+        "notes": "Cited III.C.2.a",
+        "latencyMs": 8520,
+        "topSimilarity": 0.650611971661996,
+        "navigationPath": [],
+        "navigationBreadcrumb": "",
+        "citations": [
+          {
+            "sectionLabel": "III.C.2.a Sandbags, Supplies, and Labor",
+            "pageStart": 6,
+            "pageEnd": 7
+          },
+          {
+            "sectionLabel": "III.D.1 General",
+            "pageStart": 8,
+            "pageEnd": 8
+          },
+          {
+            "sectionLabel": "III.C.2.b Property Removed to Safety",
+            "pageStart": 7,
+            "pageEnd": 7
+          },
+          {
+            "sectionLabel": "III.D.4.a When a building insured under",
+            "pageStart": 9,
+            "pageEnd": 9
+          },
+          {
+            "sectionLabel": "V.D.10 Alteration of the insured property",
+            "pageStart": 14,
+            "pageEnd": 14
+          },
+          {
+            "sectionLabel": "VII.Q.2.b Before approval of your claim,",
+            "pageStart": 23,
+            "pageEnd": 24
+          }
+        ]
+      },
+      "tree": {
+        "answer": "Yes, those expenses are likely reimbursable, subject to certain conditions and a dollar cap.\n\n## What's Covered\n\nThe policy covers your reasonable expenses to purchase sandbags (including sand to fill them) and pumps used to protect the insured building from flood. [III.C.2.a, p.6-7]\n\n## Dollar Limit\n\nReimbursement for these items is capped at **$1,000** total. [III.C.2.a, p.6-7]\n\n## Conditions That Must Be Met\n\nTo qualify for this coverage, **both** of the following must be true:\n\n1. **Flood damage must be imminent** — the threat must be apparent enough that a person of common prudence would anticipate flood damage. [III.C.2.a, p.6-7]\n\n2. **At least one of the following must also occur:**\n   - A general and temporary condition of flooding in the area near your property must occur (even if the flood never actually reaches your building), **OR**\n   - A legally authorized official must issue an evacuation order or other civil order calling for measures to preserve life and property from flood. [III.C.2.a, p.6-7]\n\n## Important Note\n\nThis reimbursement **does not increase** your Coverage A or Coverage B limits of liability — it is a separate benefit. [III.C.2.a, p.6-7]\n\nMake sure you document your purchases and retain all receipts to support your claim.",
+        "refused": false,
+        "status": "PASS",
+        "notes": "Cited III.C.2.a",
+        "latencyMs": 12678,
+        "topSimilarity": null,
+        "navigationPath": [
+          {
+            "hop": 1,
+            "consideredNodeIds": [
+              "0001",
+              "0002",
+              "0006",
+              "0026",
+              "0027",
+              "0034",
+              "0035",
+              "0059",
+              "0065",
+              "0066"
+            ],
+            "pickedNodeIds": [
+              "0006"
+            ],
+            "reasoning": "The 'Property Insured' section covers all coverages under the policy, including 'other coverages,' which is where loss avoidance/mitigation measures like sandbags and pumps would likely be addressed — but a child node of section 0006 specific to 'other coverages' would be more definitive."
+          },
+          {
+            "hop": 2,
+            "consideredNodeIds": [
+              "0007",
+              "0011",
+              "0015",
+              "0019"
+            ],
+            "pickedNodeIds": [
+              "0015"
+            ],
+            "reasoning": "Coverage C explicitly mentions loss avoidance measures including sandbags and property removal, directly addressing reimbursement for flood-prevention expenses."
+          },
+          {
+            "hop": 3,
+            "consideredNodeIds": [
+              "0016",
+              "0017",
+              "0018"
+            ],
+            "pickedNodeIds": [
+              "0017"
+            ],
+            "reasoning": "Section III.C.2 explicitly covers sandbags, supplies, and labor to protect the building from imminent flood, which directly answers the question."
+          }
+        ],
+        "navigationBreadcrumb": "III → III.C → III.C.2",
+        "citations": [
+          {
+            "sectionLabel": "III.C.2 Loss Avoidance Measures",
+            "pageStart": 6,
+            "pageEnd": 6
+          },
+          {
+            "sectionLabel": "III.C.2.a Sandbags, Supplies, and Labor",
+            "pageStart": 6,
+            "pageEnd": 7
+          },
+          {
+            "sectionLabel": "III.C.2.b Property Removed to Safety",
+            "pageStart": 7,
+            "pageEnd": 7
+          }
+        ]
+      }
+    },
+    {
+      "id": 7,
+      "difficulty": "medium",
+      "question": "What is Increased Cost of Compliance coverage, what is its limit, and does a deductible apply to it?",
+      "trap_notes": "Two-part answer: $30,000 limit AND no deductible. VI.C also confirms the deductible exemption.",
+      "must_cite": [
+        "III.D.2"
+      ],
+      "must_refuse": false,
+      "vector": {
+        "answer": "Based on the policy passages provided:\n\n**What It Is:**\nIncreased Cost of Compliance (ICC) coverage pays you to comply with State or local floodplain management laws or ordinances that meet the minimum standards of the National Flood Insurance Program, as found in 44 CFR 60.3. It also pays for compliance activities that exceed those standards under specific conditions, including elevation or floodproofing to preliminary or advisory base flood elevations provided by FEMA, and elevation or floodproofing above the base flood elevation to meet State or local \"freeboard\" requirements. [III.D.3.b, p.8]\n\n**Limit of Liability:**\nThe policy will pay up to **$30,000** under Coverage D—Increased Cost of Compliance. This coverage only applies to policies that include building coverage (Coverage A), and any payment under Coverage D is **in addition to** the amount of Coverage A selected. However, the combined total collected under both Coverage A and Coverage D cannot exceed the maximum permitted under the Act. [III.D.2 Limit of Liability, p.8]\n\n**Deductible:**\n**No separate deductible applies** to claims made under Coverage D—Increased Cost of Compliance. [III.D.2 Limit of Liability, p.8]\n\nAdditionally, it is worth noting that ICC coverage is **not included** in the calculation to determine whether coverage meets the 80% insurance-to-value requirement for replacement cost coverage. [III.D.6.a, p.10]",
+        "refused": false,
+        "status": "PASS",
+        "notes": "Cited III.D.2",
+        "latencyMs": 8843,
+        "topSimilarity": 0.703260213089202,
+        "navigationPath": [],
+        "navigationBreadcrumb": "",
+        "citations": [
+          {
+            "sectionLabel": "III.D Coverage D—Increased Cost of Compliance",
+            "pageStart": 8,
+            "pageEnd": 8
+          },
+          {
+            "sectionLabel": "III.D.2 Limit of Liability",
+            "pageStart": 8,
+            "pageEnd": 8
+          },
+          {
+            "sectionLabel": "III.D.5 Exclusions",
+            "pageStart": 9,
+            "pageEnd": 9
+          },
+          {
+            "sectionLabel": "VI.C.3 III.D. Increased Cost of Compliance.",
+            "pageStart": 14,
+            "pageEnd": 14
+          },
+          {
+            "sectionLabel": "III.D.6.a Increased Cost of Compliance coverage will",
+            "pageStart": 10,
+            "pageEnd": 10
+          },
+          {
+            "sectionLabel": "III.D.3.b This Coverage D pays you to comply with",
+            "pageStart": 8,
+            "pageEnd": 8
+          }
+        ]
+      },
+      "tree": {
+        "answer": "## Increased Cost of Compliance (Coverage D) Analysis\n\n### What It Is\nCoverage D pays the insured to comply with a **State or local floodplain management law or ordinance** affecting the repair or reconstruction of a building that has suffered flood damage. The eligible compliance activities include **elevation, floodproofing, relocation, or demolition** (or any combination thereof) of the building [III.D.1 General, p.8].\n\nEligible floodproofing activities are specifically limited to:\n- **Non-residential buildings** [III.D.1.a, p.8]; and\n- **Residential buildings with basements** that satisfy FEMA's standards published at 44 CFR 60.6(b) or (c) [III.D.1.b, p.8].\n\n---\n\n### Limit of Liability\nThe policy pays **up to $30,000** under Coverage D. Importantly:\n- Coverage D **only applies to policies that also carry building coverage (Coverage A)** [III.D.2, p.8].\n- Payment under Coverage D is **in addition to** the Coverage A limit selected by the insured and shown on the Declarations Page [III.D.2, p.8].\n- However, the **combined total** collected under Coverage A and Coverage D **cannot exceed the maximum permitted under the Act** [III.D.2, p.8].\n\n---\n\n### Deductible\n**No separate deductible applies** to Coverage D claims [III.D.2, p.8].",
+        "refused": false,
+        "status": "PASS",
+        "notes": "Cited III.D.2",
+        "latencyMs": 16055,
+        "topSimilarity": null,
+        "navigationPath": [
+          {
+            "hop": 1,
+            "consideredNodeIds": [
+              "0001",
+              "0002",
+              "0006",
+              "0026",
+              "0027",
+              "0034",
+              "0035",
+              "0059",
+              "0065",
+              "0066"
+            ],
+            "pickedNodeIds": [
+              "0006",
+              "0034"
+            ],
+            "reasoning": "Section 0006 covers Increased Cost of Compliance as a coverage under the policy (including what it is and its limit), and Section 0034 addresses deductibles with a specific exception for ICC, making both necessary to fully answer the question."
+          },
+          {
+            "hop": 2,
+            "consideredNodeIds": [
+              "0007",
+              "0011",
+              "0015",
+              "0019"
+            ],
+            "pickedNodeIds": [
+              "0019"
+            ],
+            "reasoning": "Section III.D directly covers Increased Cost of Compliance, its $30,000 limit, and related conditions including whether a deductible applies."
+          },
+          {
+            "hop": 3,
+            "consideredNodeIds": [
+              "0020",
+              "0021",
+              "0022",
+              "0023",
+              "0024",
+              "0025"
+            ],
+            "pickedNodeIds": [
+              "0020",
+              "0021"
+            ],
+            "reasoning": "Section III.D.1 describes what ICC coverage is (eligible compliance activities), and III.D.2 directly states the $30,000 limit and that no separate deductible applies."
+          }
+        ],
+        "navigationBreadcrumb": "III → III.D → III.D.1",
+        "citations": [
+          {
+            "sectionLabel": "III.D.1 General",
+            "pageStart": 8,
+            "pageEnd": 8
+          },
+          {
+            "sectionLabel": "III.D.1.a Non-residential buildings.",
+            "pageStart": 8,
+            "pageEnd": 8
+          },
+          {
+            "sectionLabel": "III.D.1.b Residential buildings with basements that",
+            "pageStart": 8,
+            "pageEnd": 8
+          },
+          {
+            "sectionLabel": "III.D.2 Limit of Liability",
+            "pageStart": 8,
+            "pageEnd": 8
+          }
+        ]
+      }
+    },
+    {
+      "id": 8,
+      "difficulty": "medium",
+      "question": "I moved my furniture to a storage unit before the flood hit. Is it still covered there, and for how long?",
+      "trap_notes": "The 45-day window is the key fact; the $1,000 moving expense is separate from the 45-day coverage.",
+      "must_cite": [
+        "III.C.2.b"
+      ],
+      "must_refuse": false,
+      "vector": {
+        "answer": "Based on the policy, your furniture moved to a storage unit before the flood may be covered, but there are several important conditions to assess:\n\n**Coverage Duration**\nPersonal property moved to protect it from flood or imminent danger of flood is covered at the other location for **45 consecutive days**, starting from the date you began moving it there [III.B.2, p.5] [III.C.2.b, p.7].\n\n**Key Conditions That Must Be Met**\n\n1. **Enclosed Structure Requirement:** The personal property that is moved must be placed in a **fully enclosed building** or otherwise reasonably protected from the elements [III.C.2.b, p.7]. A storage unit would likely satisfy this requirement, but the specific facts matter.\n\n2. **Above Ground or Outside Flood Hazard Area:** The removed property must be placed **above ground level or outside of the special flood hazard area** [III.C.2.b, p.7]. If the storage unit is at ground level within the special flood hazard area, this condition could be a problem.\n\n3. **No Limit Increase:** This coverage does **not increase** your Coverage B (personal property) limit of liability [III.C.2.b, p.7].\n\n**Bottom Line**\nIf the storage unit is fully enclosed and situated above ground level or outside the special flood hazard area, your furniture should be covered there for up to 45 days from when you began moving it. I would carefully examine whether the storage unit's location satisfies the elevation/zone requirement.",
+        "refused": false,
+        "status": "PASS",
+        "notes": "Cited III.C.2.b",
+        "latencyMs": 7791,
+        "topSimilarity": 0.560421496229738,
+        "navigationPath": [],
+        "navigationBreadcrumb": "",
+        "citations": [
+          {
+            "sectionLabel": "III.C.2.b Property Removed to Safety",
+            "pageStart": 7,
+            "pageEnd": 7
+          },
+          {
+            "sectionLabel": "III.B.3 Personal property in a building that is not fully",
+            "pageStart": 5,
+            "pageEnd": 5
+          },
+          {
+            "sectionLabel": "III.B.2 Personal property is also insured for a period of 45",
+            "pageStart": 5,
+            "pageEnd": 5
+          },
+          {
+            "sectionLabel": "VII.Q.2.c Within 90 days of approval",
+            "pageStart": 24,
+            "pageEnd": 24
+          },
+          {
+            "sectionLabel": "III.C.2.a Sandbags, Supplies, and Labor",
+            "pageStart": 6,
+            "pageEnd": 7
+          },
+          {
+            "sectionLabel": "III.D.5.e Any Increased Cost of Com-",
+            "pageStart": 10,
+            "pageEnd": 10
+          }
+        ]
+      },
+      "tree": {
+        "answer": "Based on the policy passages, yes, your furniture moved to a storage unit can be covered at that location, subject to the following conditions:\n\n**Duration of Coverage**\nCoverage extends for **45 consecutive days** from the date you begin moving the property to the other location. [III.C.2.b, p.7]\n\n**Conditions That Must Be Met**\nTo qualify for this coverage, the move must have been made to protect the property from flood or the imminent danger of flood. [III.C.2.b, p.7]\n\n**Storage Requirements**\nThe moved personal property must be:\n- Placed in a **fully enclosed building** or otherwise reasonably protected from the elements [III.C.2.b, p.7]\n- Placed **above ground level or outside of the special flood hazard area** [III.C.2.b, p.7]\n\nA storage unit would likely satisfy the \"fully enclosed building\" requirement, though you should confirm that it also meets the elevation or location requirement (above ground level or outside the special flood hazard area). [III.C.2.b, p.7]\n\n**Cost Reimbursement**\nThe policy will also pay **up to $1,000** for the reasonable expenses you incurred to move the insured property, including the value of any household labor at the Federal minimum wage. [III.C.2.b, p.7]\n\n**Important Limitation**\nThis coverage does not increase your Coverage A or Coverage B limit of liability. [III.C.2.b, p.7]",
+        "refused": false,
+        "status": "PASS",
+        "notes": "Cited III.C.2.b",
+        "latencyMs": 13779,
+        "topSimilarity": null,
+        "navigationPath": [
+          {
+            "hop": 1,
+            "consideredNodeIds": [
+              "0001",
+              "0002",
+              "0006",
+              "0026",
+              "0027",
+              "0034",
+              "0035",
+              "0059",
+              "0065",
+              "0066"
+            ],
+            "pickedNodeIds": [
+              "0006",
+              "0026"
+            ],
+            "reasoning": "Section III (Property Insured) likely addresses coverage for personal property moved to storage, including any 'other coverages' provisions for off-premises property, while Section IV (Property Not Insured) may exclude personal property outside buildings or in storage units, directly addressing the question of coverage location and duration."
+          },
+          {
+            "hop": 2,
+            "consideredNodeIds": [
+              "0007",
+              "0011",
+              "0015",
+              "0019"
+            ],
+            "pickedNodeIds": [
+              "0015",
+              "0011"
+            ],
+            "reasoning": "Coverage C likely addresses property removal to safety (moving items to storage before a flood) including any time limits, while Coverage B governs personal property coverage generally; both are relevant to whether furniture stored off-premises is covered and for how long."
+          },
+          {
+            "hop": 3,
+            "consideredNodeIds": [
+              "0016",
+              "0017",
+              "0018",
+              "0012",
+              "0013",
+              "0014"
+            ],
+            "pickedNodeIds": [
+              "0017"
+            ],
+            "reasoning": "Section III.C.2 specifically covers moving insured property to safety (up to $1,000) for up to 45 days, directly answering the question about furniture moved to a storage unit before a flood."
+          }
+        ],
+        "navigationBreadcrumb": "III → III.C → III.C.2",
+        "citations": [
+          {
+            "sectionLabel": "III.C.2 Loss Avoidance Measures",
+            "pageStart": 6,
+            "pageEnd": 6
+          },
+          {
+            "sectionLabel": "III.C.2.a Sandbags, Supplies, and Labor",
+            "pageStart": 6,
+            "pageEnd": 7
+          },
+          {
+            "sectionLabel": "III.C.2.b Property Removed to Safety",
+            "pageStart": 7,
+            "pageEnd": 7
+          }
+        ]
+      }
+    },
+    {
+      "id": 9,
+      "difficulty": "medium",
+      "question": "My washer and dryer are in the basement. Are they covered?",
+      "trap_notes": "Trap direction: most basement contents are NOT covered — washer/dryer is a narrow exception. Wrong answer patterns: 'no basement contents are covered' or 'all contents covered.'",
+      "must_cite": [
+        "III.B.5"
+      ],
+      "must_refuse": false,
+      "vector": {
+        "answer": "Based on the policy passages, the answer depends on the specific coverage section that applies to your situation.\n\nFor items located **in a basement**, coverage is explicitly limited to specific listed items [III.B.5, p.5]. Clothes washers and dryers **are included** in that limited list of covered items for basements [III.B.5.b, p.6], provided they are:\n\n- **Installed in their functioning locations**, and\n- **Connected to a power source** (if necessary for operation) [III.B.5, p.5]\n\nSo yes, your washer and dryer located in the basement would appear to be covered, as long as those installation conditions are met.\n\n> ⚠️ **Important caveat:** The policy passages provided do not include information about coverage limits, deductibles, or any applicable exclusions beyond what is shown. An attorney should review the full policy to confirm no other provisions would affect this coverage determination.",
+        "refused": false,
+        "status": "PASS",
+        "notes": "Cited III.B.5",
+        "latencyMs": 5877,
+        "topSimilarity": 0.489636072327749,
+        "navigationPath": [],
+        "navigationBreadcrumb": "",
+        "citations": [
+          {
+            "sectionLabel": "III.B.4.d Clothes washers and dryers;",
+            "pageStart": 5,
+            "pageEnd": 5
+          },
+          {
+            "sectionLabel": "III.B.5.b Clothes washers and dryers; and",
+            "pageStart": 6,
+            "pageEnd": 6
+          },
+          {
+            "sectionLabel": "VII.R.5.b Those supports listed in R.5.a above, that are",
+            "pageStart": 27,
+            "pageEnd": 27
+          },
+          {
+            "sectionLabel": "III.A.8.a Any of the following items, if installed in their",
+            "pageStart": 5,
+            "pageEnd": 5
+          },
+          {
+            "sectionLabel": "VII.R.4.f Appliances, carpets, and carpet pads.",
+            "pageStart": 27,
+            "pageEnd": 27
+          },
+          {
+            "sectionLabel": "III.B.5 Coverage for items of property",
+            "pageStart": 5,
+            "pageEnd": 5
+          }
+        ]
+      },
+      "tree": {
+        "answer": "Based on the policy, clothes washers and dryers **can be covered** even when located in a basement, but with important conditions.\n\nThe policy specifically lists \"clothes washers and dryers\" as one of the eligible items for coverage in a basement, regardless of flood zone [III.B.5.b, p.6]. However, this coverage is limited, and the items must meet the following requirements [III.B.5, p.5]:\n\n1. They must be **installed in their functioning locations**, and\n2. If necessary for operation, they must be **connected to a power source**.\n\nSo, as long as your washer and dryer are properly installed and connected in the basement, they would fall within the scope of coverage under this provision. You should document their installation and connection status to support your claim.",
+        "refused": false,
+        "status": "PASS",
+        "notes": "Cited III.B.5",
+        "latencyMs": 10443,
+        "topSimilarity": null,
+        "navigationPath": [
+          {
+            "hop": 1,
+            "consideredNodeIds": [
+              "0001",
+              "0002",
+              "0006",
+              "0026",
+              "0027",
+              "0034",
+              "0035",
+              "0059",
+              "0065",
+              "0066"
+            ],
+            "pickedNodeIds": [
+              "0006",
+              "0026"
+            ],
+            "reasoning": "The answer about whether a washer and dryer in a basement are covered would be found in the Property Insured section (which may address basement property coverage) and the Property Not Insured section (which may enumerate basement or personal property exclusions)."
+          },
+          {
+            "hop": 2,
+            "consideredNodeIds": [
+              "0007",
+              "0011",
+              "0015",
+              "0019"
+            ],
+            "pickedNodeIds": [
+              "0011"
+            ],
+            "reasoning": "Coverage B – Personal Property specifically mentions basement restrictions for personal property like washers and dryers, making it the most relevant section to answer this question."
+          },
+          {
+            "hop": 3,
+            "consideredNodeIds": [
+              "0012",
+              "0013",
+              "0014"
+            ],
+            "pickedNodeIds": [
+              "0013"
+            ],
+            "reasoning": "Section III.B.5 specifically addresses personal property coverage in basements and explicitly mentions clothes washers/dryers as covered items in that location."
+          }
+        ],
+        "navigationBreadcrumb": "III → III.B → III.B.5",
+        "citations": [
+          {
+            "sectionLabel": "III.B.5 Coverage for items of property",
+            "pageStart": 5,
+            "pageEnd": 5
+          },
+          {
+            "sectionLabel": "III.B.5.a Air conditioning units, portable or window type;",
+            "pageStart": 6,
+            "pageEnd": 6
+          },
+          {
+            "sectionLabel": "III.B.5.b Clothes washers and dryers; and",
+            "pageStart": 6,
+            "pageEnd": 6
+          },
+          {
+            "sectionLabel": "III.B.5.c Food freezers, other than walk-in, and food in",
+            "pageStart": 6,
+            "pageEnd": 6
+          }
+        ]
+      }
+    },
+    {
+      "id": 10,
+      "difficulty": "medium",
+      "question": "Which coverages under this policy are NOT subject to the deductible?",
+      "trap_notes": "Exact three-item list; partial answers should score partial/fail.",
+      "must_cite": [
+        "VI.C"
+      ],
+      "must_refuse": false,
+      "vector": {
+        "answer": "Based on the available policy passages, I can only partially answer this question.\n\nThe policy confirms that a deductible applies generally — specifically, that only the portion of a loss **exceeding** the deductible amount (as shown on the Declarations Page) will be paid, subject to applicable limits of liability [VI.A, p.14].\n\nThe policy also references a section that identifies coverages or situations where the deductible does **not** apply [VI.C, p.14], however, **the actual content listing those exceptions was not provided in the passages available to me.**\n\nI can't find this in the policy.\n\nTo fully answer your question, you would need to review the complete text of **Section VI.C** (p.14), which is titled \"The deductible does NOT apply to:\" — that section would contain the specific enumerated coverages or circumstances excluded from the deductible requirement.",
+        "refused": false,
+        "status": "PASS",
+        "notes": "Cited VI.C",
+        "latencyMs": 5456,
+        "topSimilarity": 0.729488677658075,
+        "navigationPath": [],
+        "navigationBreadcrumb": "",
+        "citations": [
+          {
+            "sectionLabel": "VI.C The deductible does NOT apply to:",
+            "pageStart": 14,
+            "pageEnd": 14
+          },
+          {
+            "sectionLabel": "III.C Coverage C—Other Coverages",
+            "pageStart": 6,
+            "pageEnd": 6
+          },
+          {
+            "sectionLabel": "III.A.7 The following items of property which are insured",
+            "pageStart": 4,
+            "pageEnd": 4
+          },
+          {
+            "sectionLabel": "III.D.5 Exclusions",
+            "pageStart": 9,
+            "pageEnd": 9
+          },
+          {
+            "sectionLabel": "III.B.4 Coverage for personal property includes the",
+            "pageStart": 5,
+            "pageEnd": 5
+          },
+          {
+            "sectionLabel": "VI.A When a loss is insured under this policy, we will pay",
+            "pageStart": 14,
+            "pageEnd": 14
+          }
+        ]
+      },
+      "tree": {
+        "answer": "Based on the policy passages provided, there are three coverages that are explicitly exempt from the deductible:\n\n1. **Loss Avoidance Measures** [VI.C.1, p.14]\n2. **Condominium Loss Assessments** [VI.C.2, p.14]\n3. **Increased Cost of Compliance** [VI.C.3, p.14]\n\nThese exceptions are carved out under the general deductible provision, which otherwise requires the insured to pay the deductible amount before the policy responds to a covered flood loss [VI.A, p.14].",
+        "refused": false,
+        "status": "PASS",
+        "notes": "Cited VI.C",
+        "latencyMs": 5912,
+        "topSimilarity": null,
+        "navigationPath": [
+          {
+            "hop": 1,
+            "consideredNodeIds": [
+              "0001",
+              "0002",
+              "0006",
+              "0026",
+              "0027",
+              "0034",
+              "0035",
+              "0059",
+              "0065",
+              "0066"
+            ],
+            "pickedNodeIds": [
+              "0034"
+            ],
+            "reasoning": "Section VI (Deductibles) directly explains how deductibles apply and explicitly lists exceptions such as loss avoidance, condo assessments, and ICC — which are the coverages not subject to the deductible."
+          }
+        ],
+        "navigationBreadcrumb": "VI",
+        "citations": [
+          {
+            "sectionLabel": "VI DEDUCTIBLES",
+            "pageStart": 14,
+            "pageEnd": 14
+          },
+          {
+            "sectionLabel": "VI.A When a loss is insured under this policy, we will pay",
+            "pageStart": 14,
+            "pageEnd": 14
+          },
+          {
+            "sectionLabel": "VI.B In each loss from flood, separate deductibles apply to",
+            "pageStart": 14,
+            "pageEnd": 14
+          },
+          {
+            "sectionLabel": "VI.C The deductible does NOT apply to:",
+            "pageStart": 14,
+            "pageEnd": 14
+          },
+          {
+            "sectionLabel": "VI.C.1 III.C.2. Loss Avoidance Measures;",
+            "pageStart": 14,
+            "pageEnd": 14
+          },
+          {
+            "sectionLabel": "VI.C.2 III.C.3. Condominium Loss Assessments; or",
+            "pageStart": 14,
+            "pageEnd": 14
+          },
+          {
+            "sectionLabel": "VI.C.3 III.D. Increased Cost of Compliance.",
+            "pageStart": 14,
+            "pageEnd": 14
+          }
+        ]
+      }
+    },
+    {
+      "id": 11,
+      "difficulty": "medium",
+      "question": "Will my dwelling loss be paid at replacement cost or actual cash value?",
+      "trap_notes": "Multi-condition reasoning; both the principal-residence test and the 80% insurance-to-value test must appear. II.C.25 defines principal residence.",
+      "must_cite": [
+        "VII.R.1.a",
+        "VII.R.4"
+      ],
+      "must_refuse": false,
+      "vector": {
+        "answer": "Based on the policy passages provided, the answer depends on several factors:\n\n**Replacement Cost Settlement** may apply if your dwelling qualifies as a single-family dwelling meeting the conditions outlined in the policy [VII.R.2, p.26]. However, even when replacement cost applies, there are important limitations:\n\n- If your dwelling is insured for **less than 80% of its full replacement cost** and **less than the maximum NFIP coverage available**, the payment will be the **greater of** actual cash value or a proportional share of replacement cost — but never more than your policy limit [VII.R.4.a, p.27].\n\n- If your dwelling is **totally destroyed or so severely damaged** that repair is not economically feasible, payment will be the **least of** either 1.5 times actual cash value or your building limit of liability shown on the Declarations Page [VII.R.3.b, p.27].\n\n**Actual Cash Value Settlement** will apply if:\n- Your single-family dwelling does **not** qualify for replacement cost or special loss settlement [VII.R.1.c, p.26]; **or**\n- You **choose** to file your initial claim on an actual cash value basis, though you retain the right to later claim additional replacement cost amounts if you notify the insurer **within 180 days** of the date of loss [VII.R.2.d, p.26].\n\nTo determine exactly which settlement method applies to your specific claim, you would need to confirm your dwelling's eligibility under the replacement cost provisions and compare your coverage amount against 80% of the full replacement cost.",
+        "refused": false,
+        "status": "PASS",
+        "notes": "Cited VII.R.1.a, VII.R.4",
+        "latencyMs": 8373,
+        "topSimilarity": 0.68364047771537,
+        "navigationPath": [],
+        "navigationBreadcrumb": "",
+        "citations": [
+          {
+            "sectionLabel": "VII.R.4.a A dwelling, at the time of loss, when the",
+            "pageStart": 27,
+            "pageEnd": 27
+          },
+          {
+            "sectionLabel": "VII.R.3.b If such a dwelling is totally destroyed or damaged",
+            "pageStart": 27,
+            "pageEnd": 27
+          },
+          {
+            "sectionLabel": "VII.R.2.d You may disregard the replacement cost",
+            "pageStart": 26,
+            "pageEnd": 26
+          },
+          {
+            "sectionLabel": "VII.R.1.c Actual Cash Value Loss Settlement applies",
+            "pageStart": 26,
+            "pageEnd": 26
+          },
+          {
+            "sectionLabel": "VII.H.2.b Actual cash values or",
+            "pageStart": 20,
+            "pageEnd": 20
+          },
+          {
+            "sectionLabel": "VII.R.2 Replacement Cost Loss Settlement",
+            "pageStart": 26,
+            "pageEnd": 26
+          }
+        ]
+      },
+      "tree": {
+        "answer": "Based on the policy, the answer depends on several factors:\n\n**Replacement Cost applies** to your dwelling if it meets **both** of the following conditions [VII.R.1.a, p.26]:\n\n1. It is your **principal residence**, AND\n2. At the time of loss, the insurance amount covering the dwelling is **80% or more of its full replacement cost** immediately before the loss, *or* is the **maximum amount of insurance available under the NFIP**.\n\nIf both conditions are met, the policy will pay the least of: (1) the building limit of liability on your Declarations Page, (2) the replacement cost using materials of like kind and quality, or (3) the necessary amount actually spent to repair or replace the damaged part — all **without deduction for depreciation** [VII.R.2.a, p.26].\n\n---\n\n**Actual Cash Value applies** to your dwelling if it does **not** qualify for Replacement Cost settlement — for example, if it is not your principal residence or if it is underinsured below the 80% threshold [VII.R.1.c, p.26].\n\n---\n\n**Important nuance:** Even if your dwelling qualifies for Replacement Cost, you may initially claim on an **Actual Cash Value basis** and later seek the additional replacement cost amount, provided you **notify the insurer within 180 days** after the date of loss [VII.R.2.d, p.26].\n\n---\n\n**Manufactured/mobile homes and travel trailers** are subject to a separate **Special Loss Settlement** method, regardless of the above [VII.R.1.b, p.26].",
+        "refused": false,
+        "status": "PASS",
+        "notes": "Cited VII.R.1.a, VII.R.4",
+        "latencyMs": 13354,
+        "topSimilarity": null,
+        "navigationPath": [
+          {
+            "hop": 1,
+            "consideredNodeIds": [
+              "0001",
+              "0002",
+              "0006",
+              "0026",
+              "0027",
+              "0034",
+              "0035",
+              "0059",
+              "0065",
+              "0066"
+            ],
+            "pickedNodeIds": [
+              "0035"
+            ],
+            "reasoning": "Section VII General Conditions explicitly covers loss settlement methods, which is where replacement cost vs. actual cash value valuation for dwelling losses would be specified."
+          },
+          {
+            "hop": 2,
+            "consideredNodeIds": [
+              "0036",
+              "0037",
+              "0038",
+              "0039",
+              "0040",
+              "0041",
+              "0042",
+              "0043",
+              "0044",
+              "0045",
+              "0046",
+              "0047",
+              "0048",
+              "0049",
+              "0050",
+              "0051",
+              "0052",
+              "0053"
+            ],
+            "pickedNodeIds": [
+              "0053"
+            ],
+            "reasoning": "Section VII.R directly defines the loss settlement methods—replacement cost, special loss settlement, and actual cash value—and specifies which property types and conditions trigger each method for dwelling losses."
+          },
+          {
+            "hop": 3,
+            "consideredNodeIds": [
+              "0054",
+              "0055",
+              "0056",
+              "0057",
+              "0058"
+            ],
+            "pickedNodeIds": [
+              "0054",
+              "0055"
+            ],
+            "reasoning": "Node 0054 summarizes which settlement method applies to which property type, and node 0055 specifically covers replacement cost for qualifying dwellings — together they directly answer whether a dwelling loss is paid at replacement cost or ACV, but descending into 0055 and 0057 would give the most specific answer."
+          }
+        ],
+        "navigationBreadcrumb": "VII → VII.R → VII.R.1",
+        "citations": [
+          {
+            "sectionLabel": "VII.R.1 Introduction",
+            "pageStart": 26,
+            "pageEnd": 26
+          },
+          {
+            "sectionLabel": "VII.R.1.a Replacement Cost Loss",
+            "pageStart": 26,
+            "pageEnd": 26
+          },
+          {
+            "sectionLabel": "VII.R.1.b Special Loss Settlement, described in R.3",
+            "pageStart": 26,
+            "pageEnd": 26
+          },
+          {
+            "sectionLabel": "VII.R.1.c Actual Cash Value Loss Settlement applies",
+            "pageStart": 26,
+            "pageEnd": 26
+          },
+          {
+            "sectionLabel": "VII.R.2 Replacement Cost Loss Settlement",
+            "pageStart": 26,
+            "pageEnd": 26
+          },
+          {
+            "sectionLabel": "VII.R.2.a We will pay to repair or replace the damaged",
+            "pageStart": 26,
+            "pageEnd": 26
+          },
+          {
+            "sectionLabel": "VII.R.2.b If the dwelling is rebuilt at a new location, the",
+            "pageStart": 26,
+            "pageEnd": 26
+          },
+          {
+            "sectionLabel": "VII.R.2.c When the full cost of repair or replacement is",
+            "pageStart": 26,
+            "pageEnd": 26
+          },
+          {
+            "sectionLabel": "VII.R.2.d You may disregard the replacement cost",
+            "pageStart": 26,
+            "pageEnd": 26
+          },
+          {
+            "sectionLabel": "VII.R.2.e If the community in which your dwelling is",
+            "pageStart": 26,
+            "pageEnd": 26
+          }
+        ]
+      }
+    },
+    {
+      "id": 12,
+      "difficulty": "medium",
+      "question": "The insurer denied my claim. How long do I have to sue, and where must I file?",
+      "trap_notes": "Gold for a law firm demo: NFIP suits are federal with a 1-year clock — NOT state statutes of limitation. Wrong answer pattern: citing generic state SOL periods.",
+      "must_cite": [
+        "VII.O"
+      ],
+      "must_refuse": false,
+      "vector": {
+        "answer": "Based on the policy, if your claim has been denied, you have **one year** from the date of the written denial to file suit [VII.O Suit Against Us, p.22].\n\nRegarding where you must file, the suit must be brought in the **United States District Court of the district in which the insured property was located at the time of loss** [VII.O Suit Against Us, p.22].\n\nThere is an important prerequisite to filing suit: you must have **complied with all the requirements of the policy** before you can sue to recover money [VII.O Suit Against Us, p.22]. These deadlines and venue requirements apply both to claims under the policy and to any disputes arising out of the handling of a claim [VII.O Suit Against Us, p.22].",
+        "refused": false,
+        "status": "PASS",
+        "notes": "Cited VII.O",
+        "latencyMs": 4027,
+        "topSimilarity": 0.554216076727959,
+        "navigationPath": [],
+        "navigationBreadcrumb": "",
+        "citations": [
+          {
+            "sectionLabel": "VII.O Suit Against Us",
+            "pageStart": 22,
+            "pageEnd": 22
+          },
+          {
+            "sectionLabel": "VII.J.2.c File an amended proof of loss as long as it is",
+            "pageStart": 21,
+            "pageEnd": 21
+          },
+          {
+            "sectionLabel": "VII.G.7 The insurance adjuster whom we hire to investigate",
+            "pageStart": 19,
+            "pageEnd": 19
+          },
+          {
+            "sectionLabel": "VII.Q.2.c Within 90 days of approval",
+            "pageStart": 24,
+            "pageEnd": 24
+          },
+          {
+            "sectionLabel": "VII.J.1 We will adjust all losses with you. We will pay you",
+            "pageStart": 21,
+            "pageEnd": 21
+          },
+          {
+            "sectionLabel": "VII.G.4 Within 60 days after the loss,",
+            "pageStart": 19,
+            "pageEnd": 19
+          }
+        ]
+      },
+      "tree": {
+        "answer": "Based on the policy, if your claim has been denied, here are the key requirements for bringing a lawsuit:\n\n**Time Limit:**\nYou must start the suit **within one year** after the date of the written denial of all or part of your claim. [VII.O Suit Against Us, p.22]\n\n**Where to File:**\nYou must file the suit in the **United States District Court of the district in which the insured property was located at the time of the loss**. [VII.O Suit Against Us, p.22]\n\n**Important Additional Requirement:**\nBefore you can sue at all, you must have **complied with all the requirements of the policy**. Failure to do so could bar your suit entirely. [VII.O Suit Against Us, p.22]\n\nNote that these requirements apply not only to coverage claims but also to **any dispute arising out of the handling of any claim** under the policy. [VII.O Suit Against Us, p.22]\n\n---\n*Please consult with a licensed attorney promptly, as the one-year deadline is strictly enforced and missing it could permanently bar your right to recover.*",
+        "refused": false,
+        "status": "PASS",
+        "notes": "Cited VII.O",
+        "latencyMs": 9195,
+        "topSimilarity": null,
+        "navigationPath": [
+          {
+            "hop": 1,
+            "consideredNodeIds": [
+              "0001",
+              "0002",
+              "0006",
+              "0026",
+              "0027",
+              "0034",
+              "0035",
+              "0059",
+              "0065",
+              "0066"
+            ],
+            "pickedNodeIds": [
+              "0035"
+            ],
+            "reasoning": "The lawsuit filing deadline and venue requirements are typically found in the general conditions section, which covers operational conditions including loss-related provisions — but a more specific child node may exist within it."
+          },
+          {
+            "hop": 2,
+            "consideredNodeIds": [
+              "0036",
+              "0037",
+              "0038",
+              "0039",
+              "0040",
+              "0041",
+              "0042",
+              "0043",
+              "0044",
+              "0045",
+              "0046",
+              "0047",
+              "0048",
+              "0049",
+              "0050",
+              "0051",
+              "0052",
+              "0053"
+            ],
+            "pickedNodeIds": [
+              "0050"
+            ],
+            "reasoning": "Section VII.O 'Suit Against Us' directly addresses the deadline to sue (one year from written denial) and the required venue (U.S. District Court for the district where the property is located)."
+          }
+        ],
+        "navigationBreadcrumb": "VII → VII.O",
+        "citations": [
+          {
+            "sectionLabel": "VII.O Suit Against Us",
+            "pageStart": 22,
+            "pageEnd": 22
+          }
+        ]
+      }
+    },
+    {
+      "id": 13,
+      "difficulty": "medium",
+      "question": "Our in-ground swimming pool and its pump equipment were wrecked by the flood. Covered?",
+      "trap_notes": "Must be answered from Section IV (Property Not Insured), not V (Exclusions) — tests whether retrieval distinguishes the two lists.",
+      "must_cite": [
+        "IV.14"
+      ],
+      "must_refuse": false,
+      "vector": {
+        "answer": "Based on the policy passages provided, I can't find this in the policy.\n\nThe passages only address Coverage A for buildings [III.A Coverage A—Building Property, p.3], personal property provisions [III.B.3, p.5], loss mitigation measures [III.C.2.a, p.6-7], property removed to safety [III.C.2.b, p.7], and increased cost of compliance [III.D.4.a, p.9]. None of these passages address swimming pools or their associated pump equipment — whether as covered property, excluded property, or otherwise defined structures.\n\nA complete answer would require reviewing the full policy's definitions, Coverage A building property itemization, and any applicable exclusions, none of which are contained in the passages provided.",
+        "refused": false,
+        "status": "FAIL",
+        "notes": "Missing required cite: IV.14",
+        "latencyMs": 5185,
+        "topSimilarity": 0.520187822321368,
+        "navigationPath": [],
+        "navigationBreadcrumb": "",
+        "citations": [
+          {
+            "sectionLabel": "III.C.2.a Sandbags, Supplies, and Labor",
+            "pageStart": 6,
+            "pageEnd": 7
+          },
+          {
+            "sectionLabel": "III.B.3 Personal property in a building that is not fully",
+            "pageStart": 5,
+            "pageEnd": 5
+          },
+          {
+            "sectionLabel": "III.D.4.a When a building insured under",
+            "pageStart": 9,
+            "pageEnd": 9
+          },
+          {
+            "sectionLabel": "III.A Coverage A—Building Property",
+            "pageStart": 3,
+            "pageEnd": 3
+          },
+          {
+            "sectionLabel": "III.C.2.b Property Removed to Safety",
+            "pageStart": 7,
+            "pageEnd": 7
+          },
+          {
+            "sectionLabel": "VII.G Requirements in Case of Loss",
+            "pageStart": 18,
+            "pageEnd": 18
+          }
+        ]
+      },
+      "tree": {
+        "answer": "Based on the policy passages provided, I can address parts of this question, but with an important limitation.\n\n**The Pool Itself**\n\nThe in-ground swimming pool is built into the **land**, and the policy expressly excludes **\"Land, land values, lawns, trees, shrubs, plants, growing crops, or animals\"** [IV.6, p.11]. An in-ground pool is structurally part of the land/ground, which strongly suggests it would fall within this exclusion.\n\n**The Pump Equipment**\n\nThe pump equipment presents a closer question. However, under the policy, **\"Personal property not inside a building\"** is excluded [IV.1, p.11]. Pool pump equipment is typically located outdoors, not inside a building. If that is the case here, it would fall squarely within this exclusion.\n\n**Important Caveat**\n\nThe passages provided do not include the affirmative coverage grants or definitions sections of the policy, which could bear on how structures like pools are classified (e.g., as a \"building\" or as \"personal property\"). Without those provisions, a complete coverage determination cannot be made solely from these passages.\n\n**Bottom Line:** Based on the available passages, both the pool and the pump equipment face significant coverage obstacles — the pool under the land exclusion [IV.6, p.11] and the pump equipment under the personal property not inside a building exclusion [IV.1, p.11].",
+        "refused": false,
+        "status": "FAIL",
+        "notes": "Missing required cite: IV.14",
+        "latencyMs": 9527,
+        "topSimilarity": null,
+        "navigationPath": [
+          {
+            "hop": 1,
+            "consideredNodeIds": [
+              "0001",
+              "0002",
+              "0006",
+              "0026",
+              "0027",
+              "0034",
+              "0035",
+              "0059",
+              "0065",
+              "0066"
+            ],
+            "pickedNodeIds": [
+              "0026"
+            ],
+            "reasoning": "The 'Property Not Insured' section explicitly enumerates categories of excluded property including underground structures and open water structures, which would cover in-ground pools and their pump equipment."
+          }
+        ],
+        "navigationBreadcrumb": "IV",
+        "citations": [
+          {
+            "sectionLabel": "IV PROPERTY NOT INSURED",
+            "pageStart": 11,
+            "pageEnd": 11
+          },
+          {
+            "sectionLabel": "IV.1 Personal property not inside",
+            "pageStart": 11,
+            "pageEnd": 11
+          },
+          {
+            "sectionLabel": "IV.2 A building, and personal property",
+            "pageStart": 11,
+            "pageEnd": 11
+          },
+          {
+            "sectionLabel": "IV.3 Open structures, including a",
+            "pageStart": 11,
+            "pageEnd": 11
+          },
+          {
+            "sectionLabel": "IV.4 Recreational vehicles other than",
+            "pageStart": 11,
+            "pageEnd": 11
+          },
+          {
+            "sectionLabel": "IV.5 Self-propelled vehicles or ma-",
+            "pageStart": 11,
+            "pageEnd": 11
+          },
+          {
+            "sectionLabel": "IV.5.a Used mainly to service the",
+            "pageStart": 11,
+            "pageEnd": 11
+          },
+          {
+            "sectionLabel": "IV.5.b Designed and used to assist",
+            "pageStart": 11,
+            "pageEnd": 11
+          },
+          {
+            "sectionLabel": "IV.6 Land, land values, lawns, trees,",
+            "pageStart": 11,
+            "pageEnd": 11
+          },
+          {
+            "sectionLabel": "IV.7 Accounts, bills, coins, currency,",
+            "pageStart": 11,
+            "pageEnd": 11
+          }
+        ]
+      }
+    },
+    {
+      "id": 14,
+      "difficulty": "hard",
+      "question": "A pipe burst inside my house and flooded my kitchen and living room. Is this water damage covered?",
+      "trap_notes": "THE flagship trap. Naive systems retrieve 'water damage' language and answer yes. Correct answer requires the flood definition and/or the V.D.4 exclusion. Citing only one of the two grounds = pass; citing neither = fail.",
+      "must_cite": [
+        "V.D.4",
+        "II.B"
+      ],
+      "must_refuse": false,
+      "vector": {
+        "answer": "Based on the policy passages provided, a pipe burst inside your house would **not** appear to be covered. The policy covers direct physical loss **by or from flood** to building property [III.A Coverage A—Building Property, p.3] and personal property [III.B.1, p.5]. A pipe burst is not a flood event.\n\nAdditionally, the policy specifically **excludes** water damage from seeps or leaks on or through the insured property, unless:\n- There is a **flood in the area**, AND\n- The flood is the **proximate cause** of the water intrusion\n\n[V.D.5.c, p.13-14]\n\nSince a pipe burst is an internal plumbing failure — not an external flood event — neither of these conditions would be met, and the exclusion for seeps and leaks would apply.\n\n**Important caveat:** The passages provided do not contain a complete picture of all policy terms, conditions, and exclusions. A pipe burst may be addressed elsewhere in the policy, and this type of damage is commonly covered under a **homeowners insurance policy** rather than a flood insurance policy. I would recommend reviewing your homeowners policy and consulting with your claims attorney for a full coverage analysis.",
+        "refused": false,
+        "status": "PASS",
+        "notes": "Cited V.D.4, II.B",
+        "latencyMs": 6577,
+        "topSimilarity": 0.46917389238628,
+        "navigationPath": [],
+        "navigationBreadcrumb": "",
+        "citations": [
+          {
+            "sectionLabel": "III.B.1 If you have purchased personal property coverage,",
+            "pageStart": 5,
+            "pageEnd": 5
+          },
+          {
+            "sectionLabel": "VII.Q.1 If an insured building has been",
+            "pageStart": 22,
+            "pageEnd": 23
+          },
+          {
+            "sectionLabel": "III.B.7 If you are the owner of a unit and",
+            "pageStart": 6,
+            "pageEnd": 6
+          },
+          {
+            "sectionLabel": "III.A Coverage A—Building Property",
+            "pageStart": 3,
+            "pageEnd": 3
+          },
+          {
+            "sectionLabel": "V.D.5.c Seeps or leaks on or through",
+            "pageStart": 13,
+            "pageEnd": 14
+          },
+          {
+            "sectionLabel": "VII.Q.2 If your insured building is subject",
+            "pageStart": 23,
+            "pageEnd": 23
+          }
+        ]
+      },
+      "tree": {
+        "answer": "Based on the policy passages provided, this type of water damage would **not** appear to be covered.\n\nThe policy defines \"Flood\" as requiring either:\n\n- A **general and temporary condition of partial or complete inundation of two or more acres of normally dry land area or of two or more properties** from overflow of inland or tidal waters, unusual and rapid accumulation of surface waters, or mudflow [II.B.1, p.1]; or\n- Collapse or subsidence of land along the shore of a lake or similar body of water caused by waves or currents [II.B.2, p.1-2].\n\nA burst pipe inside your home does not meet either of these definitions. The flooding in your kitchen and living room originates from an internal plumbing failure, not from an external flood event affecting two or more acres or two or more properties. Therefore, the damage would fall outside the scope of what this flood insurance policy covers.\n\n---\n\n⚠️ **Important Caveat:** The passages provided to me are limited in scope. There may be other sections of your policy — such as building property coverage provisions or additional exclusions — that are relevant to this question but were not included here. I would strongly recommend reviewing the **complete policy** or consulting with a coverage attorney before drawing a final conclusion.",
+        "refused": false,
+        "status": "PASS",
+        "notes": "Cited V.D.4, II.B",
+        "latencyMs": 12566,
+        "topSimilarity": null,
+        "navigationPath": [
+          {
+            "hop": 1,
+            "consideredNodeIds": [
+              "0001",
+              "0002",
+              "0006",
+              "0026",
+              "0027",
+              "0034",
+              "0035",
+              "0059",
+              "0065",
+              "0066"
+            ],
+            "pickedNodeIds": [
+              "0027",
+              "0002"
+            ],
+            "reasoning": "The Exclusions section (V) is most likely to clarify whether internal pipe burst/water damage is excluded (e.g., as sewer backup or non-flood peril), and the Definitions section (II) will clarify how 'flood' is defined, which is key to determining if this type of water damage qualifies for coverage."
+          },
+          {
+            "hop": 2,
+            "consideredNodeIds": [
+              "0028",
+              "0029",
+              "0030",
+              "0031",
+              "0032",
+              "0033",
+              "0003",
+              "0004",
+              "0005"
+            ],
+            "pickedNodeIds": [
+              "0031",
+              "0004"
+            ],
+            "reasoning": "Section V.D covers sewer backup and other water-related exclusions (like water pressure and non-flood water sources), while II.B defines 'flood' — together these sections determine whether an internal pipe burst qualifies as a covered flood event or falls under an exclusion."
+          }
+        ],
+        "navigationBreadcrumb": "V → V.D",
+        "citations": [
+          {
+            "sectionLabel": "II.B Flood, as used in this flood insurance policy, means:",
+            "pageStart": 1,
+            "pageEnd": 1
+          },
+          {
+            "sectionLabel": "II.B.1 A general and temporary condition of partial",
+            "pageStart": 1,
+            "pageEnd": 1
+          },
+          {
+            "sectionLabel": "II.B.1.a Overflow of inland or tidal waters;",
+            "pageStart": 1,
+            "pageEnd": 1
+          },
+          {
+            "sectionLabel": "II.B.1.b Unusual and rapid accumulation or runoff of",
+            "pageStart": 1,
+            "pageEnd": 1
+          },
+          {
+            "sectionLabel": "II.B.1.c Mudflow.",
+            "pageStart": 1,
+            "pageEnd": 1
+          },
+          {
+            "sectionLabel": "II.B.2 Collapse or subsidence of land along the shore of a",
+            "pageStart": 1,
+            "pageEnd": 2
+          },
+          {
+            "sectionLabel": "V.D We do not insure for direct physical",
+            "pageStart": 13,
+            "pageEnd": 13
+          },
+          {
+            "sectionLabel": "V.D.1 The pressure or weight of ice;",
+            "pageStart": 13,
+            "pageEnd": 13
+          },
+          {
+            "sectionLabel": "V.D.2 Freezing or thawing;",
+            "pageStart": 13,
+            "pageEnd": 13
+          },
+          {
+            "sectionLabel": "V.D.3 Rain, snow, sleet, hail, or",
+            "pageStart": 13,
+            "pageEnd": 13
+          }
+        ]
+      }
+    },
+    {
+      "id": 15,
+      "difficulty": "hard",
+      "question": "During heavy rains, sewage backed up through my drains and damaged my floors. Am I covered?",
+      "trap_notes": "Conditional answer required. Systems that answer flatly 'yes' or 'no' without the proximate-cause condition fail. This is the classic NFIP confusion cited in FEMA's own consumer guidance.",
+      "must_cite": [
+        "V.D.5"
+      ],
+      "must_refuse": false,
+      "vector": {
+        "answer": "Based on the policy passages provided, the answer depends on a critical condition.\n\n**The backup itself is generally excluded**, but there is an important exception:\n\nSewer or drain backup that seeps or leaks on or through the insured property is **not covered** under standard circumstances. However, coverage **may apply** if:\n\n- There is a **flood in the area**, AND\n- That flood is the **proximate cause** of the sewer or drain backup\n\n[V.D.5.c, p.13-14]\n\n**In practical terms for your situation:**\n\n- If the heavy rains created a **flood in the area** and that flooding was the proximate cause of the sewage backing up through your drains, the damage to your floors **could be covered**.\n- If the backup occurred simply due to heavy rain overwhelming the sewer system **without a flood in the area**, the damage would **not be covered** under the policy passages provided.\n\n**The key factual questions your attorney should investigate are:**\n\n1. Was there a qualifying flood event occurring in the area at the time of the backup?\n2. Can it be established that the flood — not just the rain itself — was the proximate cause of the drain backup?\n\nThe answers to these questions will be determinative of whether coverage applies under this policy provision.",
+        "refused": false,
+        "status": "PASS",
+        "notes": "Cited V.D.5",
+        "latencyMs": 7090,
+        "topSimilarity": 0.523820429832504,
+        "navigationPath": [],
+        "navigationBreadcrumb": "",
+        "citations": [
+          {
+            "sectionLabel": "V.D.5.c Seeps or leaks on or through",
+            "pageStart": 13,
+            "pageEnd": 14
+          },
+          {
+            "sectionLabel": "III.C.2.a Sandbags, Supplies, and Labor",
+            "pageStart": 6,
+            "pageEnd": 7
+          },
+          {
+            "sectionLabel": "VII.Q.1 If an insured building has been",
+            "pageStart": 22,
+            "pageEnd": 23
+          },
+          {
+            "sectionLabel": "III.D.1 General",
+            "pageStart": 8,
+            "pageEnd": 8
+          },
+          {
+            "sectionLabel": "III.D.3.e Coverage D will pay to bring a flood-damaged",
+            "pageStart": 9,
+            "pageEnd": 9
+          },
+          {
+            "sectionLabel": "VII.Q.2 If your insured building is subject",
+            "pageStart": 23,
+            "pageEnd": 23
+          }
+        ]
+      },
+      "tree": {
+        "answer": "Based on the policy passages provided, this loss would likely **not be covered**.\n\nThe policy explicitly excludes direct physical loss caused by water or water-borne material that \"backs up through sewers or drains\" [V.D.5.a, p.13]. This exclusion appears to directly apply to your situation, as the sewage entered your home through the drain backup during the heavy rain event.\n\nAdditionally, there may be a secondary applicable exclusion. Rain and water-related losses are broadly excluded [V.D.4, p.13], particularly when the damage results from a condition involving \"failure, stoppage, or breakage of water or sewer lines, drains, pumps, fixtures, or equipment\" [V.D.4.b(2), p.13].\n\nIt is also worth noting that the policy states these exclusions apply whether the loss is caused **directly or indirectly** by the listed causes [V.D, p.13], which limits the ability to argue the rain was the true proximate cause rather than the backup itself.\n\n**In summary**, the sewer/drain backup exclusion [V.D.5.a, p.13] would be the primary basis for denial of this claim. You should carefully review whether your policy includes any **separate endorsement** for sewer backup coverage, as such endorsements are sometimes sold as add-ons, but no such endorsement language appears in the passages provided here.",
+        "refused": false,
+        "status": "PASS",
+        "notes": "Cited V.D.5",
+        "latencyMs": 11240,
+        "topSimilarity": null,
+        "navigationPath": [
+          {
+            "hop": 1,
+            "consideredNodeIds": [
+              "0001",
+              "0002",
+              "0006",
+              "0026",
+              "0027",
+              "0034",
+              "0035",
+              "0059",
+              "0065",
+              "0066"
+            ],
+            "pickedNodeIds": [
+              "0027"
+            ],
+            "reasoning": "Section V (Exclusions) explicitly lists sewer backup among the specified physical perils excluded from coverage, making it the most directly relevant section for this question."
+          },
+          {
+            "hop": 2,
+            "consideredNodeIds": [
+              "0028",
+              "0029",
+              "0030",
+              "0031",
+              "0032",
+              "0033"
+            ],
+            "pickedNodeIds": [
+              "0031"
+            ],
+            "reasoning": "Section V.D explicitly lists sewer backup as an excluded peril, directly addressing the scenario of sewage backing up through drains during heavy rains."
+          }
+        ],
+        "navigationBreadcrumb": "V → V.D",
+        "citations": [
+          {
+            "sectionLabel": "V.D We do not insure for direct physical",
+            "pageStart": 13,
+            "pageEnd": 13
+          },
+          {
+            "sectionLabel": "V.D.1 The pressure or weight of ice;",
+            "pageStart": 13,
+            "pageEnd": 13
+          },
+          {
+            "sectionLabel": "V.D.2 Freezing or thawing;",
+            "pageStart": 13,
+            "pageEnd": 13
+          },
+          {
+            "sectionLabel": "V.D.3 Rain, snow, sleet, hail, or",
+            "pageStart": 13,
+            "pageEnd": 13
+          },
+          {
+            "sectionLabel": "V.D.4 Water, moisture, mildew, or mold",
+            "pageStart": 13,
+            "pageEnd": 13
+          },
+          {
+            "sectionLabel": "V.D.4.a Substantially confined to the",
+            "pageStart": 13,
+            "pageEnd": 13
+          },
+          {
+            "sectionLabel": "V.D.4.b That is within your control,",
+            "pageStart": 13,
+            "pageEnd": 13
+          },
+          {
+            "sectionLabel": "V.D.5 Water or water-borne",
+            "pageStart": 13,
+            "pageEnd": 13
+          },
+          {
+            "sectionLabel": "V.D.5.a Backs up through sewers",
+            "pageStart": 13,
+            "pageEnd": 13
+          },
+          {
+            "sectionLabel": "V.D.5.b Discharges or overflows",
+            "pageStart": 13,
+            "pageEnd": 13
+          }
+        ]
+      }
+    },
+    {
+      "id": 16,
+      "difficulty": "hard",
+      "question": "Floodwaters saturated the hillside behind my house and triggered a landslide that damaged my foundation. Since the flood caused it, I'm covered, right?",
+      "trap_notes": "Hardest reasoning question: 'caused by flood' does NOT defeat the earth-movement exclusion, yet mudflow is covered. Requires connecting an exclusion, a definition, and the flood definition. LLMs frequently conflate mudflow and landslide.",
+      "must_cite": [
+        "V.C",
+        "II.C.20"
+      ],
+      "must_refuse": false,
+      "vector": {
+        "answer": "Based on the policy passages provided, this situation is more complicated than it might appear, and the coverage is **not clearly established**.\n\nThe passages explicitly exclude **gradual erosion** as a covered cause of loss [V.C.6, p.13]. However, the same passage does carve out a limited exception — the policy **will** pay for losses from **mudflow** and **land subsidence as a result of erosion** that fall within the policy's specific definition of flood [V.C.6, p.13].\n\n## Key Issues for Your Claim\n\n**The critical question is how the damage is classified:**\n\n- A **landslide** is not explicitly addressed in the passages provided. Whether your specific loss qualifies as a covered \"mudflow\" or \"land subsidence as a result of erosion\" — both of which reference definitions in sections II.B.1.c and II.B.2 — would need to be evaluated against those definitions [V.C.6, p.13].\n- The passages provided **do not include** sections II.B.1.c or II.B.2, which contain the controlling definitions for mudflow and flood.\n\n## Bottom Line\n\nI can't find enough information in the provided passages to definitively confirm or deny coverage for a landslide specifically. **The outcome would depend heavily on the definitions in Sections II.B.1.c and II.B.2**, which were not included in the passages available. You should obtain and review those sections carefully before drawing a conclusion.",
+        "refused": false,
+        "status": "PASS",
+        "notes": "Cited V.C, II.C.20",
+        "latencyMs": 8492,
+        "topSimilarity": 0.528388385524551,
+        "navigationPath": [],
+        "navigationBreadcrumb": "",
+        "citations": [
+          {
+            "sectionLabel": "III.C.2.a Sandbags, Supplies, and Labor",
+            "pageStart": 6,
+            "pageEnd": 7
+          },
+          {
+            "sectionLabel": "VII.Q.2.a Lake floodwaters must damage",
+            "pageStart": 23,
+            "pageEnd": 23
+          },
+          {
+            "sectionLabel": "V.C.6 Gradual erosion.",
+            "pageStart": 13,
+            "pageEnd": 13
+          },
+          {
+            "sectionLabel": "VII.Q.1 If an insured building has been",
+            "pageStart": 22,
+            "pageEnd": 23
+          },
+          {
+            "sectionLabel": "III.D.1 General",
+            "pageStart": 8,
+            "pageEnd": 8
+          },
+          {
+            "sectionLabel": "V.B Flood in Progress. If this policy",
+            "pageStart": 12,
+            "pageEnd": 13
+          }
+        ]
+      },
+      "tree": {
+        "answer": "Based on the policy passages, unfortunately this loss would likely **not be covered**.\n\nThe policy explicitly states that it does not insure for loss to property caused directly by earth movement **even if the earth movement is caused by flood** [V.C, p.13]. Landslide is specifically listed as one of the excluded categories of earth movement [V.C.2, p.13].\n\nYour situation — floodwaters saturating a hillside and triggering a landslide — appears to fall squarely within this exclusion. The policy's specific language anticipating flood-triggered earth movement and still excluding it suggests this precise scenario was contemplated and intentionally excluded.\n\n**There is a narrow exception worth examining:** The policy does state that losses from **mudflow** and **land subsidence as a result of erosion** that are specifically insured under the flood definition *are* covered [V.C.6, p.13]. So two questions worth investigating are:\n\n- Whether the material that moved could be characterized as **mudflow** rather than a landslide under the policy's definition of flood (referenced at II.B.1.c and II.B.2, which were not provided in the passages).\n- Whether any foundation damage resulted from **land subsidence due to erosion** specifically.\n\nTo fully evaluate those potential avenues, you would need to review the flood definition sections **II.B.1.c and II.B.2**, which are not included in the provided passages. I can't find this in the policy for those specific definitions.",
+        "refused": false,
+        "status": "PASS",
+        "notes": "Cited V.C, II.C.20",
+        "latencyMs": 11722,
+        "topSimilarity": null,
+        "navigationPath": [
+          {
+            "hop": 1,
+            "consideredNodeIds": [
+              "0001",
+              "0002",
+              "0006",
+              "0026",
+              "0027",
+              "0034",
+              "0035",
+              "0059",
+              "0065",
+              "0066"
+            ],
+            "pickedNodeIds": [
+              "0027"
+            ],
+            "reasoning": "Section V (Exclusions) explicitly covers earth movement exclusions, which would address whether a flood-triggered landslide is covered or excluded."
+          },
+          {
+            "hop": 2,
+            "consideredNodeIds": [
+              "0028",
+              "0029",
+              "0030",
+              "0031",
+              "0032",
+              "0033"
+            ],
+            "pickedNodeIds": [
+              "0030"
+            ],
+            "reasoning": "Section V.C directly addresses the Earth Movement Exclusion, which excludes landslide damage even when caused by flood, making it the most specific and relevant section to answer this question."
+          }
+        ],
+        "navigationBreadcrumb": "V → V.C",
+        "citations": [
+          {
+            "sectionLabel": "V.C We do not insure for loss",
+            "pageStart": 13,
+            "pageEnd": 13
+          },
+          {
+            "sectionLabel": "V.C.1 Earthquake;",
+            "pageStart": 13,
+            "pageEnd": 13
+          },
+          {
+            "sectionLabel": "V.C.2 Landslide;",
+            "pageStart": 13,
+            "pageEnd": 13
+          },
+          {
+            "sectionLabel": "V.C.3 Land subsidence;",
+            "pageStart": 13,
+            "pageEnd": 13
+          },
+          {
+            "sectionLabel": "V.C.4 Sinkholes;",
+            "pageStart": 13,
+            "pageEnd": 13
+          },
+          {
+            "sectionLabel": "V.C.5 Destabilization or movement",
+            "pageStart": 13,
+            "pageEnd": 13
+          },
+          {
+            "sectionLabel": "V.C.6 Gradual erosion.",
+            "pageStart": 13,
+            "pageEnd": 13
+          }
+        ]
+      }
+    },
+    {
+      "id": 17,
+      "difficulty": "hard",
+      "question": "My house is uninhabitable during repairs. Will the policy pay for our hotel and extra meal costs?",
+      "trap_notes": "Trap for models trained on standard homeowners policies where ALE/Coverage D loss-of-use is standard. This is NOT a refusal question — the policy explicitly addresses and excludes it. A refusal here = fail.",
+      "must_cite": [
+        "V.A.5"
+      ],
+      "must_refuse": false,
+      "vector": {
+        "answer": "Based on the policy passages provided, **no** — your hotel stays and extra meal costs would **not be covered**.\n\nThe policy explicitly excludes:\n\n> *\"Any additional living expenses incurred while the insured building is being repaired or is unable to be occupied for any reason\"* [V.A.5, p.12]\n\nThis exclusion is broad and applies regardless of the reason the building cannot be occupied, which would include your current repair situation. Additional living expenses — such as hotel bills and increased meal costs — fall squarely within this excluded category.",
+        "refused": false,
+        "status": "PASS",
+        "notes": "Cited V.A.5",
+        "latencyMs": 3794,
+        "topSimilarity": 0.606096819090027,
+        "navigationPath": [],
+        "navigationBreadcrumb": "",
+        "citations": [
+          {
+            "sectionLabel": "V.A.5 Any additional living expenses",
+            "pageStart": 12,
+            "pageEnd": 12
+          },
+          {
+            "sectionLabel": "VII.R.3.c If such a dwelling is partially damaged and,",
+            "pageStart": 27,
+            "pageEnd": 27
+          },
+          {
+            "sectionLabel": "VII.R.3.b If such a dwelling is totally destroyed or damaged",
+            "pageStart": 27,
+            "pageEnd": 27
+          },
+          {
+            "sectionLabel": "VII.R.2.a We will pay to repair or replace the damaged",
+            "pageStart": 26,
+            "pageEnd": 26
+          },
+          {
+            "sectionLabel": "VII.R.2.c When the full cost of repair or replacement is",
+            "pageStart": 26,
+            "pageEnd": 26
+          },
+          {
+            "sectionLabel": "VII.R.4.a A dwelling, at the time of loss, when the",
+            "pageStart": 27,
+            "pageEnd": 27
+          }
+        ]
+      },
+      "tree": {
+        "answer": "Based on the policy language, **no**, the policy will not pay for your hotel and extra meal costs during repairs.\n\nThe policy explicitly excludes \"any additional living expenses incurred while the insured building is being repaired or is unable to be occupied for any reason.\" [V.A.5, p.12]\n\nThis exclusion would directly apply to your situation, as hotel stays and extra meal costs are classic examples of additional living expenses incurred while a building is being repaired or is uninhabitable. Furthermore, even if there were any doubt, the policy's broader exclusion of \"any other economic loss you suffer\" would serve as a catch-all to prevent recovery of such costs. [V.A.7, p.12]\n\nThe policy only covers **direct physical loss caused by flood** [V.A, p.12], and the additional living expenses you describe fall squarely outside that coverage.",
+        "refused": false,
+        "status": "PASS",
+        "notes": "Cited V.A.5",
+        "latencyMs": 11131,
+        "topSimilarity": null,
+        "navigationPath": [
+          {
+            "hop": 1,
+            "consideredNodeIds": [
+              "0001",
+              "0002",
+              "0006",
+              "0026",
+              "0027",
+              "0034",
+              "0035",
+              "0059",
+              "0065",
+              "0066"
+            ],
+            "pickedNodeIds": [
+              "0027"
+            ],
+            "reasoning": "Additional living expenses (hotel, meals) during repairs are typically addressed either as an exclusion under economic/consequential losses or as a specific coverage; the Exclusions section (V) explicitly mentions economic losses and is the most likely place to find whether such costs are excluded, but the Property Insured section (III) should also be checked for any 'loss of use' or 'additional living expense' coverage — however, section 0006 (III) is a better candidate to confirm if such coverage exists."
+          },
+          {
+            "hop": 2,
+            "consideredNodeIds": [
+              "0028",
+              "0029",
+              "0030",
+              "0031",
+              "0032",
+              "0033"
+            ],
+            "pickedNodeIds": [
+              "0028"
+            ],
+            "reasoning": "Section V.A explicitly lists 'additional living expenses' among the excluded economic losses, which directly addresses whether hotel and extra meal costs during repairs would be covered."
+          }
+        ],
+        "navigationBreadcrumb": "V → V.A",
+        "citations": [
+          {
+            "sectionLabel": "V.A We only pay for direct physical",
+            "pageStart": 12,
+            "pageEnd": 12
+          },
+          {
+            "sectionLabel": "V.A.1 Loss of revenue or profits;",
+            "pageStart": 12,
+            "pageEnd": 12
+          },
+          {
+            "sectionLabel": "V.A.2 Loss of access to the insured",
+            "pageStart": 12,
+            "pageEnd": 12
+          },
+          {
+            "sectionLabel": "V.A.3 Loss of use of the insured",
+            "pageStart": 12,
+            "pageEnd": 12
+          },
+          {
+            "sectionLabel": "V.A.4 Loss from interruption of",
+            "pageStart": 12,
+            "pageEnd": 12
+          },
+          {
+            "sectionLabel": "V.A.5 Any additional living expenses",
+            "pageStart": 12,
+            "pageEnd": 12
+          },
+          {
+            "sectionLabel": "V.A.6 The cost of complying with any",
+            "pageStart": 12,
+            "pageEnd": 12
+          },
+          {
+            "sectionLabel": "V.A.7 Any other economic loss",
+            "pageStart": 12,
+            "pageEnd": 12
+          }
+        ]
+      }
+    },
+    {
+      "id": 18,
+      "difficulty": "hard",
+      "question": "My finished basement rec room — painted drywall, taped seams, and wall-to-wall carpet over the concrete — was destroyed. What exactly will the policy pay for?",
+      "trap_notes": "Multi-hop across two lists. The 'unfinished, unfloated, not taped' drywall detail is a famous NFIP gotcha; a correct answer must convey the finished materials are NOT fully covered.",
+      "must_cite": [
+        "III.A.8",
+        "III.B.5"
+      ],
+      "must_refuse": false,
+      "vector": {
+        "answer": "Based on the provided policy passages, I cannot give you a complete answer about basement finishing coverage specifically, as the passages do not contain definitions or provisions addressing basement contents, finished basement spaces, or eligible building property components like drywall, carpet, or interior finishes.\n\nThe passages provided address:\n\n- **Replacement cost coverage** for damaged dwelling components, paying the least of the building limit of liability, replacement cost of the damaged part, or the amount actually spent to repair or replace it [VII.R.2.a, p.26]\n- **Totally destroyed dwellings**, where payment would be the lesser of replacement cost/1.5× actual cash value or the building limit [VII.R.3.b, p.27]\n- **Underinsurance penalties**, which could reduce your recovery if your coverage is below 80% of full replacement cost and below the NFIP maximum [VII.R.4.a, p.27]\n- **Increased Cost of Compliance (ICC)** coverage for elevation, floodproofing, relocation, or demolition required by local ordinance [III.D.1, p.8; III.D.4.a, p.9]\n\nTo fully answer your question about what is — and critically, what is **not** — covered for finished basement spaces (drywall, carpet, painted surfaces), the policy passages defining eligible building property and any basement-specific limitations **were not included here**.\n\nI can't find this in the policy.",
+        "refused": false,
+        "status": "FAIL",
+        "notes": "Missing required cite: III.A.8, III.B.5",
+        "latencyMs": 8688,
+        "topSimilarity": 0.511366176268586,
+        "navigationPath": [],
+        "navigationBreadcrumb": "",
+        "citations": [
+          {
+            "sectionLabel": "III.D.1 General",
+            "pageStart": 8,
+            "pageEnd": 8
+          },
+          {
+            "sectionLabel": "VII.R.3.b If such a dwelling is totally destroyed or damaged",
+            "pageStart": 27,
+            "pageEnd": 27
+          },
+          {
+            "sectionLabel": "VII.R.2.a We will pay to repair or replace the damaged",
+            "pageStart": 26,
+            "pageEnd": 26
+          },
+          {
+            "sectionLabel": "VII.R.4.a A dwelling, at the time of loss, when the",
+            "pageStart": 27,
+            "pageEnd": 27
+          },
+          {
+            "sectionLabel": "III.D.4.a When a building insured under",
+            "pageStart": 9,
+            "pageEnd": 9
+          },
+          {
+            "sectionLabel": "III.D.3.d Coverage D will pay for the incremental cost,",
+            "pageStart": 9,
+            "pageEnd": 9
+          }
+        ]
+      },
+      "tree": {
+        "answer": "Based on the policy passages provided, coverage for basement items is strictly limited, and your finished rec room faces significant restrictions.\n\n## What the Policy Will and Will Not Cover\n\n### Drywall — Partial Coverage Only\nThe policy covers drywall in a basement only if it is **\"unfinished and unfloated and not taped.\"** [III.A.8.a(3), p.5] Because your drywall is painted and has taped seams, it does **not** meet this requirement. Additionally, labor costs are only covered for **nailing** unqualified drywall to framing — a finishing step that also does not apply here. [III.A.8.a(3), p.5]\n\n### Carpet — Not Covered\nWall-to-wall carpet over a concrete floor is **not listed anywhere** among the covered basement building items [III.A.8.a, p.5] or covered basement personal property items [III.B.5, p.5-6]. Because coverage is **limited to** the enumerated items only, the carpet would not be payable.\n\n### What *Is* Covered in the Basement\nIf present and damaged, the policy would cover only the specifically listed items, such as:\n- Electrical junction/circuit breaker boxes, outlets, and switches [III.A.8.a(4)(5), p.5]\n- Furnaces, hot water heaters, and heat pumps [III.A.8.a(8)(9), p.5]\n- Sump pumps [III.A.8.a(13), p.5]\n- Required utility connections for listed items [III.A.8.a(16), p.5]\n- **Clean-up costs** [III.A.8.b, p.5]\n- Clothes washers and dryers [III.B.5.b, p.6]\n\n## Bottom Line\nThe recreational use and finished nature of the basement — painted drywall, taped seams, and carpet — falls **outside the policy's enumerated basement coverage**. Recovery will be limited to any qualifying mechanical/utility items that were installed and damaged.",
+        "refused": false,
+        "status": "PASS",
+        "notes": "Cited III.A.8, III.B.5",
+        "latencyMs": 19498,
+        "topSimilarity": null,
+        "navigationPath": [
+          {
+            "hop": 1,
+            "consideredNodeIds": [
+              "0001",
+              "0002",
+              "0006",
+              "0026",
+              "0027",
+              "0034",
+              "0035",
+              "0059",
+              "0065",
+              "0066"
+            ],
+            "pickedNodeIds": [
+              "0006",
+              "0026"
+            ],
+            "reasoning": "The answer about what the policy pays for in a finished basement (drywall, carpet, etc.) most directly lies in Property Insured (which covers what is and isn't covered in basements) and Property Not Insured (which enumerates excluded items, including many basement finishing items), as these two sections together define the scope of coverage for the described loss."
+          },
+          {
+            "hop": 2,
+            "consideredNodeIds": [
+              "0007",
+              "0011",
+              "0015",
+              "0019"
+            ],
+            "pickedNodeIds": [
+              "0007",
+              "0011"
+            ],
+            "reasoning": "The rec room question involves both building components (drywall, carpet as floor covering) under Coverage A and potentially personal property under Coverage B, so both parent sections are relevant but their child sections likely contain the specific basement finish coverage rules."
+          },
+          {
+            "hop": 3,
+            "consideredNodeIds": [
+              "0008",
+              "0009",
+              "0010",
+              "0012",
+              "0013",
+              "0014"
+            ],
+            "pickedNodeIds": [
+              "0010",
+              "0013"
+            ],
+            "reasoning": "The finished basement rec room falls under basement coverage rules, so the building items (drywall, carpet) are governed by section 0010 and personal property by section 0013, which both specifically restrict what is covered in a basement."
+          }
+        ],
+        "navigationBreadcrumb": "III → III.A → III.A.8",
+        "citations": [
+          {
+            "sectionLabel": "III.A.8 Items of property below the lowest",
+            "pageStart": 4,
+            "pageEnd": 5
+          },
+          {
+            "sectionLabel": "III.A.8.a Any of the following items, if installed in their",
+            "pageStart": 5,
+            "pageEnd": 5
+          },
+          {
+            "sectionLabel": "III.A.8.b Clean-up.",
+            "pageStart": 5,
+            "pageEnd": 5
+          },
+          {
+            "sectionLabel": "III.B.5 Coverage for items of property",
+            "pageStart": 5,
+            "pageEnd": 5
+          },
+          {
+            "sectionLabel": "III.B.5.a Air conditioning units, portable or window type;",
+            "pageStart": 6,
+            "pageEnd": 6
+          },
+          {
+            "sectionLabel": "III.B.5.b Clothes washers and dryers; and",
+            "pageStart": 6,
+            "pageEnd": 6
+          },
+          {
+            "sectionLabel": "III.B.5.c Food freezers, other than walk-in, and food in",
+            "pageStart": 6,
+            "pageEnd": 6
+          }
+        ]
+      }
+    },
+    {
+      "id": 19,
+      "difficulty": "hard",
+      "question": "I own a condo unit with this Dwelling Form policy, and my condo association also has an RCBAP. Can I collect under both policies for the same damage?",
+      "trap_notes": "Numeric precision + anti-double-recovery rule. The $250,000 combined cap is the key fact.",
+      "must_cite": [
+        "I.G"
+      ],
+      "must_refuse": false,
+      "vector": {
+        "answer": "No, you cannot collect under both policies for the same damage. The policy imposes several overlapping protections against double recovery:\n\n**No Double Payment for the Same Damage**\nThe policy explicitly states that it \"will only pay for damage once\" and that \"[i]tems of damage paid for under an RCBAP cannot also be claimed under the Dwelling Form policy.\" [I.G, p.1]\n\n**Combined Benefits Cap**\nEven where both policies apply to your unit, \"no more than $250,000 may be paid in combined benefits for a single unit under the Dwelling Form policy and the RCBAP.\" [I.G, p.1]\n\n**Loss Assessment Exclusions Reinforce This**\nOn the loss assessment side, the policy will not pay any loss assessment \"on any item of damage that has already been paid under a RCBAP where a single unit in a condominium building is insured by both a Dwelling Policy and a RCBAP,\" nor any assessment where \"the total payment combined under all policies exceeds the maximum amount of coverage available under the Act for a single unit.\" [III.C.3.b, p.7]\n\n**This Policy is Excess Over the RCBAP**\nWhere both policies cover the same property, this Dwelling Form policy \"will be in excess over the other insurance\" issued under the Act in the name of your condominium association. [VII.B.2, p.15]\n\nIn short, the two policies can work together to cover different items or fill gaps, but they cannot be used to recover twice for the same loss or to exceed the applicable combined limits.",
+        "refused": false,
+        "status": "PASS",
+        "notes": "Cited I.G",
+        "latencyMs": 8413,
+        "topSimilarity": 0.772497079360636,
+        "navigationPath": [],
+        "navigationBreadcrumb": "",
+        "citations": [
+          {
+            "sectionLabel": "I.G A Dwelling Form policy with building coverage may",
+            "pageStart": 1,
+            "pageEnd": 1
+          },
+          {
+            "sectionLabel": "III.C.3.b We will not pay any loss",
+            "pageStart": 7,
+            "pageEnd": 7
+          },
+          {
+            "sectionLabel": "VII.B.2 If there is other insurance",
+            "pageStart": 15,
+            "pageEnd": 15
+          },
+          {
+            "sectionLabel": "III.C.3.a Subject to III.C.3.b below, if this policy",
+            "pageStart": 7,
+            "pageEnd": 7
+          },
+          {
+            "sectionLabel": "III.B.7 If you are the owner of a unit and",
+            "pageStart": 6,
+            "pageEnd": 6
+          },
+          {
+            "sectionLabel": "III.C.3.c Condominium Loss Assessment coverage",
+            "pageStart": 7,
+            "pageEnd": 8
+          }
+        ]
+      },
+      "tree": {
+        "answer": "Based on the policy passages, the answer depends on the specific circumstances, but here is how the two policies interact:\n\n## General Rule: Your Policy Is Excess\n\nWhen your condo association has flood insurance issued under the Act (such as an RCBAP) covering the same property, **your Dwelling Form policy will be in excess** over the association's policy. This means the association's policy pays first, and yours only pays what remains. [VII.B.2, p.15]\n\n---\n\n## Exception: Underinsured Association Policy\n\nYour Dwelling Form policy can step in as **more than just excess coverage** if a condominium loss assessment is made against you as a unit owner, and the association's flood policy did not fully reimburse the loss because the building was not insured at the time of loss for at least: [VII.B.2, p.15]\n\n- **80% or more** of the building's full replacement cost [VII.B.2.a, p.15], **or**\n- The **maximum amount of insurance permitted under the Act** [VII.B.2.b, p.16]\n\n---\n\n## Hard Cap on Combined Recovery\n\nRegardless of how the two policies interact, **the total combined payment under both the RCBAP and your Dwelling Form policy cannot exceed $250,000 per single unit**. [VII.B.3, p.16]\n\n---\n\nIn short, you may collect under both policies, but not beyond the statutory cap, and your policy is generally secondary to the association's coverage.",
+        "refused": false,
+        "status": "FAIL",
+        "notes": "Missing required cite: I.G",
+        "latencyMs": 12656,
+        "topSimilarity": null,
+        "navigationPath": [
+          {
+            "hop": 1,
+            "consideredNodeIds": [
+              "0001",
+              "0002",
+              "0006",
+              "0026",
+              "0027",
+              "0034",
+              "0035",
+              "0059",
+              "0065",
+              "0066"
+            ],
+            "pickedNodeIds": [
+              "0035"
+            ],
+            "reasoning": "The 'other insurance coordination' topic mentioned in Section VII (General Conditions) is where rules about collecting under multiple policies for the same loss would be found."
+          },
+          {
+            "hop": 2,
+            "consideredNodeIds": [
+              "0036",
+              "0037",
+              "0038",
+              "0039",
+              "0040",
+              "0041",
+              "0042",
+              "0043",
+              "0044",
+              "0045",
+              "0046",
+              "0047",
+              "0048",
+              "0049",
+              "0050",
+              "0051",
+              "0052",
+              "0053"
+            ],
+            "pickedNodeIds": [
+              "0037"
+            ],
+            "reasoning": "Section VII.B explicitly addresses coordination with other flood insurance policies including NFIP condominium association coverage (RCBAP), establishing the rules for how this Dwelling Form policy interacts with such coverage and the $250,000 per unit cap."
+          }
+        ],
+        "navigationBreadcrumb": "VII → VII.B",
+        "citations": [
+          {
+            "sectionLabel": "VII.B Other Insurance",
+            "pageStart": 15,
+            "pageEnd": 15
+          },
+          {
+            "sectionLabel": "VII.B.1 If a loss insured by this policy is",
+            "pageStart": 15,
+            "pageEnd": 15
+          },
+          {
+            "sectionLabel": "VII.B.1.a We will pay only the proportion",
+            "pageStart": 15,
+            "pageEnd": 15
+          },
+          {
+            "sectionLabel": "VII.B.1.b If the other policy has a",
+            "pageStart": 15,
+            "pageEnd": 15
+          },
+          {
+            "sectionLabel": "VII.B.1.c This policy will be primary (but",
+            "pageStart": 15,
+            "pageEnd": 15
+          },
+          {
+            "sectionLabel": "VII.B.2 If there is other insurance",
+            "pageStart": 15,
+            "pageEnd": 15
+          },
+          {
+            "sectionLabel": "VII.B.2.a 80 percent or more of its full",
+            "pageStart": 15,
+            "pageEnd": 15
+          },
+          {
+            "sectionLabel": "VII.B.2.b The maximum amount of",
+            "pageStart": 16,
+            "pageEnd": 16
+          },
+          {
+            "sectionLabel": "VII.B.3 The combined coverage payment",
+            "pageStart": 16,
+            "pageEnd": 16
+          }
+        ]
+      }
+    },
+    {
+      "id": 20,
+      "difficulty": "refusal",
+      "question": "A guest slipped in my flooded living room and broke her arm. Does this policy cover my personal liability for her injury?",
+      "trap_notes": "The pure refusal gate. Any invented section citation here is an automatic, severe fail — this is the malpractice scenario the whole system exists to prevent.",
+      "must_cite": [],
+      "must_refuse": true,
+      "vector": {
+        "answer": "I can't find this in the policy.",
+        "refused": true,
+        "status": "PASS",
+        "notes": "Correct refusal",
+        "latencyMs": 1436,
+        "topSimilarity": 0.483024160793157,
+        "navigationPath": [],
+        "navigationBreadcrumb": "",
+        "citations": [
+          {
+            "sectionLabel": "III.B.6 If you are a tenant and have insured personal",
+            "pageStart": 6,
+            "pageEnd": 6
+          },
+          {
+            "sectionLabel": "III.B Coverage B—Personal Property",
+            "pageStart": 5,
+            "pageEnd": 5
+          },
+          {
+            "sectionLabel": "III.B.1 If you have purchased personal property coverage,",
+            "pageStart": 5,
+            "pageEnd": 5
+          },
+          {
+            "sectionLabel": "III.B.7 If you are the owner of a unit and",
+            "pageStart": 6,
+            "pageEnd": 6
+          },
+          {
+            "sectionLabel": "III.C.2.b Property Removed to Safety",
+            "pageStart": 7,
+            "pageEnd": 7
+          },
+          {
+            "sectionLabel": "III.B.3 Personal property in a building that is not fully",
+            "pageStart": 5,
+            "pageEnd": 5
+          }
+        ]
+      },
+      "tree": {
+        "answer": "I can't find this in the policy.",
+        "refused": true,
+        "status": "PASS",
+        "notes": "Correct refusal",
+        "latencyMs": 2085,
+        "topSimilarity": null,
+        "navigationPath": [
+          {
+            "hop": 1,
+            "consideredNodeIds": [
+              "0001",
+              "0002",
+              "0006",
+              "0026",
+              "0027",
+              "0034",
+              "0035",
+              "0059",
+              "0065",
+              "0066"
+            ],
+            "pickedNodeIds": [],
+            "reasoning": "None of the listed sections address personal liability coverage for bodily injury to third parties; this appears to be a flood insurance policy focused solely on property damage, with no liability provisions present."
+          }
+        ],
+        "navigationBreadcrumb": "",
+        "citations": []
+      }
+    }
+  ],
+  "scoreboard": {
+    "vector": {
+      "passRate": 0.85,
+      "trapCatchRate": 0.85,
+      "severeCount": 0,
+      "medianLatencyMs": 6665,
+      "passCount": 17,
+      "totalCount": 20
+    },
+    "tree": {
+      "passRate": 0.8,
+      "trapCatchRate": 0.8,
+      "severeCount": 0,
+      "medianLatencyMs": 11481,
+      "passCount": 16,
+      "totalCount": 20
+    },
+    "oracle_hybrid": {
+      "passRate": 0.9,
+      "trapCatchRate": 0.9,
+      "severeCount": 0,
+      "medianLatencyMs": 11481,
+      "passCount": 18,
+      "totalCount": 20
+    }
+  }
+}

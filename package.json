@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "eval": "tsx eval/run-eval.ts"
+    "eval": "tsx eval/run-eval.ts",
+    "export-lab": "tsx scripts/export-lab.ts",
+    "build-tree": "tsx scripts/build-toc-tree.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.110.0",

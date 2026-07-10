@@ -15,3 +15,8 @@ export const LETTER_MAX_PASSAGES = 12;
 export const CHUNK_TARGET_TOKENS = 800;
 
 export const CHUNK_OVERLAP_TOKENS = 100;
+
+/** Tree-navigation retrieval (Retrieval Lab bake-off). */
+export const TREE_MAX_HOPS = 3;
+export const TREE_MAX_SECTIONS = 3;
+export const TREE_MAX_PASSAGES = 10;

@@ -35,6 +35,8 @@ const ROMAN_TO_INT: Record<string, number> = {
 };
 
 const CHARS_PER_TOKEN = 4;
+/** Drop heading-only or whitespace stubs that pollute retrieval and the ToC tree. */
+const MIN_CHUNK_CONTENT_CHARS = 50;
 
 export function romanToInt(numeral: string): number | null {
   return ROMAN_TO_INT[numeral] ?? null;
@@ -152,7 +154,7 @@ function linesToChunk(
 ): PolicyChunk | null {
   if (lines.length === 0) return null;
   const content = lines.map((l) => l.text).join("\n").trim();
-  if (!content) return null;
+  if (!content || content.length < MIN_CHUNK_CONTENT_CHARS) return null;
   const { pageStart, pageEnd } = aggregatePageRange(lines);
   return { sectionLabel, pageStart, pageEnd, content };
 }
@@ -292,7 +294,7 @@ function splitByTokens(
     }
 
     const slice = fullText.slice(start, end).trim();
-    if (slice) {
+    if (slice.length >= MIN_CHUNK_CONTENT_CHARS) {
       const { pageStart, pageEnd } = pageRangeForSlice(
         lines,
         start,
@@ -335,7 +337,7 @@ export function chunkPolicyText(pages: string[]): PolicyChunk[] {
     chunks.push(...splitLargeSection(section));
   }
 
-  return chunks.filter((c) => c.content.trim().length > 0);
+  return chunks.filter((c) => c.content.trim().length >= MIN_CHUNK_CONTENT_CHARS);
 }
 
 /** Highest printed policy page found in the PDF, for document.page_count. */

@@ -1,3 +1,5 @@
+import type { TocTree } from "@/types/toc";
+
 export type ClaimType =
   | "flood"
   | "fire"
@@ -57,7 +59,7 @@ export interface Document {
   title: string;
   page_count: number | null;
   ingest_status: IngestStatus;
-  toc_tree: Record<string, unknown> | null;
+  toc_tree: TocTree | null;
   ingest_stats: IngestStats | null;
   created_at: string;
 }
@@ -157,7 +159,7 @@ export interface Database {
           title: string;
           page_count?: number | null;
           ingest_status?: IngestStatus;
-          toc_tree?: Record<string, unknown> | null;
+          toc_tree?: TocTree | null;
           ingest_stats?: IngestStats | null;
           created_at?: string;
         };
@@ -170,7 +172,7 @@ export interface Database {
           title?: string;
           page_count?: number | null;
           ingest_status?: IngestStatus;
-          toc_tree?: Record<string, unknown> | null;
+          toc_tree?: TocTree | null;
           ingest_stats?: IngestStats | null;
           created_at?: string;
         };
@@ -265,6 +267,14 @@ export interface Database {
           min_similarity?: number;
         };
         Returns: MatchChunkResult[];
+      };
+      demo_rate_limit_check: {
+        Args: {
+          p_ip: string;
+          p_max: number;
+          p_window_seconds: number;
+        };
+        Returns: boolean;
       };
     };
   };

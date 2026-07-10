@@ -1,33 +1,23 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import { REFUSAL_MESSAGE } from "../lib/qa/constants";
+import { createClient } from "@supabase/supabase-js";
+import { loadEnvLocal, requireEnv } from "./env";
+import {
+  fetchValidSections,
+  resolveDocumentId,
+  scoreQuestion,
+  type EvalStatus,
+  type GoldenFile,
+} from "./scoring";
 import { answerPolicyQuestion } from "../lib/qa/pipeline";
 import type { PolicyCitation } from "../lib/qa/types";
+import { answerPolicyQuestionTree } from "../lib/tree/navigate";
 
 loadEnvLocal();
 
+const strategy = (process.env.STRATEGY ?? "vector") as "vector" | "tree";
+
 const DELAY_MS = 1000;
-const SECTION_REF_PATTERN = /([IVX]+\.[A-Z](?:\.\d+)?)/gi;
-
-interface GoldenQuestion {
-  id: number;
-  difficulty: string;
-  question: string;
-  expected_answer: string;
-  must_cite: string[];
-  pages: number[];
-  must_refuse: boolean;
-  trap_notes?: string;
-}
-
-interface GoldenFile {
-  document: Record<string, unknown>;
-  scoring_rules: Record<string, unknown>;
-  questions: GoldenQuestion[];
-}
-
-type EvalStatus = "PASS" | "FAIL" | "SEVERE";
 
 interface EvalRow {
   id: number;
@@ -41,173 +31,8 @@ interface EvalRow {
   retrievedChunks: PolicyCitation[];
 }
 
-function loadEnvLocal() {
-  const envPath = resolve(process.cwd(), ".env.local");
-  const content = readFileSync(envPath, "utf-8");
-  for (const line of content.split("\n")) {
-    const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith("#")) continue;
-    const eq = trimmed.indexOf("=");
-    if (eq === -1) continue;
-    const key = trimmed.slice(0, eq).trim();
-    let value = trimmed.slice(eq + 1).trim();
-    if (
-      (value.startsWith('"') && value.endsWith('"')) ||
-      (value.startsWith("'") && value.endsWith("'"))
-    ) {
-      value = value.slice(1, -1);
-    }
-    process.env[key] ??= value;
-  }
-}
-
-function requireEnv(name: string): string {
-  const value = process.env[name];
-  if (!value) {
-    throw new Error(`Missing required env var: ${name}`);
-  }
-  return value;
-}
-
 function sleep(ms: number) {
   return new Promise((r) => setTimeout(r, ms));
-}
-
-function normalizeWhitespace(text: string): string {
-  return text.replace(/\s+/g, " ").trim();
-}
-
-function buildValidSectionSet(labels: (string | null)[]): Set<string> {
-  const set = new Set<string>();
-  for (const label of labels) {
-    if (!label) continue;
-    const token = label.trim().split(/\s+/)[0]!;
-    const upper = token.toUpperCase();
-    set.add(upper);
-    const segments = token.split(".");
-    for (let i = 1; i <= segments.length; i++) {
-      set.add(segments.slice(0, i).join(".").toUpperCase());
-    }
-  }
-  return set;
-}
-
-function extractSectionRefs(answer: string): string[] {
-  const refs = new Set<string>();
-  for (const match of answer.matchAll(SECTION_REF_PATTERN)) {
-    refs.add(match[1]!.toUpperCase());
-  }
-  return [...refs];
-}
-
-function answerContainsCite(answer: string, mustCite: string[]): boolean {
-  if (mustCite.length === 0) return false;
-  const normalized = normalizeWhitespace(answer);
-  return mustCite.some((cite) => {
-    const compact = cite.replace(/\s+/g, "");
-    const re = new RegExp(
-      `(?:Section\\s+)?${compact.replace(/\./g, "\\.")}\\b`,
-      "i"
-    );
-    return re.test(normalized);
-  });
-}
-
-function findInventedCitations(
-  answer: string,
-  validSections: Set<string>
-): string[] {
-  return extractSectionRefs(answer).filter((ref) => !validSections.has(ref));
-}
-
-function scoreQuestion(
-  q: GoldenQuestion,
-  answer: string,
-  validSections: Set<string>
-): { status: EvalStatus; notes: string } {
-  const invented = findInventedCitations(answer, validSections);
-  const trimmedAnswer = answer.trim();
-
-  if (invented.length > 0) {
-    return {
-      status: "SEVERE",
-      notes: `Invented citation(s): ${invented.join(", ")}`,
-    };
-  }
-
-  if (q.must_refuse) {
-    if (trimmedAnswer === REFUSAL_MESSAGE) {
-      return { status: "PASS", notes: "Correct refusal" };
-    }
-    return {
-      status: "SEVERE",
-      notes: "must_refuse question received substantive answer",
-    };
-  }
-
-  if (answerContainsCite(answer, q.must_cite)) {
-    return { status: "PASS", notes: `Cited ${q.must_cite.join(", ")}` };
-  }
-
-  return {
-    status: "FAIL",
-    notes: `Missing required cite: ${q.must_cite.join(", ")}`,
-  };
-}
-
-async function resolveDocumentId(
-  supabase: SupabaseClient
-): Promise<string> {
-  const docId = process.env.DOC_ID;
-  if (docId) {
-    const { data, error } = await supabase
-      .from("documents")
-      .select("id, ingest_status, doc_type")
-      .eq("id", docId)
-      .single();
-    if (error || !data) {
-      throw new Error(`DOC_ID not found: ${error?.message}`);
-    }
-    const doc = data as { ingest_status: string };
-    if (doc.ingest_status !== "ready") {
-      throw new Error(`DOC_ID document is not ready (ingest_status=${doc.ingest_status})`);
-    }
-    return docId;
-  }
-
-  const { data, error } = await supabase
-    .from("documents")
-    .select("id, ingest_status, doc_type, created_at")
-    .eq("doc_type", "policy")
-    .eq("ingest_status", "ready")
-    .order("created_at", { ascending: false })
-    .limit(1);
-
-  if (error || !data?.length) {
-    throw new Error(
-      "No ready policy document found. Set DOC_ID or process a policy PDF."
-    );
-  }
-
-  return (data[0] as { id: string }).id;
-}
-
-async function fetchValidSections(
-  supabase: SupabaseClient,
-  documentId: string
-): Promise<Set<string>> {
-  const { data, error } = await supabase
-    .from("chunks")
-    .select("section_label")
-    .eq("document_id", documentId);
-
-  if (error) {
-    throw new Error(`Failed to load chunk labels: ${error.message}`);
-  }
-
-  return buildValidSectionSet(
-    (data ?? []).map((r) => (r as { section_label: string | null }).section_label)
-  );
 }
 
 function printTable(rows: EvalRow[]) {
@@ -251,6 +76,7 @@ function writeMarkdown(rows: EvalRow[], documentId: string) {
 
   let md = `# Eval Results\n\n`;
   md += `Run: ${new Date().toISOString()}\n\n`;
+  md += `Strategy: \`${strategy}\`\n\n`;
   md += `Document ID: \`${documentId}\`\n\n`;
   md += `## Summary\n\n`;
   md += `- **PASS:** ${totalPass} / ${rows.length}\n`;
@@ -269,7 +95,10 @@ function writeMarkdown(rows: EvalRow[], documentId: string) {
     md += `| ${row.id} | ${row.difficulty} | ${row.status} | ${row.topSimilarity} | ${row.latencyMs} | ${row.notes.replace(/\|/g, "\\|")} |\n`;
   }
 
-  const outPath = resolve(process.cwd(), "eval/results.md");
+  const outPath =
+    strategy === "vector"
+      ? resolve(process.cwd(), "eval/results.md")
+      : resolve(process.cwd(), `eval/results.${strategy}.md`);
   writeFileSync(outPath, md, "utf-8");
   console.log(`\nWrote ${outPath}`);
 }
@@ -300,7 +129,10 @@ function writeTranscripts(rows: EvalRow[]) {
     }
   }
 
-  const outPath = resolve(process.cwd(), "eval/transcripts.md");
+  const outPath =
+    strategy === "vector"
+      ? resolve(process.cwd(), "eval/transcripts.md")
+      : resolve(process.cwd(), `eval/transcripts.${strategy}.md`);
   writeFileSync(outPath, md, "utf-8");
   console.log(`Wrote ${outPath}`);
 }
@@ -326,7 +158,9 @@ async function main() {
   const goldenPath = resolve(process.cwd(), "eval/golden.json");
   const golden = JSON.parse(readFileSync(goldenPath, "utf-8")) as GoldenFile;
 
-  console.log(`Evaluating ${golden.questions.length} questions against doc ${documentId}\n`);
+  console.log(
+    `Evaluating ${golden.questions.length} questions (strategy: ${strategy}) against doc ${documentId}\n`
+  );
 
   const rows: EvalRow[] = [];
 
@@ -335,7 +169,10 @@ async function main() {
     const start = Date.now();
     let result;
     try {
-      result = await answerPolicyQuestion(supabase, documentId, q.question);
+      result =
+        strategy === "tree"
+          ? await answerPolicyQuestionTree(supabase, documentId, q.question)
+          : await answerPolicyQuestion(supabase, documentId, q.question);
     } catch (err) {
       const latencyMs = Date.now() - start;
       rows.push({

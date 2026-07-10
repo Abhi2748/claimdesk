@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { isDemoUser } from "@/lib/demo";
 import { createClient } from "@/lib/supabase/server";
 import type { Case, Database, DocType } from "@/types/database";
 
@@ -49,6 +50,10 @@ export async function uploadDocument(
 
   if (!user) {
     return { error: "You must be signed in to upload documents." };
+  }
+
+  if (isDemoUser(user)) {
+    return { error: "Uploads are disabled in the public demo." };
   }
 
   const { data: caseData, error: caseError } = await supabase

@@ -9,11 +9,13 @@ export function DemandLetterPanel({
   initialLetterId,
   initialContent,
   initialPlannedQueries,
+  isDemo = false,
 }: {
   caseId: string;
   initialLetterId: string | null;
   initialContent: string | null;
   initialPlannedQueries: string[] | null;
+  isDemo?: boolean;
 }) {
   const [letterId, setLetterId] = useState<string | null>(initialLetterId);
   const [content, setContent] = useState(initialContent ?? "");
@@ -80,7 +82,7 @@ export function DemandLetterPanel({
     <section className="rounded-xl border border-zinc-200 bg-white shadow-sm">
       <div className="flex flex-wrap items-start justify-between gap-4 border-b border-zinc-200 px-6 py-4">
         <div>
-          <h2 className="text-lg font-medium text-zinc-900">Demand Letter</h2>
+          <h2 className="text-lg font-semibold text-zinc-900">Demand Letter</h2>
           <p className="mt-1 text-sm text-zinc-500">
             AI-drafted demand with policy-grounded citations when a processed
             policy is available
@@ -98,9 +100,16 @@ export function DemandLetterPanel({
 
       <div className="space-y-4 px-6 py-4">
         {isDrafting && (
-          <p className="text-sm text-zinc-500">
-            Planning retrieval, fetching policy passages, and drafting…
-          </p>
+          <div className="rounded-lg border border-dashed border-zinc-200 bg-zinc-50 px-4 py-3">
+            <p className="text-sm text-zinc-600">
+              Planning retrieval, fetching policy passages, and drafting…
+            </p>
+            <div className="mt-2 flex gap-1" aria-hidden>
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber-400" />
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber-400 [animation-delay:150ms]" />
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber-400 [animation-delay:300ms]" />
+            </div>
+          </div>
         )}
 
         {error && (
@@ -133,14 +142,16 @@ export function DemandLetterPanel({
               >
                 {copyLabel}
               </button>
-              <button
-                type="button"
-                onClick={handleSave}
-                disabled={busy || !letterId}
-                className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-800 disabled:opacity-50"
-              >
-                {isSaving ? "Saving…" : "Save edits"}
-              </button>
+              {!isDemo && (
+                <button
+                  type="button"
+                  onClick={handleSave}
+                  disabled={busy || !letterId}
+                  className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-800 disabled:opacity-50"
+                >
+                  {isSaving ? "Saving…" : "Save edits"}
+                </button>
+              )}
             </div>
             <LetterRetrievalPlan queries={plannedQueries} />
           </>

@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { isDemoUser } from "@/lib/demo";
 import { createClient } from "@/lib/supabase/server";
 import { processDocumentIngestion } from "@/lib/ingestion/process-document";
 import type { ProcessDocumentState } from "./ingestion-types";
@@ -20,6 +21,12 @@ async function runIngestion(
 
   if (!user) {
     return { error: "You must be signed in." };
+  }
+
+  if (isDemoUser(user)) {
+    return {
+      error: "Document processing is disabled in the public demo.",
+    };
   }
 
   const { data: docData, error: docError } = await supabase

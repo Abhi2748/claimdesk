@@ -7,6 +7,13 @@ export interface PolicyCitation {
   similarity: number;
 }
 
+export interface NavStep {
+  hop: number;
+  consideredNodeIds: string[];
+  pickedNodeIds: string[];
+  reasoning: string;
+}
+
 export interface PolicyQAResult {
   answer: string;
   citations: PolicyCitation[];
@@ -14,4 +21,6 @@ export interface PolicyQAResult {
   retrievedChunks: PolicyCitation[];
   refused: boolean;
   topSimilarity: number | null;
+  strategy?: "vector" | "tree";
+  navigationPath?: NavStep[];
 }

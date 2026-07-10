@@ -8,6 +8,7 @@ import { LowConfidenceIngestBadge } from "@/components/low-confidence-ingest-bad
 import { KeyDeadlinesCard } from "@/components/key-deadlines-card";
 import { StatusPill } from "@/components/status-pill";
 import { buildDeadlineDisplay } from "@/lib/deadlines";
+import { isDemoUser } from "@/lib/demo";
 import { createClient } from "@/lib/supabase/server";
 import { formatDateOnly } from "@/lib/utils";
 import { DocumentUploadForm } from "./document-upload-form";
@@ -49,6 +50,11 @@ export default async function CaseDetailPage({
 }) {
   const { id } = await params;
   const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const isDemo = isDemoUser(user);
 
   const { data, error: caseError } = await supabase
     .from("cases")
@@ -101,8 +107,8 @@ export default async function CaseDetailPage({
           >
             ← Back to cases
           </Link>
-          <div className="mt-3 flex flex-wrap items-center gap-3">
-            <h1 className="text-2xl font-semibold text-zinc-900">
+          <div className="mt-4 flex flex-wrap items-center gap-3">
+            <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">
               {caseRow.title}
             </h1>
             <ClaimTypeBadge type={caseRow.claim_type} />
@@ -173,51 +179,30 @@ export default async function CaseDetailPage({
 
         {deadlineDisplay && <KeyDeadlinesCard deadline={deadlineDisplay} />}
 
-        <DemandLetterPanel
-          caseId={id}
-          initialLetterId={latestLetter?.id ?? null}
-          initialContent={latestLetter?.content ?? null}
-          initialPlannedQueries={latestLetter?.planned_queries ?? null}
-        />
-
-        {previousLetters.length > 0 && (
-          <section className="rounded-xl border border-zinc-200 bg-white shadow-sm">
-            <div className="border-b border-zinc-200 px-6 py-4">
-              <h2 className="text-lg font-medium text-zinc-900">
-                Previous drafts
-              </h2>
-              <p className="mt-1 text-sm text-zinc-500">
-                Earlier demand letter versions for this case
-              </p>
-            </div>
-            <ul className="divide-y divide-zinc-200">
-              {previousLetters.map((letter) => (
-                <li key={letter.id} className="space-y-2 px-6 py-4">
-                  <p className="text-sm font-medium text-zinc-700">
-                    {formatDateTime(letter.created_at)}
-                  </p>
-                  <LetterRetrievalPlan queries={letter.planned_queries} />
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
-
         <section className="rounded-xl border border-zinc-200 bg-white shadow-sm">
           <div className="border-b border-zinc-200 px-6 py-4">
-            <h2 className="text-lg font-medium text-zinc-900">Documents</h2>
+          <h2 className="text-lg font-semibold text-zinc-900">Documents</h2>
             <p className="mt-1 text-sm text-zinc-500">
               Upload PDFs, then process pending documents to enable policy Q&amp;A
             </p>
           </div>
 
           <div className="border-b border-zinc-200 px-6 py-4">
-            <DocumentUploadForm caseId={id} />
+            {isDemo ? (
+              <p className="text-sm text-zinc-500">
+                Uploads are disabled in the demo.
+              </p>
+            ) : (
+              <DocumentUploadForm caseId={id} />
+            )}
           </div>
 
           {!documents || documents.length === 0 ? (
-            <div className="px-6 py-8 text-center">
-              <p className="text-sm text-zinc-500">No documents yet.</p>
+            <div className="px-6 py-10 text-center">
+              <p className="text-sm font-medium text-zinc-700">No documents yet</p>
+              <p className="mt-1 text-sm text-zinc-500">
+                Upload a PDF to enable policy Q&amp;A and demand-letter drafting.
+              </p>
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -269,21 +254,22 @@ export default async function CaseDetailPage({
                         {formatDateTime(doc.created_at)}
                       </td>
                       <td className="px-4 py-3">
-                        {doc.ingest_status === "pending" && (
+                        {!isDemo && doc.ingest_status === "pending" && (
                           <ProcessDocumentButton
                             documentId={doc.id}
                             caseId={id}
                             variant="process"
                           />
                         )}
-                        {(doc.ingest_status === "ready" ||
-                          doc.ingest_status === "failed") && (
-                          <ProcessDocumentButton
-                            documentId={doc.id}
-                            caseId={id}
-                            variant="reprocess"
-                          />
-                        )}
+                        {!isDemo &&
+                          (doc.ingest_status === "ready" ||
+                            doc.ingest_status === "failed") && (
+                            <ProcessDocumentButton
+                              documentId={doc.id}
+                              caseId={id}
+                              variant="reprocess"
+                            />
+                          )}
                       </td>
                     </tr>
                   ))}
@@ -301,6 +287,37 @@ export default async function CaseDetailPage({
             documentTitle={doc.title}
           />
         ))}
+
+        <DemandLetterPanel
+          caseId={id}
+          initialLetterId={latestLetter?.id ?? null}
+          initialContent={latestLetter?.content ?? null}
+          initialPlannedQueries={latestLetter?.planned_queries ?? null}
+          isDemo={isDemo}
+        />
+
+        {previousLetters.length > 0 && (
+          <section className="rounded-xl border border-zinc-200 bg-white shadow-sm">
+            <div className="border-b border-zinc-200 px-6 py-4">
+              <h2 className="text-lg font-medium text-zinc-900">
+                Previous drafts
+              </h2>
+              <p className="mt-1 text-sm text-zinc-500">
+                Earlier demand letter versions for this case
+              </p>
+            </div>
+            <ul className="divide-y divide-zinc-200">
+              {previousLetters.map((letter) => (
+                <li key={letter.id} className="space-y-2 px-6 py-4">
+                  <p className="text-sm font-medium text-zinc-700">
+                    {formatDateTime(letter.created_at)}
+                  </p>
+                  <LetterRetrievalPlan queries={letter.planned_queries} />
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
       </main>
     </>
   );

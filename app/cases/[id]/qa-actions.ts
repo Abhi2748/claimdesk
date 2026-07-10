@@ -1,6 +1,8 @@
 "use server";
 
 import { answerPolicyQuestion as runPolicyQA } from "@/lib/qa/pipeline";
+import { isDemoUser } from "@/lib/demo";
+import { enforceDemoRateLimit } from "@/lib/demo-rate-limit";
 import { createClient } from "@/lib/supabase/server";
 import type { AskPolicyResult } from "./qa-types";
 
@@ -22,6 +24,13 @@ export async function askPolicy(
 
   if (!user) {
     return { ok: false, error: "You must be signed in." };
+  }
+
+  if (isDemoUser(user)) {
+    const guard = await enforceDemoRateLimit(supabase);
+    if (!guard.ok) {
+      return { ok: false, error: guard.message };
+    }
   }
 
   const { data: docData, error: docError } = await supabase

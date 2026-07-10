@@ -156,13 +156,13 @@ export function PolicyQAPanel({
   return (
     <section className="rounded-xl border border-zinc-200 bg-white shadow-sm">
       <div className="border-b border-zinc-200 px-6 py-4">
-        <h2 className="text-lg font-medium text-zinc-900">Ask the policy</h2>
+        <h2 className="text-lg font-semibold text-zinc-900">Ask the policy</h2>
         <p className="mt-1 text-sm text-zinc-500">{documentTitle}</p>
       </div>
 
       <div className="flex max-h-96 flex-col gap-4 overflow-y-auto px-6 py-4">
-        {messages.length === 0 && (
-          <p className="text-sm text-zinc-500">
+        {messages.length === 0 && !isPending && (
+          <p className="text-sm leading-relaxed text-zinc-500">
             Ask a question about this policy. Answers cite specific sections
             and pages, or refuse when the policy doesn&apos;t address the topic.
           </p>
@@ -172,8 +172,8 @@ export function PolicyQAPanel({
             key={i}
             className={
               msg.role === "user"
-                ? "ml-8 rounded-lg bg-zinc-100 px-4 py-3"
-                : "mr-8 rounded-lg border border-zinc-200 bg-white px-4 py-3"
+                ? "ml-0 rounded-lg bg-zinc-100 px-4 py-3 sm:ml-8"
+                : "mr-0 rounded-lg border border-zinc-200 bg-white px-4 py-3 sm:mr-8"
             }
           >
             {msg.role === "user" ? (
@@ -187,7 +187,14 @@ export function PolicyQAPanel({
           </div>
         ))}
         {isPending && (
-          <p className="text-sm text-zinc-500">Searching policy and drafting answer…</p>
+          <div className="mr-0 rounded-lg border border-dashed border-zinc-200 bg-zinc-50 px-4 py-3 sm:mr-8">
+            <p className="text-sm text-zinc-600">Searching policy and drafting answer…</p>
+            <div className="mt-2 flex gap-1" aria-hidden>
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber-400" />
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber-400 [animation-delay:150ms]" />
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber-400 [animation-delay:300ms]" />
+            </div>
+          </div>
         )}
       </div>
 
@@ -198,7 +205,7 @@ export function PolicyQAPanel({
       )}
 
       <form onSubmit={handleSubmit} className="border-t border-zinc-200 px-6 py-4">
-        <div className="flex gap-2">
+        <div className="flex flex-col gap-2 sm:flex-row">
           <input
             type="text"
             value={question}

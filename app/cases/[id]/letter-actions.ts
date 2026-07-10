@@ -2,6 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { runDemandLetterPipeline } from "@/lib/demand-letter/pipeline";
+import { isDemoUser } from "@/lib/demo";
+import { enforceDemoRateLimit } from "@/lib/demo-rate-limit";
 import { createClient } from "@/lib/supabase/server";
 import type { Case, Document } from "@/types/database";
 import type { DraftDemandLetterResult, SaveLetterResult } from "./letter-types";
@@ -17,6 +19,13 @@ export async function draftDemandLetter(
 
   if (!user) {
     return { ok: false, error: "You must be signed in." };
+  }
+
+  if (isDemoUser(user)) {
+    const guard = await enforceDemoRateLimit(supabase);
+    if (!guard.ok) {
+      return { ok: false, error: guard.message };
+    }
   }
 
   const { data: caseData, error: caseError } = await supabase
@@ -84,6 +93,13 @@ export async function saveLetterEdits(
 
   if (!user) {
     return { ok: false, error: "You must be signed in." };
+  }
+
+  if (isDemoUser(user)) {
+    return {
+      ok: false,
+      error: "Editing is disabled in the public demo.",
+    };
   }
 
   const { error } = await supabase

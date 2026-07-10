@@ -1,6 +1,6 @@
 # Eval Failure Transcripts
 
-Run: 2026-07-08T20:37:56.538Z
+Run: 2026-07-10T03:07:51.723Z
 
 3 FAIL(s) — full question, model answer, and retrieved chunks.
 
@@ -37,9 +37,7 @@ Our in-ground swimming pool and its pump equipment were wrecked by the flood. Co
 
 Based on the policy passages provided, I can't find this in the policy.
 
-The only passage addressing Coverage A—Building Property states that the policy insures against "direct physical loss by or from flood" [III.A Coverage A—Building Property, p.3], but the passages provided do not include the specific list of what structures or items qualify as insured property under Coverage A or Coverage B. Without those definitional provisions, I cannot determine whether an in-ground swimming pool and its pump equipment are covered, excluded, or subject to any special limitations.
-
-You would need to review the complete itemized list of covered building property and any applicable exclusions sections of the policy to answer this question definitively.
+The passages do not contain sufficient information to determine whether an in-ground swimming pool and its pump equipment are covered or excluded. While [III.A, p.3] establishes that Coverage A insures against "direct physical loss by or from flood" to building property, the passages provided do not include the specific definitions or itemized lists that would clarify whether an in-ground swimming pool and associated pump equipment qualify as covered building property — or whether they fall under an exclusion. Those determinations would depend on policy language not present in the passages supplied.
 
 ### Retrieved chunks (6)
 
@@ -60,34 +58,32 @@ My finished basement rec room — painted drywall, taped seams, and wall-to-wall
 
 ### Model answer
 
-Based on the provided policy passages, I cannot give you a complete answer about basement finishing coverage specifically, as the passages do not contain definitions or provisions directly addressing finished basement contents like drywall, carpet, or interior finishes.
+Based on the provided policy passages, I cannot give you a complete answer about basement finishing coverage specifically, as the passages do not address basement contents, finished surfaces, or interior improvements directly.
 
-However, based on what **is** present in the passages, here is what the general repair/replacement framework provides:
-
----
-
-**If the dwelling is repairable**, the policy pays the least of:
-- The building limit of liability on your Declarations Page,
-- The replacement cost of the damaged part with **materials of like kind and quality and for like use**, or
-- The necessary amount actually spent to repair or replace the damaged part for like use.
-
-[VII.R.2.a, p.26]
+However, regarding what the policy **will pay** for dwelling repairs generally, the passages do establish the following payment framework:
 
 ---
 
-**If the dwelling is totally destroyed or not economically feasible to repair**, the policy pays the least of:
-- The lesser of replacement cost or 1.5 times actual cash value, or
-- The building limit of liability on your Declarations Page.
+**Standard Repair/Replacement (Partial Loss)**
 
-[VII.R.3.b, p.27]
+If your dwelling is repairable, the policy pays the **least of**:
+- The building limit of liability on your Declarations Page;
+- The replacement cost of the damaged part with materials of **like kind and quality and for like use**; or
+- The necessary amount **actually spent** to repair or replace the damaged part for like use.
+
+This is paid **without deduction for depreciation** and after the deductible is applied. [VII.R.2.a, p.26]
 
 ---
 
-**Important caveat — the underinsurance rule:** If your coverage is both below 80% of full replacement cost *and* below the maximum NFIP available amount, a proportional payment formula applies and you may receive less than full replacement cost. [VII.R.4.a, p.27]
+**Important Underinsurance Warning**
+
+If your coverage is **both** less than 80% of full replacement cost **and** less than the NFIP maximum available, your recovery may be reduced to either actual cash value or a proportional amount — whichever is greater. [VII.R.4.a, p.27]
 
 ---
 
-**For specific questions about whether finished basement components (drywall, carpet, painted surfaces) qualify as covered building property under this policy, I can't find this in the policy** based on the passages provided. You should request the complete policy definitions and building property coverage sections for that determination.
+**Critical Gap**
+
+The passages provided do **not** address whether finished basement elements (drywall, carpet, paint) are covered building property or excluded. I can't find this in the policy from the passages provided, and you should obtain the full policy language addressing basement finish coverage before making any coverage assumptions.
 
 ### Retrieved chunks (6)
 
