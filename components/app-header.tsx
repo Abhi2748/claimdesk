@@ -14,31 +14,42 @@ export async function AppHeader() {
   return (
     <>
       {isDemo && <DemoBanner />}
-      <header className="border-b border-zinc-200 bg-white">
+      <header className="bg-ink">
         <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4 sm:px-6">
           <div className="flex items-center gap-6">
-            <Link href="/cases" className="text-lg font-semibold text-zinc-900">
-              ClaimDesk
+            <Link
+              href="/cases"
+              className="flex items-center gap-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-seal-ring focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
+            >
+              <span
+                className="flex h-7 w-7 items-center justify-center rounded-md bg-seal font-serif text-base font-medium text-white"
+                aria-hidden
+              >
+                §
+              </span>
+              <span className="font-serif text-lg font-medium text-white">
+                ClaimDesk
+              </span>
             </Link>
             <nav className="flex items-center gap-4 text-sm">
               <Link
                 href="/cases"
-                className="text-zinc-600 transition hover:text-zinc-900"
+                className="text-white/65 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-seal-ring focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
               >
                 Cases
               </Link>
               <Link
                 href="/lab"
-                className="text-zinc-600 transition hover:text-zinc-900"
+                className="text-white/65 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-seal-ring focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
               >
-                Retrieval Lab
+                Accuracy Lab
               </Link>
             </nav>
           </div>
           <form action={signOut}>
             <button
               type="submit"
-              className="text-sm text-zinc-500 transition hover:text-zinc-900"
+              className="text-sm text-white/55 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-seal-ring focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
             >
               Sign out
             </button>

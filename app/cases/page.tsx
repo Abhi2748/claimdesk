@@ -1,9 +1,41 @@
-import type { Case } from "@/types/database";
+import type { Case, ClaimType } from "@/types/database";
 import Link from "next/link";
 import { AppHeader } from "@/components/app-header";
-import { ClaimTypeBadge } from "@/components/claim-type-badge";
+import { ClaimTypeBadge, claimTypeLabels } from "@/components/claim-type-badge";
 import { StatusPill } from "@/components/status-pill";
 import { createClient } from "@/lib/supabase/server";
+
+const claimBorderTint: Record<ClaimType, string> = {
+  flood: "border-l-seal",
+  fire: "border-l-flag",
+  water: "border-l-seal/70",
+  wind_hail: "border-l-brass",
+  denied: "border-l-flag",
+  underpaid: "border-l-brass",
+};
+
+function formatCurrency(amount: number | null) {
+  if (amount == null) return "—";
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  }).format(amount);
+}
+
+function disputeBlock(claimed: number | null, offered: number | null) {
+  const dispute =
+    claimed != null ? claimed - (offered ?? 0) : null;
+  const offeredLabel =
+    offered == null || offered === 0
+      ? "$0 offered (denied)"
+      : `${formatCurrency(offered)} offered`;
+
+  return {
+    disputeLabel: dispute != null ? formatCurrency(dispute) : "—",
+    subline: `${formatCurrency(claimed)} claimed · ${offeredLabel}`,
+  };
+}
 
 export default async function CasesPage() {
   const supabase = await createClient();
@@ -19,9 +51,7 @@ export default async function CasesPage() {
       <>
         <AppHeader />
         <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
-          <p className="text-sm text-red-600">
-            Failed to load cases: {error.message}
-          </p>
+          <p className="text-sm text-flag">Failed to load cases: {error.message}</p>
         </main>
       </>
     );
@@ -30,73 +60,77 @@ export default async function CasesPage() {
   return (
     <>
       <AppHeader />
-      <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
-        <div className="mb-8">
-          <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">Cases</h1>
-          <p className="mt-1 text-sm text-zinc-500">
+      <main className="mx-auto max-w-5xl space-y-8 px-4 py-8 sm:px-6">
+        <header>
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-ink-mute">
+            Caseload
+          </p>
+          <h1 className="mt-1 text-3xl text-ink">Your cases</h1>
+          <p className="mt-1 text-sm text-ink-mute">
             {cases.length} {cases.length === 1 ? "case" : "cases"}
+          </p>
+        </header>
+
+        <div className="rounded-[14px] border border-seal-ring bg-seal-tint px-5 py-4">
+          <p className="text-sm leading-relaxed text-seal-deep">
+            Each case bundles the client&apos;s policy, its key deadlines, and two
+            AI tools — one that answers questions about the policy and one that
+            drafts demand letters. Every AI answer is cited to a specific section
+            and page.
           </p>
         </div>
 
         {cases.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-zinc-300 bg-white px-6 py-12 text-center shadow-sm">
-            <p className="text-sm font-medium text-zinc-700">No cases yet</p>
-            <p className="mt-1 text-sm text-zinc-500">
+          <div className="card-surface border-dashed px-6 py-14 text-center">
+            <p className="text-sm font-medium text-ink-soft">No cases yet</p>
+            <p className="mt-1 text-sm text-ink-mute">
               Seeded demo cases appear after running migrations.
             </p>
           </div>
         ) : (
-          <div className="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm">
-            <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-zinc-200">
-              <thead className="bg-zinc-50">
-                <tr>
-                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-zinc-500">
-                    Title
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-zinc-500">
-                    Client
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-zinc-500">
-                    Claim Type
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-zinc-500">
-                    State
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-zinc-500">
-                    Status
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-zinc-200">
-                {cases.map((c) => (
-                  <tr key={c.id} className="transition hover:bg-zinc-50">
-                    <td className="px-4 py-3">
-                      <Link
-                        href={`/cases/${c.id}`}
-                        className="font-medium text-blue-600 hover:text-blue-800"
-                      >
+          <ul className="space-y-4">
+            {cases.map((c) => {
+              const money = disputeBlock(c.amount_claimed, c.amount_offered);
+              return (
+                <li key={c.id}>
+                  <Link
+                    href={`/cases/${c.id}`}
+                    className={`card-surface group flex flex-col gap-4 border-l-4 ${claimBorderTint[c.claim_type]} p-5 transition hover:border-seal-ring sm:flex-row sm:items-center sm:justify-between focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-seal-ring`}
+                  >
+                    <div className="min-w-0 flex-1">
+                      <h2 className="text-xl text-ink group-hover:text-seal-deep">
                         {c.title}
-                      </Link>
-                    </td>
-                    <td className="px-4 py-3 text-sm text-zinc-700">
-                      {c.client_name}
-                    </td>
-                    <td className="px-4 py-3">
-                      <ClaimTypeBadge type={c.claim_type} />
-                    </td>
-                    <td className="px-4 py-3 text-sm text-zinc-700">
-                      {c.state}
-                    </td>
-                    <td className="px-4 py-3">
-                      <StatusPill status={c.status} />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            </div>
-          </div>
+                      </h2>
+                      <p className="mt-1 text-sm text-ink-mute">
+                        {c.client_name} · {claimTypeLabels[c.claim_type]} ·{" "}
+                        {c.state}
+                      </p>
+                      <div className="mt-3 flex flex-wrap items-center gap-2">
+                        <ClaimTypeBadge type={c.claim_type} />
+                        {c.is_nfip && (
+                          <span className="inline-flex items-center rounded-full bg-seal-tint px-2.5 py-0.5 text-[11.5px] font-semibold text-seal-deep ring-1 ring-inset ring-seal-ring">
+                            NFIP
+                          </span>
+                        )}
+                        <StatusPill status={c.status} />
+                      </div>
+                    </div>
+                    <div className="shrink-0 text-left sm:text-right">
+                      <p className="font-mono text-2xl font-semibold text-ink">
+                        {money.disputeLabel}
+                      </p>
+                      <p className="mt-0.5 text-xs font-medium uppercase tracking-wider text-ink-mute">
+                        In dispute
+                      </p>
+                      <p className="mt-1 font-mono text-xs text-ink-mute">
+                        {money.subline}
+                      </p>
+                    </div>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
         )}
       </main>
     </>

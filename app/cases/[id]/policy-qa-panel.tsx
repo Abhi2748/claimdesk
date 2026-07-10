@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { ExhibitTab } from "@/components/exhibit-tab";
 import { askPolicy } from "./qa-actions";
 import { REFUSAL_MESSAGE, type PolicyCitation } from "./qa-types";
 
@@ -10,46 +11,6 @@ interface ChatMessage {
   citations?: PolicyCitation[];
 }
 
-function formatPage(pageStart: number | null, pageEnd: number | null): string {
-  if (pageStart == null) return "?";
-  if (pageEnd != null && pageEnd !== pageStart) {
-    return `${pageStart}-${pageEnd}`;
-  }
-  return String(pageStart);
-}
-
-function CitationChip({
-  label,
-  citation,
-  expanded,
-  onToggle,
-}: {
-  label: string;
-  citation: PolicyCitation | undefined;
-  expanded: boolean;
-  onToggle: () => void;
-}) {
-  return (
-    <span className="inline">
-      <button
-        type="button"
-        onClick={onToggle}
-        className="mx-0.5 inline-flex items-center rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-800 transition hover:bg-blue-200"
-      >
-        {label}
-      </button>
-      {expanded && citation && (
-        <blockquote className="my-2 rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-sm text-zinc-700">
-          <p className="mb-1 text-xs font-medium text-blue-800">
-            {citation.sectionLabel} · p.{formatPage(citation.pageStart, citation.pageEnd)}
-          </p>
-          <p className="whitespace-pre-wrap">{citation.content}</p>
-        </blockquote>
-      )}
-    </span>
-  );
-}
-
 function findCitationForLabel(
   label: string,
   citations: PolicyCitation[]
@@ -57,7 +18,12 @@ function findCitationForLabel(
   const normalized = label.trim().toLowerCase();
   return citations.find((c) => {
     const section = c.sectionLabel.toLowerCase();
-    const page = formatPage(c.pageStart, c.pageEnd);
+    const page =
+      c.pageStart != null
+        ? c.pageEnd != null && c.pageEnd !== c.pageStart
+          ? `${c.pageStart}-${c.pageEnd}`
+          : String(c.pageStart)
+        : "?";
     return (
       normalized.includes(section) ||
       normalized.includes(`p.${page}`) ||
@@ -75,25 +41,51 @@ function AnswerWithCitations({
 }) {
   const [expandedKey, setExpandedKey] = useState<string | null>(null);
 
-  if (answer === REFUSAL_MESSAGE || citations.length === 0) {
-    return <p className="whitespace-pre-wrap text-sm text-zinc-800">{answer}</p>;
+  if (answer === REFUSAL_MESSAGE) {
+    return (
+      <div>
+        <p className="whitespace-pre-wrap text-sm leading-relaxed text-ink-soft">
+          {answer}
+        </p>
+        <p className="mt-3 text-xs font-medium text-seal">
+          ✓ ClaimDesk refused rather than guessing
+        </p>
+      </div>
+    );
+  }
+
+  if (citations.length === 0) {
+    return (
+      <p className="whitespace-pre-wrap text-sm leading-relaxed text-ink-soft">
+        {answer}
+      </p>
+    );
   }
 
   const parts = answer.split(/(\[[^\]]+\])/g);
 
   return (
-    <div className="text-sm text-zinc-800">
+    <div className="text-sm leading-relaxed text-ink-soft">
       {parts.map((part, i) => {
         const match = part.match(/^\[(.+)\]$/);
         if (match) {
           const label = match[1]!;
           const key = `${label}-${i}`;
           const citation = findCitationForLabel(label, citations);
+          if (!citation) {
+            return (
+              <span key={key} className="whitespace-pre-wrap">
+                {part}
+              </span>
+            );
+          }
           return (
-            <CitationChip
+            <ExhibitTab
               key={key}
-              label={part}
-              citation={citation}
+              sectionLabel={citation.sectionLabel}
+              pageStart={citation.pageStart}
+              pageEnd={citation.pageEnd}
+              content={citation.content}
               expanded={expandedKey === key}
               onToggle={() =>
                 setExpandedKey(expandedKey === key ? null : key)
@@ -154,15 +146,22 @@ export function PolicyQAPanel({
   }
 
   return (
-    <section className="rounded-xl border border-zinc-200 bg-white shadow-sm">
-      <div className="border-b border-zinc-200 px-6 py-4">
-        <h2 className="text-lg font-semibold text-zinc-900">Ask the policy</h2>
-        <p className="mt-1 text-sm text-zinc-500">{documentTitle}</p>
+    <section className="card-surface overflow-hidden">
+      <div className="border-b border-line px-6 py-4">
+        <h2 className="text-xl text-ink">Ask the policy</h2>
+        <p className="mt-1 text-sm text-ink-mute">{documentTitle}</p>
+      </div>
+
+      <div className="border-b border-line-soft bg-seal-tint px-6 py-3">
+        <p className="text-sm leading-relaxed text-seal-deep">
+          Grounded answers only — each reply cites the policy, or refuses if the
+          policy doesn&apos;t address it.
+        </p>
       </div>
 
       <div className="flex max-h-96 flex-col gap-4 overflow-y-auto px-6 py-4">
         {messages.length === 0 && !isPending && (
-          <p className="text-sm leading-relaxed text-zinc-500">
+          <p className="text-sm leading-relaxed text-ink-mute">
             Ask a question about this policy. Answers cite specific sections
             and pages, or refuse when the policy doesn&apos;t address the topic.
           </p>
@@ -172,12 +171,12 @@ export function PolicyQAPanel({
             key={i}
             className={
               msg.role === "user"
-                ? "ml-0 rounded-lg bg-zinc-100 px-4 py-3 sm:ml-8"
-                : "mr-0 rounded-lg border border-zinc-200 bg-white px-4 py-3 sm:mr-8"
+                ? "ml-0 rounded-[10px] bg-card-2 px-4 py-3 sm:ml-8"
+                : "mr-0 rounded-[10px] border border-line bg-card px-4 py-3 sm:mr-8"
             }
           >
             {msg.role === "user" ? (
-              <p className="text-sm text-zinc-900">{msg.content}</p>
+              <p className="text-sm text-ink">{msg.content}</p>
             ) : (
               <AnswerWithCitations
                 answer={msg.content}
@@ -187,24 +186,26 @@ export function PolicyQAPanel({
           </div>
         ))}
         {isPending && (
-          <div className="mr-0 rounded-lg border border-dashed border-zinc-200 bg-zinc-50 px-4 py-3 sm:mr-8">
-            <p className="text-sm text-zinc-600">Searching policy and drafting answer…</p>
-            <div className="mt-2 flex gap-1" aria-hidden>
-              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber-400" />
-              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber-400 [animation-delay:150ms]" />
-              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber-400 [animation-delay:300ms]" />
+          <div className="mr-0 rounded-[10px] border border-dashed border-line bg-card-2 px-4 py-3 sm:mr-8">
+            <p className="text-sm text-ink-mute">
+              Searching policy and drafting answer…
+            </p>
+            <div className="mt-2 flex gap-1 motion-reduce:hidden" aria-hidden>
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-seal" />
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-seal [animation-delay:150ms]" />
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-seal [animation-delay:300ms]" />
             </div>
           </div>
         )}
       </div>
 
       {error && (
-        <div className="mx-6 mb-2 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">
+        <div className="mx-6 mb-2 rounded-[10px] bg-flag-tint px-3 py-2 text-sm text-flag">
           {error}
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="border-t border-zinc-200 px-6 py-4">
+      <form onSubmit={handleSubmit} className="border-t border-line px-6 py-4">
         <div className="flex flex-col gap-2 sm:flex-row">
           <input
             type="text"
@@ -212,12 +213,12 @@ export function PolicyQAPanel({
             onChange={(e) => setQuestion(e.target.value)}
             placeholder="e.g. How does this policy define a flood?"
             disabled={isPending}
-            className="flex-1 rounded-lg border border-zinc-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50"
+            className="flex-1 rounded-[10px] border border-line bg-card px-3 py-2 text-sm shadow-sm focus:border-seal focus:outline-none focus:ring-2 focus:ring-seal-ring disabled:opacity-50"
           />
           <button
             type="submit"
             disabled={isPending || !question.trim()}
-            className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700 disabled:opacity-50"
+            className="rounded-[10px] bg-seal px-4 py-2 text-sm font-semibold text-white transition hover:bg-seal-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-seal-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card disabled:opacity-50"
           >
             Ask
           </button>

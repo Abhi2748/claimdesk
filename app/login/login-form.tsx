@@ -11,7 +11,7 @@ export function LoginForm() {
   return (
     <form action={formAction} className="space-y-4">
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-zinc-700">
+        <label htmlFor="email" className="block text-sm font-medium text-ink-soft">
           Email
         </label>
         <input
@@ -20,7 +20,7 @@ export function LoginForm() {
           type="email"
           required
           autoComplete="email"
-          className="mt-1 block w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="mt-1 block w-full rounded-[10px] border border-line bg-card px-3 py-2 text-sm shadow-sm focus:border-seal focus:outline-none focus:ring-2 focus:ring-seal-ring"
           placeholder="you@firm.com"
         />
       </div>
@@ -28,7 +28,7 @@ export function LoginForm() {
       <div>
         <label
           htmlFor="password"
-          className="block text-sm font-medium text-zinc-700"
+          className="block text-sm font-medium text-ink-soft"
         >
           Password
         </label>
@@ -38,12 +38,12 @@ export function LoginForm() {
           type="password"
           required
           autoComplete="current-password"
-          className="mt-1 block w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="mt-1 block w-full rounded-[10px] border border-line bg-card px-3 py-2 text-sm shadow-sm focus:border-seal focus:outline-none focus:ring-2 focus:ring-seal-ring"
         />
       </div>
 
       {state.error && (
-        <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">
+        <p className="rounded-[10px] bg-flag-tint px-3 py-2 text-sm text-flag">
           {state.error}
         </p>
       )}
@@ -51,7 +51,7 @@ export function LoginForm() {
       <button
         type="submit"
         disabled={pending}
-        className="w-full rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-blue-700 disabled:opacity-50"
+        className="w-full rounded-[10px] bg-seal px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-seal-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-seal-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card disabled:opacity-50"
       >
         {pending ? "Signing in…" : "Sign in"}
       </button>

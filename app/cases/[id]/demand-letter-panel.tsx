@@ -79,20 +79,27 @@ export function DemandLetterPanel({
   const busy = isDrafting || isSaving;
 
   return (
-    <section className="rounded-xl border border-zinc-200 bg-white shadow-sm">
-      <div className="flex flex-wrap items-start justify-between gap-4 border-b border-zinc-200 px-6 py-4">
-        <div>
-          <h2 className="text-lg font-semibold text-zinc-900">Demand Letter</h2>
-          <p className="mt-1 text-sm text-zinc-500">
-            AI-drafted demand with policy-grounded citations when a processed
-            policy is available
-          </p>
+    <section className="card-surface overflow-hidden">
+      <div className="flex flex-wrap items-start justify-between gap-4 border-b border-line px-6 py-4">
+        <div className="flex flex-wrap items-center gap-3">
+          <div>
+            <h2 className="text-xl text-ink">Demand letter</h2>
+            <p className="mt-1 text-sm text-ink-mute">
+              AI-drafted demand with policy-grounded citations when a processed
+              policy is available
+            </p>
+          </div>
+          {content && (
+            <span className="inline-flex items-center rounded-full bg-pass-tint px-2.5 py-0.5 text-[11.5px] font-semibold text-pass ring-1 ring-inset ring-pass/30">
+              Draft ready
+            </span>
+          )}
         </div>
         <button
           type="button"
           onClick={handleDraft}
           disabled={busy}
-          className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700 disabled:opacity-50"
+          className="rounded-[10px] bg-seal px-4 py-2 text-sm font-semibold text-white transition hover:bg-seal-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-seal-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card disabled:opacity-50"
         >
           {isDrafting ? "Drafting letter…" : "Draft demand letter"}
         </button>
@@ -100,26 +107,26 @@ export function DemandLetterPanel({
 
       <div className="space-y-4 px-6 py-4">
         {isDrafting && (
-          <div className="rounded-lg border border-dashed border-zinc-200 bg-zinc-50 px-4 py-3">
-            <p className="text-sm text-zinc-600">
+          <div className="rounded-[10px] border border-dashed border-line bg-card-2 px-4 py-3">
+            <p className="text-sm text-ink-mute">
               Planning retrieval, fetching policy passages, and drafting…
             </p>
-            <div className="mt-2 flex gap-1" aria-hidden>
-              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber-400" />
-              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber-400 [animation-delay:150ms]" />
-              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber-400 [animation-delay:300ms]" />
+            <div className="mt-2 flex gap-1 motion-reduce:hidden" aria-hidden>
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-seal" />
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-seal [animation-delay:150ms]" />
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-seal [animation-delay:300ms]" />
             </div>
           </div>
         )}
 
         {error && (
-          <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">
+          <p className="rounded-[10px] bg-flag-tint px-3 py-2 text-sm text-flag">
             {error}
           </p>
         )}
 
         {info && !error && (
-          <p className="rounded-lg bg-blue-50 px-3 py-2 text-sm text-blue-800">
+          <p className="rounded-[10px] bg-seal-tint px-3 py-2 text-sm text-seal-deep">
             {info}
           </p>
         )}
@@ -131,14 +138,14 @@ export function DemandLetterPanel({
               onChange={(e) => setContent(e.target.value)}
               disabled={busy}
               rows={24}
-              className="w-full rounded-lg border border-zinc-300 px-3 py-2 font-mono text-sm leading-relaxed text-zinc-800 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50"
+              className="w-full rounded-[10px] border border-line bg-card px-4 py-3 font-serif text-sm leading-relaxed text-ink shadow-sm focus:border-seal focus:outline-none focus:ring-2 focus:ring-seal-ring disabled:opacity-50"
             />
             <div className="flex flex-wrap gap-2">
               <button
                 type="button"
                 onClick={handleCopy}
                 disabled={busy || !content}
-                className="rounded-lg border border-zinc-300 bg-white px-4 py-2 text-sm font-medium text-zinc-700 transition hover:bg-zinc-50 disabled:opacity-50"
+                className="rounded-[10px] border border-line bg-card px-4 py-2 text-sm font-medium text-ink-soft transition hover:bg-card-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-seal-ring disabled:opacity-50"
               >
                 {copyLabel}
               </button>
@@ -147,7 +154,7 @@ export function DemandLetterPanel({
                   type="button"
                   onClick={handleSave}
                   disabled={busy || !letterId}
-                  className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-800 disabled:opacity-50"
+                  className="rounded-[10px] bg-ink px-4 py-2 text-sm font-semibold text-white transition hover:bg-ink-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-seal-ring disabled:opacity-50"
                 >
                   {isSaving ? "Saving…" : "Save edits"}
                 </button>
@@ -157,7 +164,7 @@ export function DemandLetterPanel({
           </>
         ) : (
           !isDrafting && (
-            <p className="text-sm text-zinc-500">
+            <p className="text-sm text-ink-mute">
               No demand letter yet. Click &quot;Draft demand letter&quot; to
               generate one from this case&apos;s facts
               {initialContent === null ? " and policy, if available" : ""}.

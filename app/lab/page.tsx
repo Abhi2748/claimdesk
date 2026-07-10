@@ -10,20 +10,23 @@ export default function LabPage() {
       <AppHeader />
       <main className="mx-auto max-w-5xl space-y-8 px-4 py-8 sm:px-6">
         {!data ? (
-          <div className="rounded-xl border border-dashed border-zinc-300 bg-white px-6 py-14 text-center shadow-sm">
-            <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">
-              Retrieval Lab
-            </h1>
-            <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-zinc-600">
-              No lab data yet. Run the exporter to benchmark vector vs tree
-              retrieval on the golden question set.
+          <div className="card-surface border-dashed px-6 py-14 text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-ink-mute">
+              How we prove it
             </p>
-            <code className="mt-6 inline-block rounded-lg bg-zinc-100 px-4 py-2.5 text-sm text-zinc-800">
+            <h1 className="mt-2 text-3xl text-ink">Accuracy Lab</h1>
+            <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-ink-soft">
+              No lab data yet. Run the exporter to benchmark similarity search
+              vs guided reading on the golden question set.
+            </p>
+            <code className="mt-6 inline-block rounded-[10px] bg-card-2 px-4 py-2.5 font-mono text-sm text-ink">
               npm run export-lab
             </code>
-            <p className="mt-4 text-xs leading-relaxed text-zinc-500">
+            <p className="mt-4 text-xs leading-relaxed text-ink-mute">
               Requires DOC_ID, eval credentials, and API keys in{" "}
-              <code className="rounded bg-zinc-100 px-1 py-0.5">.env.local</code>
+              <code className="rounded bg-card-2 px-1 py-0.5 font-mono">
+                .env.local
+              </code>
             </p>
           </div>
         ) : (

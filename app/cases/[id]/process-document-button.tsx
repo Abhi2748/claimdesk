@@ -40,17 +40,17 @@ export function ProcessDocumentButton({
         disabled={isPending}
         className={
           isReprocess
-            ? "rounded-lg border border-indigo-300 bg-white px-3 py-1.5 text-xs font-medium text-indigo-700 transition hover:bg-indigo-50 disabled:opacity-50"
-            : "rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white transition hover:bg-indigo-700 disabled:opacity-50"
+            ? "rounded-[10px] border border-seal-ring bg-card px-3 py-1.5 text-xs font-semibold text-seal-deep transition hover:bg-seal-tint focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-seal-ring disabled:opacity-50"
+            : "rounded-[10px] bg-seal px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-seal-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-seal-ring disabled:opacity-50"
         }
       >
         {isPending ? pendingLabel : label}
       </button>
       {state.error && (
-        <span className="max-w-xs text-xs text-red-600">{state.error}</span>
+        <span className="max-w-xs text-xs text-flag">{state.error}</span>
       )}
       {state.success && (
-        <span className="text-xs text-green-600">
+        <span className="text-xs text-pass">
           {isReprocess ? "Re-processed successfully." : "Processed successfully."}
         </span>
       )}

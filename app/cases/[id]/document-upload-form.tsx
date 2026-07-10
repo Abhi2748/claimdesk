@@ -35,7 +35,7 @@ export function DocumentUploadForm({ caseId }: { caseId: string }) {
         <div>
           <label
             htmlFor="doc_type"
-            className="block text-sm font-medium text-zinc-700"
+            className="block text-sm font-medium text-ink-soft"
           >
             Document type
           </label>
@@ -44,7 +44,7 @@ export function DocumentUploadForm({ caseId }: { caseId: string }) {
             name="doc_type"
             required
             defaultValue="policy"
-            className="mt-1 block w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="mt-1 block w-full rounded-[10px] border border-line bg-card px-3 py-2 text-sm shadow-sm focus:border-seal focus:outline-none focus:ring-2 focus:ring-seal-ring"
           >
             {docTypeOptions.map((opt) => (
               <option key={opt.value} value={opt.value}>
@@ -57,7 +57,7 @@ export function DocumentUploadForm({ caseId }: { caseId: string }) {
         <div>
           <label
             htmlFor="file"
-            className="block text-sm font-medium text-zinc-700"
+            className="block text-sm font-medium text-ink-soft"
           >
             PDF file
           </label>
@@ -67,19 +67,19 @@ export function DocumentUploadForm({ caseId }: { caseId: string }) {
             type="file"
             accept="application/pdf"
             required
-            className="mt-1 block w-full text-sm text-zinc-500 file:mr-4 file:rounded-lg file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-medium file:text-blue-700 hover:file:bg-blue-100"
+            className="mt-1 block w-full text-sm text-ink-mute file:mr-4 file:rounded-[10px] file:border-0 file:bg-seal-tint file:px-4 file:py-2 file:text-sm file:font-semibold file:text-seal-deep hover:file:bg-seal-ring/40"
           />
         </div>
       </div>
 
       {state.error && (
-        <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">
+        <p className="rounded-[10px] bg-flag-tint px-3 py-2 text-sm text-flag">
           {state.error}
         </p>
       )}
 
       {state.success && (
-        <p className="rounded-lg bg-green-50 px-3 py-2 text-sm text-green-700">
+        <p className="rounded-[10px] bg-pass-tint px-3 py-2 text-sm text-pass">
           Document uploaded successfully.
         </p>
       )}
@@ -87,7 +87,7 @@ export function DocumentUploadForm({ caseId }: { caseId: string }) {
       <button
         type="submit"
         disabled={pending}
-        className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700 disabled:opacity-50"
+        className="rounded-[10px] bg-seal px-4 py-2 text-sm font-semibold text-white transition hover:bg-seal-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-seal-ring disabled:opacity-50"
       >
         {pending ? "Uploading…" : "Upload document"}
       </button>

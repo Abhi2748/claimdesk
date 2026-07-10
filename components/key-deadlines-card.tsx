@@ -5,10 +5,10 @@ const statusStyles: Record<
   DeadlineDisplay["urgency"],
   string
 > = {
-  urgent: "bg-red-100 text-red-800",
-  warning: "bg-amber-100 text-amber-800",
-  ok: "bg-green-100 text-green-800",
-  pending: "bg-zinc-100 text-zinc-600",
+  urgent: "bg-flag-tint text-flag ring-flag/30",
+  warning: "bg-brass-tint text-brass ring-brass-ring",
+  ok: "bg-pass-tint text-pass ring-pass/30",
+  pending: "bg-card-2 text-ink-mute ring-line",
 };
 
 export function KeyDeadlinesCard({
@@ -17,60 +17,76 @@ export function KeyDeadlinesCard({
   deadline: DeadlineDisplay;
 }) {
   return (
-    <section className="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm">
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <h2 className="text-sm font-medium uppercase tracking-wider text-zinc-500">
-          Key Deadlines
-        </h2>
-        <span
-          className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide ${statusStyles[deadline.urgency]}`}
-        >
-          {deadline.statusLabel}
-        </span>
-      </div>
+    <section className="card-surface overflow-hidden border-l-4 border-l-flag">
+      <div className="p-6">
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+          <h2 className="text-xl text-ink">Key deadline</h2>
+          <span
+            className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[11.5px] font-semibold uppercase tracking-wide ring-1 ring-inset ${statusStyles[deadline.urgency]}`}
+          >
+            {deadline.statusLabel}
+          </span>
+        </div>
 
-      <dl className="grid gap-4 sm:grid-cols-2">
-        <div className="sm:col-span-2">
-          <dt className="text-sm text-zinc-500">Rule</dt>
-          <dd className="mt-0.5 text-sm text-zinc-900">{deadline.description}</dd>
-        </div>
-        <div>
-          <dt className="text-sm text-zinc-500">Claim basis</dt>
-          <dd className="mt-0.5 text-sm font-medium text-zinc-900">
-            {deadline.claimBasis}
-          </dd>
-        </div>
-        <div>
-          <dt className="text-sm text-zinc-500">Period</dt>
-          <dd className="mt-0.5 text-sm font-medium text-zinc-900">
+        <dl className="grid gap-4 sm:grid-cols-2">
+          <div className="sm:col-span-2">
+            <dt className="text-xs font-medium uppercase tracking-wider text-ink-mute">
+              Rule
+            </dt>
+            <dd className="mt-1 text-sm leading-relaxed text-ink">
+              {deadline.description}
+            </dd>
+          </div>
+          <div>
+            <dt className="text-xs font-medium uppercase tracking-wider text-ink-mute">
+              Runs from
+            </dt>
+            <dd className="mt-1 text-sm font-medium text-ink">
+              {deadline.claimBasis}
+            </dd>
+          </div>
+          <div>
+            <dt className="text-xs font-medium uppercase tracking-wider text-ink-mute">
+              Deadline
+            </dt>
+            <dd className="mt-1 font-mono text-sm font-medium text-ink">
+              {deadline.deadlineLabel}
+            </dd>
+          </div>
+          <div className="sm:col-span-2">
+            <dt className="text-xs font-medium uppercase tracking-wider text-ink-mute">
+              Source
+            </dt>
+            <dd className="mt-1 font-mono text-sm text-ink-soft">
+              {deadline.source}
+            </dd>
+          </div>
+        </dl>
+
+        <div className="mt-5 rounded-[10px] border border-flag/20 bg-flag-tint px-4 py-3">
+          <p className="text-xs font-semibold uppercase tracking-wider text-flag">
+            Why it matters
+          </p>
+          <p className="mt-1 text-sm leading-relaxed text-ink-soft">
             {deadline.periodLabel}
-          </dd>
+            {deadline.daysRemainingLabel !== "—" && (
+              <>
+                {" "}
+                ·{" "}
+                <span className="font-mono font-medium text-ink">
+                  {deadline.daysRemainingLabel}
+                </span>
+              </>
+            )}
+          </p>
         </div>
-        <div>
-          <dt className="text-sm text-zinc-500">Deadline</dt>
-          <dd className="mt-0.5 text-sm font-medium text-zinc-900">
-            {deadline.deadlineLabel}
-          </dd>
-        </div>
-        <div>
-          <dt className="text-sm text-zinc-500">Days remaining</dt>
-          <dd className="mt-0.5 text-sm font-medium text-zinc-900">
-            {deadline.daysRemainingLabel}
-          </dd>
-        </div>
-        <div className="sm:col-span-2">
-          <dt className="text-sm text-zinc-500">Source</dt>
-          <dd className="mt-0.5 text-sm text-zinc-700">
-            Source: {deadline.source}
-          </dd>
-        </div>
-      </dl>
 
-      {deadline.showDemoDisclaimer && (
-        <p className="mt-4 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-800">
-          {DEMO_DISCLAIMER}
-        </p>
-      )}
+        {deadline.showDemoDisclaimer && (
+          <p className="mt-4 rounded-[10px] border border-brass-ring bg-brass-tint px-3 py-2 text-sm text-brass">
+            {DEMO_DISCLAIMER}
+          </p>
+        )}
+      </div>
     </section>
   );
 }
