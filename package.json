@@ -1,35 +1,16 @@
 {
   "name": "claimdesk",
-  "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@9.15.9",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint",
-    "eval": "tsx eval/run-eval.ts",
-    "export-lab": "tsx scripts/export-lab.ts",
-    "build-tree": "tsx scripts/build-toc-tree.ts"
-  },
-  "dependencies": {
-    "@anthropic-ai/sdk": "^0.110.0",
-    "@supabase/ssr": "^0.12.0",
-    "@supabase/supabase-js": "^2.110.1",
-    "next": "16.2.10",
-    "openai": "^6.45.0",
-    "react": "19.2.4",
-    "react-dom": "19.2.4",
-    "unpdf": "^1.6.2"
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "typecheck": "turbo typecheck",
+    "gen:types": "turbo gen:types",
+    "check:types": "turbo check:types"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.2.10",
-    "tailwindcss": "^4",
-    "tsx": "^4.23.0",
-    "typescript": "^5"
+    "turbo": "^2.5.4"
   }
 }

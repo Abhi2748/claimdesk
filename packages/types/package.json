@@ -1,0 +1,23 @@
+{
+  "name": "@claimdesk/types",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "gen:types": "node ./scripts/gen-types.mjs",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "check:types": "pnpm gen:types && node ./scripts/check-stale.mjs"
+  },
+  "devDependencies": {
+    "openapi-typescript": "^7.10.1",
+    "typescript": "^5"
+  }
+}
