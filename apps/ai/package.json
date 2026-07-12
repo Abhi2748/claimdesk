@@ -2,6 +2,9 @@
   "name": "ai",
   "private": true,
   "scripts": {
-    "dev": "uvicorn app.main:app --reload --host 127.0.0.1 --port 8000"
+    "dev": "uvicorn app.main:app --reload --host 127.0.0.1 --port 8000",
+    "lint": "node scripts/run-python.mjs -m ruff check .",
+    "typecheck": "node scripts/run-python.mjs -m compileall -q app",
+    "test": "node scripts/run-python.mjs -m pytest"
   }
 }

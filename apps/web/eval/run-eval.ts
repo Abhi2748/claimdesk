@@ -228,6 +228,26 @@ async function main() {
 
   writeMarkdown(rows, documentId);
   writeTranscripts(rows);
+
+  const ciMode = process.env.EVAL_CI === "1";
+  if (ciMode) {
+    const totalFail = rows.filter((r) => r.status === "FAIL").length;
+    const totalSevere = rows.filter((r) => r.status === "SEVERE").length;
+    const minPass = Number(process.env.EVAL_MIN_PASS ?? "17");
+
+    if (totalSevere > 0 || totalPass < minPass) {
+      console.error("\n=== EVAL CI FAIL ===");
+      console.error(
+        `PASS=${totalPass}/${rows.length} (required >= ${minPass}), FAIL=${totalFail}, SEVERE=${totalSevere}`
+      );
+      process.exit(1);
+    }
+
+    console.log("\n=== EVAL CI PASS ===");
+    console.log(
+      `PASS=${totalPass}/${rows.length}, FAIL=${totalFail}, SEVERE=${totalSevere}`
+    );
+  }
 }
 
 main().catch((err) => {

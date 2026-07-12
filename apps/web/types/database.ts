@@ -257,7 +257,7 @@ export interface Database {
         Relationships: [];
       };
     };
-    Views: {};
+    Views: Record<string, never>;
     Functions: {
       match_chunks: {
         Args: {

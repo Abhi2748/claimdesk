@@ -21,6 +21,9 @@
     },
     "check:types": {
       "cache": false
+    },
+    "test": {
+      "dependsOn": ["^build"]
     }
   }
 }

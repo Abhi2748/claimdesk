@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "eval": "tsx eval/run-eval.ts",
     "export-lab": "tsx scripts/export-lab.ts",
-    "build-tree": "tsx scripts/build-toc-tree.ts"
+    "build-tree": "tsx scripts/build-toc-tree.ts",
+    "test": "tsx --test eval/scoring.test.ts"
   },
   "dependencies": {
     "@claimdesk/types": "workspace:*",
