@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: claimdesk-ai
+    runtime: docker
+    dockerfilePath: ./apps/ai/Dockerfile
+    dockerContext: ./apps/ai
+    healthCheckPath: /health
+    envVars:
+      - key: NEXT_PUBLIC_SUPABASE_URL
+        sync: false
+      - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: LANGFUSE_PUBLIC_KEY
+        sync: false
+      - key: LANGFUSE_SECRET_KEY
+        sync: false
+      - key: LANGFUSE_HOST
+        sync: false
