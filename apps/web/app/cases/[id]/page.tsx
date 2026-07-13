@@ -326,7 +326,7 @@ export default async function CaseDetailPage({
         </section>
 
         {readyDocuments.length > 0 && (
-          <MatterQAPanel caseId={id} readyCount={readyDocuments.length} />
+          <MatterQAPanel caseId={id} readyCount={readyDocuments.length} isDemo={isDemo} />
         )}
 
         <DemandLetterPanel

@@ -50,6 +50,24 @@ export interface Case {
   created_at: string;
 }
 
+export type ReviewKind = "qa_answer" | "letter" | "coverage_analysis";
+export type ReviewStatus = "pending" | "approved" | "rejected";
+export interface ReviewItem {
+  id: string;
+  org_id: string;
+  case_id: string | null;
+  kind: ReviewKind;
+  ref_id: string | null;
+  title: string;
+  summary: string | null;
+  status: ReviewStatus;
+  created_by: string;
+  reviewed_by: string | null;
+  reviewed_at: string | null;
+  review_note: string | null;
+  created_at: string;
+}
+
 export interface Document {
   id: string;
   case_id: string;
@@ -227,6 +245,31 @@ export interface Database {
           prompt_version?: string | null;
           planned_queries?: string[] | null;
           created_at?: string;
+        };
+        Relationships: [];
+      };
+      review_items: {
+        Row: ReviewItem;
+        Insert: {
+          id?: string;
+          org_id?: string;
+          case_id?: string | null;
+          kind: ReviewKind;
+          ref_id?: string | null;
+          title: string;
+          summary?: string | null;
+          status?: ReviewStatus;
+          created_by?: string;
+          reviewed_by?: string | null;
+          reviewed_at?: string | null;
+          review_note?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          status?: ReviewStatus;
+          reviewed_by?: string | null;
+          reviewed_at?: string | null;
+          review_note?: string | null;
         };
         Relationships: [];
       };

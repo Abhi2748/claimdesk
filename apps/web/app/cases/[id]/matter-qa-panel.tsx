@@ -1,12 +1,14 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { flagForReview } from "@/app/review/actions";
 import type { VerificationResult, VerifiedCitation } from "@/lib/qa/types";
 import { askMatter } from "./qa-actions";
 import { type PolicyCitation } from "./qa-types";
 
 interface AssistantMessage {
   role: "assistant";
+  question: string;
   answer: string;
   citations: PolicyCitation[];
   refused: boolean;
@@ -30,7 +32,28 @@ function TrustBar({ v, refused }: { v: VerificationResult | null; refused: boole
   return <p className="text-xs font-medium text-flag">⚠ {un} of {v.totalCount} citation{un === 1 ? "" : "s"} couldn&apos;t be verified against retrieved source</p>;
 }
 
-function MatterAnswer({ msg }: { msg: AssistantMessage }) {
+function FlagForReviewButton({ caseId, msg }: { caseId: string; msg: AssistantMessage }) {
+  const [pending, startTransition] = useTransition();
+  const [state, setState] = useState<"idle" | "done" | "error">("idle");
+  const v = msg.verification;
+  const summary = (v ? `[${v.verifiedCount}/${v.totalCount} citations verified] ` : "") + msg.answer;
+  function flag() {
+    startTransition(async () => {
+      const r = await flagForReview({ caseId, kind: "qa_answer", title: msg.question || "Policy Q&A answer", summary });
+      setState(r.ok ? "done" : "error");
+    });
+  }
+  if (state === "done") return <p className="mt-2 text-xs font-medium text-seal">✓ Sent to review queue</p>;
+  return (
+    <button type="button" onClick={flag} disabled={pending}
+      className="mt-2 text-xs font-medium text-ink-mute underline-offset-2 transition hover:text-ink hover:underline disabled:opacity-50">
+      {pending ? "Flagging…" : "Flag for review"}
+      {state === "error" ? <span className="ml-2 text-flag">couldn&apos;t flag</span> : null}
+    </button>
+  );
+}
+
+function MatterAnswer({ msg, caseId, isDemo }: { msg: AssistantMessage; caseId: string; isDemo: boolean }) {
   const cites: VerifiedCitation[] = msg.verification?.citations ?? [];
   const multiDoc = msg.sourceDocuments.length > 1;
   const [active, setActive] = useState<number>(() => {
@@ -115,11 +138,13 @@ function MatterAnswer({ msg }: { msg: AssistantMessage }) {
           </div>
         </div>
       )}
+
+      {!isDemo && <FlagForReviewButton caseId={caseId} msg={msg} />}
     </div>
   );
 }
 
-export function MatterQAPanel({ caseId, readyCount }: { caseId: string; readyCount: number }) {
+export function MatterQAPanel({ caseId, readyCount, isDemo }: { caseId: string; readyCount: number; isDemo: boolean }) {
   const [question, setQuestion] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -137,6 +162,7 @@ export function MatterQAPanel({ caseId, readyCount }: { caseId: string; readyCou
       if (!result.ok) { setError(result.error); return; }
       setMessages((prev) => [...prev, {
         role: "assistant",
+        question: q,
         answer: result.answer,
         citations: result.citations,
         refused: result.refused,
@@ -168,7 +194,7 @@ export function MatterQAPanel({ caseId, readyCount }: { caseId: string; readyCou
             </div>
           ) : (
             <div key={i} className="mr-0 rounded-[10px] border border-line bg-card px-4 py-3 sm:mr-8">
-              <MatterAnswer msg={msg} />
+              <MatterAnswer msg={msg} caseId={caseId} isDemo={isDemo} />
             </div>
           )
         )}

@@ -37,6 +37,7 @@ export async function updateSession(request: NextRequest) {
     pathname.startsWith("/cases") ||
     pathname.startsWith("/lab") ||
     pathname.startsWith("/settings") ||
+    pathname.startsWith("/review") ||
     isMfaRoute ||
     pathname === "/";
 
