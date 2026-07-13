@@ -14,7 +14,7 @@ import { formatDateOnly } from "@/lib/utils";
 import { DocumentUploadForm } from "./document-upload-form";
 import { DemandLetterPanel } from "./demand-letter-panel";
 import { LetterRetrievalPlan } from "./letter-retrieval-plan";
-import { PolicyQAPanel } from "./policy-qa-panel";
+import { MatterQAPanel } from "./matter-qa-panel";
 import { ProcessDocumentButton } from "./process-document-button";
 
 const docTypeLabels = {
@@ -325,14 +325,9 @@ export default async function CaseDetailPage({
           )}
         </section>
 
-        {readyDocuments.map((doc) => (
-          <PolicyQAPanel
-            key={doc.id}
-            documentId={doc.id}
-            caseId={id}
-            documentTitle={doc.title}
-          />
-        ))}
+        {readyDocuments.length > 0 && (
+          <MatterQAPanel caseId={id} readyCount={readyDocuments.length} />
+        )}
 
         <DemandLetterPanel
           caseId={id}
