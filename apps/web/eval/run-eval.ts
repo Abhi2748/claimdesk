@@ -10,12 +10,14 @@ import {
   type GoldenFile,
 } from "./scoring";
 import { answerPolicyQuestion } from "../lib/qa/pipeline";
-import type { PolicyCitation } from "../lib/qa/types";
+import type { PolicyCitation, PolicyQAResult } from "../lib/qa/types";
 import { answerPolicyQuestionTree } from "../lib/tree/navigate";
+import { askPolicyQuestion } from "../lib/ai/client";
 
 loadEnvLocal();
 
 const strategy = (process.env.STRATEGY ?? "vector") as "vector" | "tree";
+const qaTarget = (process.env.QA_TARGET ?? "local") as "local" | "remote";
 
 const DELAY_MS = 1000;
 
@@ -152,6 +154,16 @@ async function main() {
     throw new Error(`Sign-in failed: ${authError.message}`);
   }
 
+  let accessToken = "";
+  let aiBaseUrl = "";
+  if (qaTarget === "remote") {
+    aiBaseUrl = requireEnv("AI_BASE_URL");
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) throw new Error("No session available for remote eval.");
+    accessToken = session.access_token;
+    console.log(`QA target: remote → ${aiBaseUrl}/qa/answer`);
+  }
+
   const documentId = await resolveDocumentId(supabase);
   const validSections = await fetchValidSections(supabase, documentId);
 
@@ -167,12 +179,33 @@ async function main() {
   for (let i = 0; i < golden.questions.length; i++) {
     const q = golden.questions[i]!;
     const start = Date.now();
-    let result;
+    let result: PolicyQAResult;
     try {
-      result =
-        strategy === "tree"
-          ? await answerPolicyQuestionTree(supabase, documentId, q.question)
-          : await answerPolicyQuestion(supabase, documentId, q.question);
+      if (qaTarget === "remote") {
+        const resp = await askPolicyQuestion(aiBaseUrl, accessToken, {
+          document_id: documentId,
+          question: q.question,
+        });
+        result = {
+          answer: resp.answer,
+          citations: [],
+          retrievedChunks: resp.retrieved_chunks.map((c) => ({
+            id: c.id,
+            sectionLabel: c.section_label ?? "Section",
+            pageStart: c.page_start ?? null,
+            pageEnd: c.page_end ?? null,
+            content: c.content,
+            similarity: c.similarity,
+          })),
+          refused: resp.refused,
+          topSimilarity: resp.top_similarity ?? null,
+        };
+      } else {
+        result =
+          strategy === "tree"
+            ? await answerPolicyQuestionTree(supabase, documentId, q.question)
+            : await answerPolicyQuestion(supabase, documentId, q.question);
+      }
     } catch (err) {
       const latencyMs = Date.now() - start;
       rows.push({
