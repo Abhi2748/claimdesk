@@ -11,6 +11,15 @@ export async function AppHeader() {
   } = await supabase.auth.getUser();
   const isDemo = isDemoUser(user);
 
+  let pendingReviews = 0;
+  if (user && !isDemo) {
+    const { count } = await supabase
+      .from("review_items")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "pending");
+    pendingReviews = count ?? 0;
+  }
+
   return (
     <>
       {isDemo && <DemoBanner />}
@@ -37,6 +46,12 @@ export async function AppHeader() {
                 className="text-white/65 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-seal-ring focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
               >
                 Cases
+              </Link>
+              <Link
+                href="/review"
+                className="text-white/65 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-seal-ring focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
+              >
+                Review{pendingReviews > 0 ? ` (${pendingReviews})` : ""}
               </Link>
               <Link
                 href="/lab"
