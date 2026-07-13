@@ -115,12 +115,22 @@ export default async function CaseDetailPage({
       <AppHeader />
       <main className="mx-auto max-w-5xl space-y-8 px-4 py-8 sm:px-6">
         <header>
-          <Link
-            href="/cases"
-            className="text-sm text-ink-mute transition hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-seal-ring"
-          >
-            ← Back to cases
-          </Link>
+          <div className="flex items-center justify-between">
+            <Link
+              href="/cases"
+              className="text-sm text-ink-mute transition hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-seal-ring"
+            >
+              ← Back to cases
+            </Link>
+            {!isDemo && (
+              <Link
+                href={`/cases/${id}/edit`}
+                className="text-sm font-medium text-seal transition hover:text-seal-deep"
+              >
+                Edit matter
+              </Link>
+            )}
+          </div>
           <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div className="min-w-0">
               <h1 className="text-3xl text-ink">{caseRow.title}</h1>

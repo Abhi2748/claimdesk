@@ -3,6 +3,7 @@ import Link from "next/link";
 import { AppHeader } from "@/components/app-header";
 import { ClaimTypeBadge, claimTypeLabels } from "@/components/claim-type-badge";
 import { StatusPill } from "@/components/status-pill";
+import { isDemoUser } from "@/lib/demo";
 import { createClient } from "@/lib/supabase/server";
 
 const claimBorderTint: Record<ClaimType, string> = {
@@ -39,6 +40,10 @@ function disputeBlock(claimed: number | null, offered: number | null) {
 
 export default async function CasesPage() {
   const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const isDemo = isDemoUser(user);
   const { data: casesData, error } = await supabase
     .from("cases")
     .select("*")
@@ -61,14 +66,22 @@ export default async function CasesPage() {
     <>
       <AppHeader />
       <main className="mx-auto max-w-5xl space-y-8 px-4 py-8 sm:px-6">
-        <header>
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-ink-mute">
-            Caseload
-          </p>
-          <h1 className="mt-1 text-3xl text-ink">Your cases</h1>
-          <p className="mt-1 text-sm text-ink-mute">
-            {cases.length} {cases.length === 1 ? "case" : "cases"}
-          </p>
+        <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-ink-mute">Caseload</p>
+            <h1 className="mt-1 text-3xl text-ink">Your cases</h1>
+            <p className="mt-1 text-sm text-ink-mute">
+              {cases.length} {cases.length === 1 ? "case" : "cases"}
+            </p>
+          </div>
+          {!isDemo && (
+            <Link
+              href="/cases/new"
+              className="inline-flex shrink-0 items-center gap-2 rounded-[10px] bg-seal px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-seal-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-seal-ring focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
+            >
+              <span aria-hidden>+</span> New matter
+            </Link>
+          )}
         </header>
 
         <div className="rounded-[14px] border border-seal-ring bg-seal-tint px-5 py-4">
@@ -86,6 +99,14 @@ export default async function CasesPage() {
             <p className="mt-1 text-sm text-ink-mute">
               Seeded demo cases appear after running migrations.
             </p>
+            {!isDemo && (
+              <Link
+                href="/cases/new"
+                className="mt-4 inline-flex items-center gap-2 rounded-[10px] bg-seal px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-seal-deep"
+              >
+                <span aria-hidden>+</span> Create your first matter
+              </Link>
+            )}
           </div>
         ) : (
           <ul className="space-y-4">
