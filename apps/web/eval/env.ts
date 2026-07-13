@@ -1,8 +1,10 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 export function loadEnvLocal() {
   const envPath = resolve(process.cwd(), ".env.local");
+  // CI injects secrets via the environment; .env.local is local-only.
+  if (!existsSync(envPath)) return;
   const content = readFileSync(envPath, "utf-8");
   for (const line of content.split("\n")) {
     const trimmed = line.trim();
