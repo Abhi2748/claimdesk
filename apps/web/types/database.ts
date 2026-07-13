@@ -268,6 +268,15 @@ export interface Database {
         };
         Returns: MatchChunkResult[];
       };
+      match_chunks_multi: {
+        Args: {
+          query_embedding: string;
+          doc_ids: string[];
+          match_count?: number;
+          min_similarity?: number;
+        };
+        Returns: (MatchChunkResult & { document_id: string })[];
+      };
       demo_rate_limit_check: {
         Args: {
           p_ip: string;

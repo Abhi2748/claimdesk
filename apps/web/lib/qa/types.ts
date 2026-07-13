@@ -5,6 +5,8 @@ export interface PolicyCitation {
   pageEnd: number | null;
   content: string;
   similarity: number;
+  documentId?: string;
+  documentTitle?: string;
 }
 
 export interface NavStep {
@@ -23,4 +25,13 @@ export interface PolicyQAResult {
   topSimilarity: number | null;
   strategy?: "vector" | "tree";
   navigationPath?: NavStep[];
+}
+
+export interface MatterQAResult {
+  answer: string;
+  citations: PolicyCitation[];
+  retrievedChunks: PolicyCitation[];
+  refused: boolean;
+  topSimilarity: number | null;
+  sourceDocuments: { id: string; title: string }[];
 }

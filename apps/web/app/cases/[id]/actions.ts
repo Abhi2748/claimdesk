@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { isDemoUser } from "@/lib/demo";
 import { createClient } from "@/lib/supabase/server";
-import type { Case, Database, DocType } from "@/types/database";
+import type { Database, DocType } from "@/types/database";
 
 export type UploadState = {
   error?: string;
@@ -58,18 +58,20 @@ export async function uploadDocument(
 
   const { data: caseData, error: caseError } = await supabase
     .from("cases")
-    .select("id")
+    .select("id, org_id")
     .eq("id", caseId)
     .single();
 
-  const caseRow = caseData as Pick<Case, "id"> | null;
+  const caseRow = caseData as { id: string; org_id: string } | null;
 
   if (caseError || !caseRow) {
     return { error: "Case not found or access denied." };
   }
 
   const filename = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-  const storagePath = `${user.id}/${caseId}/${filename}`;
+  // Org-scoped storage: the path prefix is the case's org_id, so the 012 storage
+  // RLS policy (folder[1] = org) grants access to org members, not just the uploader.
+  const storagePath = `${caseRow.org_id}/${caseId}/${filename}`;
 
   const arrayBuffer = await file.arrayBuffer();
   const { error: uploadError } = await supabase.storage

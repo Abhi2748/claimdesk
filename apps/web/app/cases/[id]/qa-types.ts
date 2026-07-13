@@ -9,3 +9,8 @@ export type AskPolicyResult =
       refused: boolean;
     }
   | { ok: false; error: string };
+
+export type AskMatterResult =
+  | { ok: true; answer: string; citations: import("@/lib/qa/types").PolicyCitation[];
+      refused: boolean; sourceDocuments: { id: string; title: string }[] }
+  | { ok: false; error: string };

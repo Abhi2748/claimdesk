@@ -82,6 +82,7 @@ jobs:
           EVAL_USER_PASSWORD: ${{ secrets.EVAL_USER_PASSWORD }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          DOC_ID: ${{ secrets.DOC_ID }}
         run: pnpm --filter web eval
 
   eval-paths:
