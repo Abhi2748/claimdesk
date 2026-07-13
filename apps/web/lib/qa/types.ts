@@ -34,4 +34,22 @@ export interface MatterQAResult {
   refused: boolean;
   topSimilarity: number | null;
   sourceDocuments: { id: string; title: string }[];
+  verification: VerificationResult | null;
+}
+
+export type CitationStatus = "verified" | "unverified";
+
+export interface VerifiedCitation {
+  marker: string;          // raw "[III.B.8, p.6]"
+  label: string;           // parsed section label (uppercased)
+  pages: number[];         // parsed page numbers ([] if none cited)
+  status: CitationStatus;
+  source?: PolicyCitation; // resolved retrieved passage (present iff verified)
+}
+
+export interface VerificationResult {
+  citations: VerifiedCitation[];
+  verifiedCount: number;
+  totalCount: number;
+  allVerified: boolean;
 }

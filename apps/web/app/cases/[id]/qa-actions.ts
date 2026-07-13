@@ -86,7 +86,7 @@ export async function askMatter(
   if (caseErr || !caseData) return { ok: false, error: "Matter not found or access denied." };
   try {
     const r = await answerMatterQuestion(supabase, caseId, trimmed);
-    return { ok: true, answer: r.answer, citations: r.citations, refused: r.refused, sourceDocuments: r.sourceDocuments };
+    return { ok: true, answer: r.answer, citations: r.citations, refused: r.refused, sourceDocuments: r.sourceDocuments, verification: r.verification };
   } catch (err) {
     console.error("Matter Q&A failed:", err);
     return { ok: false, error: err instanceof Error ? err.message : "Something went wrong." };
