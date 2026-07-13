@@ -12,5 +12,6 @@ export type AskPolicyResult =
 
 export type AskMatterResult =
   | { ok: true; answer: string; citations: import("@/lib/qa/types").PolicyCitation[];
-      refused: boolean; sourceDocuments: { id: string; title: string }[] }
+      refused: boolean; sourceDocuments: { id: string; title: string }[];
+      verification: import("@/lib/qa/types").VerificationResult | null }
   | { ok: false; error: string };

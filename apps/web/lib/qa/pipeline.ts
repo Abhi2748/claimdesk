@@ -3,6 +3,7 @@ import { generatePolicyAnswerFromPassages } from "@/lib/anthropic";
 import { embedQuery, embeddingToVector } from "@/lib/embeddings";
 import { REFUSAL_MESSAGE } from "@/lib/qa/constants";
 import type { PolicyCitation, PolicyQAResult, MatterQAResult } from "@/lib/qa/types";
+import { verifyCitations } from "@/lib/qa/verify";
 import {
   QA_TOP_K,
   REFUSAL_SIMILARITY_THRESHOLD,
@@ -106,7 +107,7 @@ export async function answerMatterQuestion(
   const titleById = new Map(sourceDocuments.map((d) => [d.id, d.title]));
   const emptyRefusal: MatterQAResult = {
     answer: REFUSAL_MESSAGE, citations: [], retrievedChunks: [],
-    refused: true, topSimilarity: null, sourceDocuments,
+    refused: true, topSimilarity: null, sourceDocuments, verification: null,
   };
   if (sourceDocuments.length === 0) return emptyRefusal;
 
@@ -138,8 +139,9 @@ export async function answerMatterQuestion(
   }));
   const answer = await generatePolicyAnswerFromPassages(trimmed, passages);
   const refused = answer === REFUSAL_MESSAGE;
+  const verification = refused ? null : verifyCitations(answer, retrievedChunks);
   return {
     answer, citations: refused ? [] : retrievedChunks, retrievedChunks,
-    refused, topSimilarity, sourceDocuments,
+    refused, topSimilarity, sourceDocuments, verification,
   };
 }
