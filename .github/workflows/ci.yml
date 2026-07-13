@@ -73,9 +73,21 @@ jobs:
       - name: Install Node dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Warm up AI service (Render cold start)
+        run: |
+          for i in $(seq 1 12); do
+            if curl -fsS "${{ secrets.AI_BASE_URL }}/health" >/dev/null; then
+              echo "AI service is up."; exit 0
+            fi
+            echo "Waiting for AI service to wake... ($i)"; sleep 10
+          done
+          echo "AI service did not respond in time."; exit 1
+
       - name: Run eval gate
         env:
           EVAL_CI: "1"
+          QA_TARGET: "remote"
+          AI_BASE_URL: ${{ secrets.AI_BASE_URL }}
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
           EVAL_USER_EMAIL: ${{ secrets.EVAL_USER_EMAIL }}
