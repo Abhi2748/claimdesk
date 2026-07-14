@@ -27,6 +27,9 @@
  *                 harness-proof runs)
  *   LAB_TOPK      final passage count per query, default QA_TOP_K (6)
  *   LAB_POOL      candidate pool size per signal for hybrid fusion, default 20
+ *   LAB_OUT       results markdown path, default eval/retrieval-lab-results.md
+ *                 (set per-run when sweeping multiple knob combos so runs
+ *                 don't overwrite each other)
  *
  * Run (proof-of-harness, 5 questions, 2 configs):
  *   LAB_SAMPLE=5 LAB_CONFIGS=dense,hybrid pnpm exec tsx eval/retrieval-lab.ts
@@ -92,6 +95,12 @@ const DOC_TARGETS: DocTarget[] = [
   { form: "F-122-ABLATION", goldenFile: "golden-f122-ablation.json" },
   { form: "F-123", goldenFile: "golden-f123.json" },
   { form: "F-144", goldenFile: "golden-f144.json" },
+  // Chunking-knob leg: MIN_CHUNK_CONTENT_CHARS=0 variants, ingested by
+  // scripts/ingest-minchunk0.ts under new document rows. Same golden files —
+  // the questions target document content, not chunk boundaries.
+  { form: "F-122-ABLATION-MC0", goldenFile: "golden-f122-ablation.json" },
+  { form: "F-123-MC0", goldenFile: "golden-f123.json" },
+  { form: "F-144-MC0", goldenFile: "golden-f144.json" },
 ].filter((t) => !docsArg || docsArg.includes(t.form));
 
 interface ChunkRow {
@@ -500,7 +509,10 @@ async function main() {
     md += `| ${r.form} | ${r.config} | ${r.id} | ${r.difficulty} | ${r.status} | ${r.topSimilarity?.toFixed(3) ?? "-"} | ${r.retrievalMs} | ${r.generationMs} | ${r.totalMs} | ${r.inputTokens} | ${r.outputTokens} | $${r.costUsd.toFixed(5)} | ${r.notes.replace(/\|/g, "\\|")} |\n`;
   }
 
-  const outPath = resolve(process.cwd(), "eval/retrieval-lab-results.md");
+  const outPath = resolve(
+    process.cwd(),
+    process.env.LAB_OUT ?? "eval/retrieval-lab-results.md"
+  );
   writeFileSync(outPath, md, "utf-8");
   console.log(`\nWrote ${outPath}`);
 

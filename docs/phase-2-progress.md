@@ -56,9 +56,21 @@ which hadn't been updated past Phase 1 / Block 1.5).
       (Proposed, pending sign-off): hybrid becomes the base config for the
       remaining legs. All 4 remaining SEVEREs trace to the chunking-knob
       and refusal-exactness issues below, not retrieval ranking.
-- [ ] Chunking knob: `MIN_CHUNK_CONTENT_CHARS` 50 vs 0 (needs a re-chunk +
-      re-embed variant of all 3 benchmark docs).
-- [ ] Top-k knob: 6 vs higher.
+- [x] **Chunking knob (`MIN_CHUNK_CONTENT_CHARS` 50 vs 0) + top-k knob (6 vs
+      10), run as a 2x2.** Re-chunked/re-embedded MC0 (0-char) copies of all
+      3 benchmark docs under new document rows (`F-122-ABLATION-MC0`,
+      `F-123-MC0`, `F-144-MC0` in `eval/documents.json`; live F-122 and the
+      50-char rows untouched). Neither knob wins cleanly alone — topK=10
+      fixes the ADR 003 Q8 regression but not the chunk-drop SEVERE; MC0
+      chunking fixes the chunk-drop SEVERE but introduces a new
+      chunk-noise SEVERE + a regression on F-144. **Combined (MC0 + topK=10):
+      39/43 PASS (90.7%), 2 FAIL, 2 SEVERE, zero regressions vs. baseline** —
+      the two knobs are complementary. See
+      `docs/decisions/004-chunking-and-topk-ablation.md`. Recommendation
+      (Accepted, pending sign-off): MC0 + topK=10 becomes the base config for
+      the remaining legs. Both remaining SEVEREs are now pure
+      refusal-string-exactness, not retrieval — the retrieval/chunking axis
+      is exhausted for this corpus.
 - [ ] Contextual Retrieval (prepend LLM-generated context per chunk before
       embedding; indexing cost via `claude-haiku-4-5` per ADR 001).
 - [ ] Embedding model benchmark (3-small vs Gemini/Voyage/Cohere v4/Qwen3/BGE).

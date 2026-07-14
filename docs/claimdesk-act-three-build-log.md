@@ -990,3 +990,49 @@ a real dense-vs-keyword tradeoff, not a fusion bug — logged as evidence for
 Block 2.3's router (dense-vs-hybrid per question) over a blanket
 always-hybrid rule. Full analysis in
 `docs/decisions/003-hybrid-retrieval-ablation.md`.
+
+**2.2c continued — chunking knob (`MIN_CHUNK_CONTENT_CHARS` 50 vs 0) x
+top-k knob (6 vs 10), run as a 2x2.** Made the 50-char drop threshold
+overridable via a `CHUNK_MIN_CONTENT_CHARS` env var (default unchanged,
+unset in every live/frozen path). Re-chunked and re-embedded fresh copies of
+all 3 benchmark docs at the 0-char setting under new document rows
+(`F-122-ABLATION-MC0` / `F-123-MC0` / `F-144-MC0`, `scripts/ingest-minchunk0.ts`)
+— live F-122 and the existing 50-char rows untouched. ~29% more chunks at
+0-char (every dropped sub-50-char stub becomes its own retrievable chunk).
+
+Ran all 4 cells, hybrid only, real API calls, full 43-question corpus:
+
+| cell | chunking | topK | PASS | FAIL | SEVERE | p50 ms | avg cost/q |
+|---|---|---|---|---|---|---|---|
+| A: baseline (ADR 003) | 50-char | 6 | 34 | 6 | 3 | 6,178 | $0.00658 |
+| B: baseline+topK10 | 50-char | 10 | 36 | 4 | 3 | 6,422 | $0.00801 |
+| C: MC0+topK6 | 0-char | 6 | 36 | 4 | 3 | 6,165 | $0.00629 |
+| D: MC0+topK10 | 0-char | 10 | **39** | **2** | **2** | 6,341 | $0.00766 |
+
+**Neither knob wins cleanly alone.** topK=10 alone (B) recovers the ADR 003
+F-123 Q8 regression exactly as predicted, plus the corpus's hardest trap
+question (F-122-ABL Q16) — zero regressions, but the chunk-drop SEVERE
+(F-123 Q12, invented citation `II.B.1.C`) stays SEVERE, because no cutoff
+size retrieves a chunk that doesn't exist. MC0 chunking alone (C) fixes that
+exact SEVERE, but trades it for a *new* one — F-144 Q9 regresses from FAIL
+to a fresh hallucinated citation (`V.D.3.A`), plus F-144 Q7 regresses
+PASS→FAIL — real evidence that more, smaller chunks add retrieval noise
+even as they close the coverage gap.
+
+**Combined (D), the two knobs are complementary, not redundant:** every MC0
+win survives, and topK=10's extra headroom absorbs both of C's regressions
+(the correct F-144 passages make the cut instead of getting crowded out by
+noise chunks). Net: 5 status changes, all wins, zero regressions — 39/43
+PASS (90.7%), latency/cost still well inside the ADR 001 budget (p50 6.3s
+vs an 8s budget, $0.0077/query vs a $0.03 budget). **After this leg, zero
+remaining SEVEREs trace to retrieval or chunking** — both leftover SEVEREs
+(F-123 Q13, F-144 Q10) are the same refusal-string-exactness issue ADR 003
+already flagged, a generation/prompt-adherence fix, not a retrieval one.
+
+**ADR 004 — Accepted:** MIN_CHUNK_CONTENT_CHARS=0 + topK=10 become the base
+config for the remaining ablation legs (contextual chunks, reranker).
+**Live path untouched** — `QA_TOP_K` stays 6, `MIN_CHUNK_CONTENT_CHARS`
+stays 50 for every existing document; promoting either to production means
+a one-time re-ingest backfill, out of scope here. Full analysis, leaderboard,
+and per-cell row diffs in `docs/decisions/004-chunking-and-topk-ablation.md`
+and `eval/chunking-topk-leaderboard.md`.
