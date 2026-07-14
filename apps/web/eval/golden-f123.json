@@ -1,0 +1,150 @@
+{
+  "document": {
+    "title": "NFIP Standard Flood Insurance Policy — General Property Form",
+    "form": "F-123",
+    "edition": "October 2021",
+    "pages": 27,
+    "source": "FEMA (public federal document)"
+  },
+  "scoring_rules": {
+    "pass_cite": "Answer must cite at least one section listed in must_cite (page numbers are a bonus check).",
+    "pass_refuse": "If must_refuse is true, the answer must state the policy does not address this, and must NOT invent coverage or exclusions.",
+    "fail_conditions": [
+      "Cites a section that does not exist in the document",
+      "Answers a must_refuse question with invented content",
+      "Gives the opposite coverage conclusion from expected_answer"
+    ]
+  },
+  "questions": [
+    {
+      "id": 1,
+      "difficulty": "easy",
+      "question": "How does this policy define a 'flood'?",
+      "expected_answer": "A general and temporary condition of partial or complete inundation of two or more acres of normally dry land, OR of two or more properties (one of which is yours), from overflow of inland/tidal waters, unusual and rapid accumulation or runoff of surface waters from any source, or mudflow. Also includes collapse/subsidence of land along a lake shore caused by waves/currents exceeding anticipated cyclical levels.",
+      "must_cite": ["II.B"],
+      "pages": [1],
+      "must_refuse": false,
+      "trap_notes": "Same flood definition as the Dwelling Form (F-122) — confirms the definition is corpus-wide, not document-specific."
+    },
+    {
+      "id": 2,
+      "difficulty": "easy",
+      "question": "What does 'actual cash value' mean under this policy?",
+      "expected_answer": "The cost to replace an insured item of property at the time of loss, less the value of its physical depreciation.",
+      "must_cite": ["II.C.2"],
+      "pages": [1],
+      "must_refuse": false,
+      "trap_notes": "Simple definition lookup, identical wording to F-122's II.C.2."
+    },
+    {
+      "id": 3,
+      "difficulty": "easy",
+      "question": "I bought sandbags and hired a pump to protect the building because a flood was imminent. Is that reimbursable?",
+      "expected_answer": "Yes — Loss Avoidance Measures pay up to $1,000 for sandbags (and sand), fill for temporary levees, pumps, plastic sheeting and lumber, plus the value of labor at federal minimum wage, provided flood damage was imminent and either a general flooding condition occurred near the location or an evacuation/civil order was issued.",
+      "must_cite": ["III.C.2.a"],
+      "pages": [6],
+      "must_refuse": false,
+      "trap_notes": "Answer should include the $1,000 cap and at least one trigger condition."
+    },
+    {
+      "id": 4,
+      "difficulty": "easy",
+      "question": "Who pays for removing debris of the insured property after a flood?",
+      "expected_answer": "The policy pays the expense to remove non-owned debris on or in insured property, and debris of insured property anywhere; if the insured or a household member does the removal work, its value is based on federal minimum wage. This does not increase the Coverage A or B limit.",
+      "must_cite": ["III.C.1"],
+      "pages": [6],
+      "must_refuse": false,
+      "trap_notes": "Tests whether retrieval distinguishes Debris Removal (C.1) from the neighboring Loss Avoidance Measures (C.2)."
+    },
+    {
+      "id": 5,
+      "difficulty": "medium",
+      "question": "What is Increased Cost of Compliance coverage, what is its limit, and is a deductible charged for it?",
+      "expected_answer": "Coverage D pays up to $30,000 to comply with State or local floodplain management laws/ordinances after flood damage (elevation, floodproofing, relocation, demolition), in addition to Coverage A (but combined A+D cannot exceed the maximum the Act permits). No separate deductible is charged for a Coverage D claim.",
+      "must_cite": ["III.D.2"],
+      "pages": [7],
+      "must_refuse": false,
+      "trap_notes": "Two-part answer required: the $30,000 limit AND the no-separate-deductible rule."
+    },
+    {
+      "id": 6,
+      "difficulty": "medium",
+      "question": "Can I have this policy cover both my household personal property and my business personal property at the same time?",
+      "expected_answer": "No. When the policy insures personal property, coverage applies to EITHER household personal property OR other-than-household personal property (e.g. furniture/fixtures, machinery/equipment, stock, business property) while within the insured building — not both at once.",
+      "must_cite": ["III.B.3"],
+      "pages": [5],
+      "must_refuse": false,
+      "trap_notes": "The either/or restriction is easy to miss; a naive answer might assume both apply since both are listed nearby in the same subsection."
+    },
+    {
+      "id": 7,
+      "difficulty": "medium",
+      "question": "I'm a tenant who paid for improvements to the unit I occupy but can't legally remove them. Does my personal property coverage account for that?",
+      "expected_answer": "Yes — a tenant may apply up to 10 percent of the Coverage B (personal property) limit to improvements made a part of the building the tenant occupies and acquired or paid for by the tenant, even though the tenant cannot legally remove them. This does not increase the total amount of personal property insurance.",
+      "must_cite": ["III.B.8"],
+      "pages": [6],
+      "must_refuse": false,
+      "trap_notes": "A separate, similarly-worded 10% allowance exists for condominium unit owners covering interior walls/floors/ceilings (III.B.9) — must_cite should be the tenant provision, not the condo-owner one."
+    },
+    {
+      "id": 8,
+      "difficulty": "medium",
+      "question": "Who can be the named insured for the personal property coverage on this policy, and can a condominium association insure jointly-owned property under it?",
+      "expected_answer": "Personal property coverage insures property owned solely by the named insured (or, for a condominium, solely by the condominium association and used exclusively in the association's business affairs), or property owned in common by the unit owners of the condominium association.",
+      "must_cite": ["III.B.1"],
+      "pages": [5],
+      "must_refuse": false,
+      "trap_notes": "Tests whether the model surfaces both the sole-ownership and common-ownership branches, not just one."
+    },
+    {
+      "id": 9,
+      "difficulty": "hard",
+      "question": "I own a unit in a residential condominium building in a regular-program community. Does this General Property Form insure my unit's building structure?",
+      "expected_answer": "No, generally. This policy provides no coverage for a residential condominium building in a regular program community, EXCEPT for personal property coverage for a unit in that condominium building. Building coverage for a residential condo in a regular program community is written instead under the Residential Condominium Building Association Policy (RCBAP, F-144), not this form.",
+      "must_cite": ["I.A.2"],
+      "pages": [1],
+      "must_refuse": false,
+      "trap_notes": "Flagship scope trap: this form's Coverage A does cover multifamily/non-residential buildings and non-regular-program condos, but explicitly excludes a residential condo building in a regular program community — the model must not assume 'General Property Form' means it covers any condo building."
+    },
+    {
+      "id": 10,
+      "difficulty": "hard",
+      "question": "My insurer denied my claim. How long do I have to sue, and where must I file?",
+      "expected_answer": "Suit must be started within ONE YEAR after the date of the written denial of all or part of the claim, and must be filed in the United States District Court for the district where the insured property was located at the time of loss. All policy requirements must have been complied with first.",
+      "must_cite": ["VII.O"],
+      "pages": [21],
+      "must_refuse": false,
+      "trap_notes": "Same federal 1-year clock as the Dwelling Form — NFIP suits are federal, not governed by state statutes of limitation."
+    },
+    {
+      "id": 11,
+      "difficulty": "hard",
+      "question": "Sewage backed up through the drains during heavy rain and damaged the building. Is this covered?",
+      "expected_answer": "Only if there is a flood in the area and the flood is the proximate cause of the sewer/drain backup. Water that backs up through sewers or drains, or discharges/overflows from a sump/sump pump, or seeps through the property, is excluded UNLESS a flood in the area proximately caused it. Heavy rain alone is not a flood unless it meets the II.B definition (2+ acres or 2+ properties inundated).",
+      "must_cite": ["V.D.5"],
+      "pages": [12, 13],
+      "must_refuse": false,
+      "trap_notes": "Requires the conditional (proximate-cause) answer, not a flat yes or no."
+    },
+    {
+      "id": 12,
+      "difficulty": "hard",
+      "question": "A landslide, triggered by floodwaters saturating the hillside, damaged the foundation. Since the flood caused it, is this covered?",
+      "expected_answer": "No. Earth movement — including landslide, land subsidence, sinkholes, and destabilization from subsurface water accumulation — is excluded even if caused by flood. However, mudflow (a river of liquid, flowing mud on the surface of normally dry land) IS covered because it's part of the flood definition itself, and is explicitly distinguished from landslide/slope failure/soil-mass movement.",
+      "must_cite": ["V.C"],
+      "pages": [12],
+      "must_refuse": false,
+      "trap_notes": "Tests whether the model conflates landslide (excluded) with mudflow (covered) — a common failure mode across all three NFIP forms."
+    },
+    {
+      "id": 13,
+      "difficulty": "refusal",
+      "question": "A delivery driver slipped in the flooded parking lot and broke her wrist. Does this policy cover my liability for her injury?",
+      "expected_answer": "REFUSAL REQUIRED: This policy does not address personal or general liability coverage anywhere — it insures property only (building and personal property). The system must say it cannot find this in the policy and must NOT invent a liability provision or cite an unrelated section.",
+      "must_cite": [],
+      "pages": [],
+      "must_refuse": true,
+      "trap_notes": "Pure refusal gate, mirroring the F-122 refusal question — any invented citation here is an automatic severe fail."
+    }
+  ]
+}

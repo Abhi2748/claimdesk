@@ -1,0 +1,120 @@
+{
+  "document": {
+    "title": "NFIP Standard Flood Insurance Policy — Residential Condominium Building Association Policy",
+    "form": "F-144",
+    "edition": "October 2021",
+    "pages": 28,
+    "source": "FEMA (public federal document)"
+  },
+  "scoring_rules": {
+    "pass_cite": "Answer must cite at least one section listed in must_cite (page numbers are a bonus check).",
+    "pass_refuse": "If must_refuse is true, the answer must state the policy does not address this, and must NOT invent coverage or exclusions.",
+    "fail_conditions": [
+      "Cites a section that does not exist in the document",
+      "Answers a must_refuse question with invented content",
+      "Gives the opposite coverage conclusion from expected_answer"
+    ]
+  },
+  "questions": [
+    {
+      "id": 1,
+      "difficulty": "easy",
+      "question": "What kind of building does this policy insure?",
+      "expected_answer": "This policy insures only a residential condominium building in a regular program community. If the community reverts to emergency program status during the policy term and remains so at renewal, the policy cannot be renewed.",
+      "must_cite": ["I.A"],
+      "pages": [1],
+      "must_refuse": false,
+      "trap_notes": "Scope question distinguishing the RCBAP from the Dwelling Form (F-122) and General Property Form (F-123), which explicitly excludes this building type."
+    },
+    {
+      "id": 2,
+      "difficulty": "easy",
+      "question": "How does this policy define 'flood'?",
+      "expected_answer": "A general and temporary condition of partial or complete inundation of two or more acres of normally dry land, OR of two or more properties (one of which is yours), from overflow of inland/tidal waters, unusual and rapid accumulation or runoff of surface waters from any source, or mudflow. Also includes collapse/subsidence of land along a lake shore from waves/currents exceeding anticipated cyclical levels.",
+      "must_cite": ["II.B"],
+      "pages": [1],
+      "must_refuse": false,
+      "trap_notes": "Identical definition across all three NFIP forms in the corpus — confirms corpus-wide consistency."
+    },
+    {
+      "id": 3,
+      "difficulty": "easy",
+      "question": "I'm a unit owner and my condo association also carries this RCBAP. If I also have a Dwelling Form policy on my unit, can I collect under both for the same damage?",
+      "expected_answer": "Both policies may exist, but no more than $250,000 may be paid in combined benefits for a single unit under the Dwelling Form and the RCBAP together. Damage is paid only once — items paid under the RCBAP cannot also be claimed under the Dwelling Form policy.",
+      "must_cite": ["I.G"],
+      "pages": [1],
+      "must_refuse": false,
+      "trap_notes": "The $250,000 combined cap and anti-double-recovery rule — the reciprocal of the same rule stated in the Dwelling Form (F-122) I.G."
+    },
+    {
+      "id": 4,
+      "difficulty": "medium",
+      "question": "My condo association insured the building for $180,000. Its replacement cost is $250,000, the required insurance-to-value is $200,000 (80%), a covered loss of $150,000 occurs, and the deductible is $500. How much will the policy pay?",
+      "expected_answer": "$134,500. Because the actual amount carried ($180,000) is less than the required amount ($200,000), a coinsurance penalty applies: 180,000/200,000 = 0.90; 0.90 × $150,000 = $135,000; minus the $500 deductible = $134,500. The remaining $15,500 is not covered (coinsurance penalty plus deductible).",
+      "must_cite": ["VII.B", "VII.C"],
+      "pages": [13],
+      "must_refuse": false,
+      "trap_notes": "The flagship RCBAP trap — coinsurance does not exist in the Dwelling Form or General Property Form; a system trained mainly on those would not expect a coinsurance penalty here. This is the document's own worked example, reproduced verbatim, so the numeric answer is exactly checkable."
+    },
+    {
+      "id": 5,
+      "difficulty": "medium",
+      "question": "What are the three ways this policy settles a loss, and which applies to a typical condo building?",
+      "expected_answer": "Three methods: (1) Replacement Cost Loss Settlement — applies to buildings other than manufactured homes or travel trailers (the normal case for a condo building); (2) Special Loss Settlement — applies only if the residential condominium building is itself a manufactured home or travel trailer meeting size conditions; (3) Actual Cash Value — applies to all other insured property (e.g. personal property).",
+      "must_cite": ["VIII.R.1"],
+      "pages": [23, 24],
+      "must_refuse": false,
+      "trap_notes": "Tests whether the model surfaces all three methods and correctly maps 'condo building' to Replacement Cost, not ACV."
+    },
+    {
+      "id": 6,
+      "difficulty": "medium",
+      "question": "Does buying Increased Cost of Compliance coverage affect whether my condo association meets the coinsurance requirement?",
+      "expected_answer": "No. Increased Cost of Compliance (Coverage D) coverage is not included in the calculation used to determine whether the building meets the coinsurance requirement for replacement cost coverage.",
+      "must_cite": ["III.D.6.a"],
+      "pages": [9],
+      "must_refuse": false,
+      "trap_notes": "A cross-reference trap linking two sections (ICC and Coinsurance) that a naive single-section retrieval could miss."
+    },
+    {
+      "id": 7,
+      "difficulty": "hard",
+      "question": "The condo building was destroyed by a flood. Can the association get paid on a replacement-cost basis before the building is actually rebuilt?",
+      "expected_answer": "No. The insurer is not liable for any loss on a Replacement Cost basis unless and until actual repair or replacement of the damaged building (or parts of it) is completed.",
+      "must_cite": ["VIII.R.2.b"],
+      "pages": [24],
+      "must_refuse": false,
+      "trap_notes": "A common misconception — replacement cost settlement is conditioned on completed repair/rebuild, not payable up front."
+    },
+    {
+      "id": 8,
+      "difficulty": "hard",
+      "question": "The condo building is a manufactured home that was destroyed and it's not economically feasible to repair it. How is the loss settled?",
+      "expected_answer": "The insurer pays, at its discretion, the LEAST of: (1) the lesser of the manufactured home/travel trailer's replacement cost or 1.5 times its actual cash value; or (2) the Building Limit of liability on the Declarations Page. This Special Loss Settlement applies only if the unit is at least 16 feet wide when fully assembled and has at least 600 square feet within its perimeter walls.",
+      "must_cite": ["VIII.R.3"],
+      "pages": [24],
+      "must_refuse": false,
+      "trap_notes": "Requires both the size-eligibility condition and the lesser-of calculation — a partial answer citing only one should score partial/fail."
+    },
+    {
+      "id": 9,
+      "difficulty": "hard",
+      "question": "During heavy rain, water backed up through the building's drains and damaged common areas. Is this covered?",
+      "expected_answer": "Only if there is a flood in the area and the flood is the proximate cause of the sewer/drain backup. Water that backs up through sewers or drains, or discharges/overflows from a sump/sump pump, or seeps through the property, is otherwise excluded. Heavy rain alone does not qualify as a flood unless it meets the II.B definition.",
+      "must_cite": ["V.D.5"],
+      "pages": [12],
+      "must_refuse": false,
+      "trap_notes": "Same proximate-cause conditional trap present in both other corpus documents — tests consistency of the model's handling across documents."
+    },
+    {
+      "id": 10,
+      "difficulty": "refusal",
+      "question": "A guest at the pool slipped and was injured. Does this policy cover the condo association's liability for that injury?",
+      "expected_answer": "REFUSAL REQUIRED: This policy does not address general or personal liability coverage anywhere — it insures the residential condominium building and, if purchased, personal property only. The system must say it cannot find this in the policy and must NOT invent a liability provision or cite an unrelated section.",
+      "must_cite": [],
+      "pages": [],
+      "must_refuse": true,
+      "trap_notes": "Pure refusal gate, consistent with the same question type in F-122 and F-123 — any invented citation is an automatic severe fail."
+    }
+  ]
+}
