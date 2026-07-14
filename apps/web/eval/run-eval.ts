@@ -5,6 +5,7 @@ import { loadEnvLocal, requireEnv } from "./env";
 import {
   fetchValidSections,
   resolveDocumentId,
+  resolveDocumentIdForForm,
   scoreQuestion,
   type EvalStatus,
   type GoldenFile,
@@ -18,6 +19,16 @@ loadEnvLocal();
 
 const strategy = (process.env.STRATEGY ?? "vector") as "vector" | "tree";
 const qaTarget = (process.env.QA_TARGET ?? "local") as "local" | "remote";
+// Defaults to the frozen F-122 golden file — unchanged behavior. Set
+// GOLDEN_FILE=golden-f123.json or golden-f144.json to run the multi-doc
+// corpus; each resolves its own document_id via eval/documents.json
+// (scripts/ingest-golden-docs.ts), not via DOC_ID.
+const goldenFile = process.env.GOLDEN_FILE ?? "golden.json";
+// Output filename suffix so non-F-122 runs don't clobber results.md/
+// transcripts.md — e.g. "golden-f123.json" -> "f123".
+const goldenSuffix = goldenFile
+  .replace(/^golden-?/, "")
+  .replace(/\.json$/, "");
 
 const DELAY_MS = 1000;
 
@@ -70,6 +81,13 @@ function totalsByDifficulty(rows: EvalRow[]) {
   return byDiff;
 }
 
+function outFilename(base: string): string {
+  const parts = [goldenSuffix, strategy !== "vector" ? strategy : null].filter(
+    Boolean
+  );
+  return parts.length === 0 ? `${base}.md` : `${base}.${parts.join(".")}.md`;
+}
+
 function writeMarkdown(rows: EvalRow[], documentId: string) {
   const byDiff = totalsByDifficulty(rows);
   const totalPass = rows.filter((r) => r.status === "PASS").length;
@@ -97,10 +115,7 @@ function writeMarkdown(rows: EvalRow[], documentId: string) {
     md += `| ${row.id} | ${row.difficulty} | ${row.status} | ${row.topSimilarity} | ${row.latencyMs} | ${row.notes.replace(/\|/g, "\\|")} |\n`;
   }
 
-  const outPath =
-    strategy === "vector"
-      ? resolve(process.cwd(), "eval/results.md")
-      : resolve(process.cwd(), `eval/results.${strategy}.md`);
+  const outPath = resolve(process.cwd(), `eval/${outFilename("results")}`);
   writeFileSync(outPath, md, "utf-8");
   console.log(`\nWrote ${outPath}`);
 }
@@ -131,10 +146,7 @@ function writeTranscripts(rows: EvalRow[]) {
     }
   }
 
-  const outPath =
-    strategy === "vector"
-      ? resolve(process.cwd(), "eval/transcripts.md")
-      : resolve(process.cwd(), `eval/transcripts.${strategy}.md`);
+  const outPath = resolve(process.cwd(), `eval/${outFilename("transcripts")}`);
   writeFileSync(outPath, md, "utf-8");
   console.log(`Wrote ${outPath}`);
 }
@@ -164,14 +176,23 @@ async function main() {
     console.log(`QA target: remote → ${aiBaseUrl}/qa/answer`);
   }
 
-  const documentId = await resolveDocumentId(supabase);
-  const validSections = await fetchValidSections(supabase, documentId);
-
-  const goldenPath = resolve(process.cwd(), "eval/golden.json");
+  const goldenPath = resolve(process.cwd(), `eval/${goldenFile}`);
   const golden = JSON.parse(readFileSync(goldenPath, "utf-8")) as GoldenFile;
 
+  // golden.json (F-122) keeps its exact original resolution — DOC_ID env,
+  // frozen and untouched. Other golden files resolve via eval/documents.json,
+  // keyed by their own document.form (e.g. "F-123").
+  const documentId =
+    goldenFile === "golden.json"
+      ? await resolveDocumentId(supabase)
+      : await resolveDocumentIdForForm(
+          supabase,
+          (golden.document as { form: string }).form
+        );
+  const validSections = await fetchValidSections(supabase, documentId);
+
   console.log(
-    `Evaluating ${golden.questions.length} questions (strategy: ${strategy}) against doc ${documentId}\n`
+    `Evaluating ${golden.questions.length} questions (strategy: ${strategy}, golden: ${goldenFile}) against doc ${documentId}\n`
   );
 
   const rows: EvalRow[] = [];

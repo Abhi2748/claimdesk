@@ -1,4 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { existsSync, readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { REFUSAL_MESSAGE } from "../lib/qa/constants";
 
 const SECTION_REF_PATTERN = /([IVX]+\.[A-Z](?:\.\d+)?(?:\.[a-z])?)/gi;
@@ -141,6 +143,48 @@ export async function resolveDocumentId(
   }
 
   return (data[0] as { id: string }).id;
+}
+
+/**
+ * Resolves the document_id for a golden file that targets a specific NFIP
+ * form (e.g. F-123, F-144), via the eval/documents.json map produced by
+ * scripts/ingest-golden-docs.ts. Separate from resolveDocumentId(), which
+ * stays untouched and keeps gating the frozen F-122 baseline on DOC_ID.
+ */
+export async function resolveDocumentIdForForm(
+  supabase: SupabaseClient,
+  form: string
+): Promise<string> {
+  const mapPath = resolve(process.cwd(), "eval/documents.json");
+  if (!existsSync(mapPath)) {
+    throw new Error(
+      `eval/documents.json not found. Run scripts/ingest-golden-docs.ts first.`
+    );
+  }
+  const map = JSON.parse(readFileSync(mapPath, "utf-8")) as Record<
+    string,
+    string
+  >;
+  const docId = map[form];
+  if (!docId) {
+    throw new Error(`No document_id mapped for form "${form}" in eval/documents.json`);
+  }
+
+  const { data, error } = await supabase
+    .from("documents")
+    .select("id, ingest_status")
+    .eq("id", docId)
+    .single();
+  if (error || !data) {
+    throw new Error(`Mapped document for ${form} not found: ${error?.message}`);
+  }
+  const doc = data as { ingest_status: string };
+  if (doc.ingest_status !== "ready") {
+    throw new Error(
+      `Mapped document for ${form} is not ready (ingest_status=${doc.ingest_status})`
+    );
+  }
+  return docId;
 }
 
 export async function fetchValidSections(

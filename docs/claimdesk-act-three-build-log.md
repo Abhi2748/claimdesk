@@ -777,3 +777,112 @@ docs now prefix the default org id — expected, since reset_demo copies the sou
 - **(Optional, D)** make `eval-gate` a *required* status check via branch
   protection — needs a small ci.yml change so the gate always reports a status
   (pass-through when no AI-path files change), else it blocks unrelated PRs.
+
+---
+
+## Phase 2 — AI trust core
+
+### Block 2.1 ✅ — Finish the cutover + signup + landing
+
+**What it does:** Closed the split-brain from Phase 1: the live "Ask the
+matter" Q&A now calls `apps/ai`'s `POST /qa/matter` (JWT forwarded) instead of
+running in the Next.js server, so the eval and the live product finally run
+the same Python path. Added public self-serve signup (`/signup`,
+`/signup/check-email`) and a marketing/landing page.
+
+**Acceptance:** verified against actual repo state — see
+`docs/phase-2-progress.md`.
+
+### Block 2.2a ✅ — Retrieval Lab v2: budgets + multi-doc golden corpus
+
+**What it does:** Content-only sub-step, no retrieval code touched.
+`docs/decisions/001-retrieval-benchmark-budgets.md` sets latency (p50 ≤ 8s /
+p95 ≤ 12s) and cost (≤ $0.03/query) budgets for the upcoming ablation, grounded
+in the measured F-122 baseline. `eval/golden-f123.json` (13 Qs) and
+`eval/golden-f144.json` (10 Qs) extend the golden corpus alongside the frozen
+`eval/golden.json` (F-122) — not yet ingested or wired into the runner.
+
+### Block 2.2b ✅ — Ingest F-123/F-144 + multi-doc eval runner
+
+**What it does:** `scripts/ingest-golden-docs.ts` (new, idempotent) signs in
+as the owner, uploads both PDFs into the same org + fixture case that already
+holds the frozen F-122 doc (`Okafor Hail Damage`, org `60b4efce…`), and drives
+the existing `processDocumentIngestion()` pipeline unchanged. `eval/run-eval.ts`
+gained a `GOLDEN_FILE` env var (default `golden.json`, i.e. zero behavior
+change for the frozen path) that, for any other golden file, resolves its
+document via a new `eval/documents.json` map (form → document_id) instead of
+`DOC_ID` — `resolveDocumentId()` itself was not touched.
+
+**Ingest results:**
+
+| Form | document_id | chunks | pages | labeled_ratio | pages_detected | est. tokens | est. cost |
+|---|---|---|---|---|---|---|---|
+| F-123 | `0411ce14-03ee-4841-bd7a-058c94af2ffd` | 296 | 27 | 1.000 | 27/27 | 15,959 | $0.00032 |
+| F-144 | `2e29b25f-d0bf-4f1c-b956-11cd6a8c0d88` | 306 | 28 | 1.000 | 28/28 | 16,901 | $0.00034 |
+
+Both parsed as cleanly as F-122 (100% section-label ratio, full page
+detection) — no page-footer misdetection, no un-labeled stub chunks. Combined
+ingest cost ≈ $0.0007, negligible (`text-embedding-3-small`, char/4 estimate
+per ADR 001's convention — no real token usage API was called twice to avoid
+double billing).
+
+**Golden eval on the new docs (multi-doc corpus, NOT the frozen gate):**
+F-123 11/13 PASS, 0 FAIL, 2 SEVERE. F-144 7/10 PASS, 3 FAIL, 0 SEVERE. These
+are expected — the corpus is deliberately adversarial (traps, cross-references,
+a worked coinsurance example) and this is the *first* uningated look at it
+before any retrieval improvements. Spot-checked 3 F-123 and 3 F-144 questions
+directly against retrieved chunks + answers (incl. the flagship RCBAP
+coinsurance trap, Q4: correctly computed $134,500 citing VII.C.3) — confirmed
+answerable, not a data problem.
+
+**Findings (evidence for later blocks, nothing fixed here — retrieval/prompt
+logic was not touched per the block's scope):**
+
+1. **The `MIN_CHUNK_CONTENT_CHARS = 50` filter silently drops short lettered
+   sub-items.** E.g. in the flood definition (§II.B.1), "a. Overflow of inland
+   or tidal waters;" (36 chars) and "c. Mudflow." (8 chars) parse correctly as
+   headings but then get discarded for being under the 50-char floor — they
+   never become chunks, so their section labels never enter `validSections`.
+   This produced F-123's Q12 SEVERE: the model quoted a real cross-reference
+   ("...our definition of flood (see II.B.1.c and II.B.2)") verbatim from a
+   *different*, longer chunk (V.C.6) that legitimately mentions those labels —
+   but since II.B.1.c has no chunk of its own, the eval's citation validator
+   flagged it as invented. Not a hallucination; a scoring/chunking-granularity
+   false positive. Confirmed by re-running `chunkPolicyText()` (pure function,
+   no DB writes) against the F-123 raw text.
+2. **The frozen F-122 chunks are not reproducible by today's parser.** Running
+   the *current* `chunkPolicyText()` fresh against the F-122 PDF (again, pure
+   function — the live F-122 document/DOC_ID was never touched or
+   reprocessed) yields 314 chunks and also drops II.B.1.a/II.B.1.c, matching
+   F-123/F-144's behavior exactly. But the live F-122 chunks in Supabase
+   number 408 and *do* include II.B.1.a/II.B.1.c. The frozen doc's chunks
+   predate the current chunker (likely carried over through the Block 1.2a-ii
+   storage relocation, which preserved chunk rows rather than re-parsing) —
+   the "frozen path" is frozen at the model/prompt/retrieval-param level, but
+   its underlying chunk data has quietly drifted from what the current
+   pipeline would produce. **Risk flag: do not hit "reprocess" on the F-122
+   document** — it would regenerate chunks with today's parser and could
+   shift the 17/20 baseline. Worth a dedicated ADR before Block 2.4 if the
+   extractor gets rebuilt.
+3. **Refusal-contract exactness is inconsistent across documents.** F-123's
+   Q13 (pure liability refusal) got SEVERE not because of invented content,
+   but because the model's answer was `"I can't find this in the policy."`
+   followed by an explanatory paragraph — the scorer requires an *exact*
+   string match to `REFUSAL_MESSAGE`, per the CLAUDE.md contract. F-122's
+   frozen prompt/doc combination reliably produces the bare string; F-123 does
+   not always. Same root symptom (a hedging tail) also showed up, harmlessly,
+   on F-123 Q1 and F-144 Q2 (flood-definition questions) — likely downstream
+   of finding 1: since the actual a/b/c list is fragmented, the model isn't
+   fully confident even when it cites the right section.
+4. **3 real retrieval-ranking misses on F-144** (Q1, Q7, Q9 — FAIL, not
+   SEVERE): the correct section chunk exists in the corpus (confirmed present
+   in `chunks`) but didn't make the top-6 vector-similarity results — e.g. Q9
+   expected `V.D.5` (present as `V.D.5.b/.c/.d`) but the top-6 retrieved
+   chunks were all near-miss neighbors (III.D.3.e, VIII.Q.1, etc.), none of
+   them V.D.5.*. Direct ablation fodder for Block 2.2's hybrid/BM25/reranker
+   work — vector-only, single-document retrieval doesn't reliably surface the
+   right subsection when several adjacent sections are semantically close.
+
+**Not done in this block (by scope):** embedding/chunking/hybrid/reranker
+ablation itself — that's the rest of Block 2.2, and now has three real
+findings above to react to going in.

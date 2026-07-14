@@ -27,9 +27,18 @@ which hadn't been updated past Phase 1 / Block 1.5).
       flagship trap) extend the golden corpus alongside the frozen
       `eval/golden.json` (F-122). Not yet wired into `run-eval.ts` or ingested
       into Supabase — that's the next sub-step.
-- [ ] Ingest F-123 and F-144 into Supabase (chunk + embed) so the golden
-      questions above are actually answerable, and wire multi-document support
-      into the eval runner.
+- [x] **2.2b — Ingest F-123/F-144 + multi-doc eval runner.** Both PDFs
+      ingested via `scripts/ingest-golden-docs.ts` into the same org/fixture
+      case as the frozen F-122 doc: F-123 → `0411ce14-03ee-4841-bd7a-058c94af2ffd`
+      (296 chunks, 100% labeled), F-144 → `2e29b25f-d0bf-4f1c-b956-11cd6a8c0d88`
+      (306 chunks, 100% labeled). `eval/run-eval.ts` now takes `GOLDEN_FILE`
+      (default `golden.json`, unchanged behavior) and resolves non-F-122
+      golden files via the new `eval/documents.json` map. F-122 baseline
+      reconfirmed **17/20, 0 SEVERE, unchanged**. First uningated look at the
+      new corpus: F-123 11/13 PASS/2 SEVERE, F-144 7/10 PASS/3 FAIL — real
+      findings recorded in the build log (a chunk-filter false-positive, a
+      stale/non-reproducible F-122 chunk set, refusal-string inconsistency,
+      3 retrieval-ranking misses), all evidence for the ablation below.
 - [ ] Embedding model benchmark (3-small vs Gemini/Voyage/Cohere v4/Qwen3/BGE).
 - [ ] Chunking strategy comparison (fixed vs semantic vs contextual).
 - [ ] Contextual Retrieval (prepend LLM-generated context per chunk).
