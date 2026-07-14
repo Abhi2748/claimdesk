@@ -886,3 +886,107 @@ logic was not touched per the block's scope):**
 **Not done in this block (by scope):** embedding/chunking/hybrid/reranker
 ablation itself — that's the rest of Block 2.2, and now has three real
 findings above to react to going in.
+
+### Block 2.2c ⏳ IN PROGRESS — Retrieval ablation harness (proof-of-harness checkpoint)
+
+**What it does:** Built the reproducible 3-doc benchmark corpus and the
+ablation harness itself; ran a small proof (5 questions, 2 configs, real API
+calls) to validate the harness before committing to the full sweep, per the
+block's checkpoint instruction. Live retrieval/prompt path untouched.
+
+1. **Fresh F-122 copy for the benchmark, live F-122 still frozen.**
+   `scripts/ingest-f122-ablation.ts` (new) ingests
+   `docs/policy-corpus/fema_F-122-Dwelling-SFIP_2021.pdf` under a new
+   document row (`920bb3a7-257f-4a04-ad23-6118ee86ddad`, title suffixed
+   `.ablation-2.2c.pdf` so it can never collide with the live doc by title or
+   storage path) into the same fixture case as F-123/F-144. Produced 314
+   chunks — matching the 2.2b finding exactly (today's parser yields 314,
+   not the live doc's 408; confirms the drift finding and that the live
+   F-122 document was correctly never touched). `eval/golden-f122-ablation.json`
+   mirrors the frozen `golden.json`'s 20 questions under `form:
+   "F-122-ABLATION"`. `eval/documents.json` gained a fourth key,
+   `F-122-ABLATION`, alongside the untouched `F-122`/`F-123`/`F-144`.
+2. **Harness (`eval/retrieval-lab.ts`, `eval/bm25.ts`, new).** Runs the
+   3-doc benchmark corpus across retrieval configs, measuring real accuracy,
+   latency, and token cost per query — see
+   `docs/decisions/002-retrieval-lab-harness-design.md` for the design
+   (in-process BM25 + RRF fusion, zero schema changes; dense retrieval in
+   every config goes through the real, unmodified `match_chunks_multi` RPC).
+   Configs implemented so far: `dense` (faithful reproduction of the live
+   single-retriever path) and `hybrid` (dense + BM25 fused). `LAB_SAMPLE`/
+   `LAB_CONFIGS`/`LAB_DOCS`/`LAB_TOPK`/`LAB_POOL` env vars support cheap
+   partial runs. Output: `eval/retrieval-lab-results.md` (leaderboard +
+   per-doc breakdown + full row dump).
+3. **Proof run (real API calls, not simulated):** 5 questions sampled
+   round-robin across the 3 docs, `dense` vs `hybrid`, topK=6, pool=20.
+
+   | config | n | PASS | FAIL | SEVERE | p50 latency | p95 latency | avg cost/query |
+   |---|---|---|---|---|---|---|---|
+   | dense | 5 | 4 | 1 | 0 | 5,974ms | 7,456ms | $0.00510 |
+   | hybrid | 5 | 5 | 0 | 0 | 3,343ms | 5,122ms | $0.00443 |
+
+   The one FAIL→PASS flip (F-144 Q1) is the exact retrieval-ranking miss
+   flagged in 2.2b's finding 4 (expected `V.D.5`, dense-only missed it) — the
+   harness reproduced a known failure and hybrid fixed it, on the first real
+   question drawn from that finding. n=5 is not a verdict on the config, only
+   a harness sanity check. Real measured cost (~$0.0044–0.0051/query) is
+   ~40% below ADR 001's estimate (~$0.010–0.014) on this small sample —
+   driven by shorter observed generations; not yet enough data to replace
+   the ADR 001 budget baseline.
+
+**Checkpoint — stopped here per the block's instruction**, before running
+the full sweep. Full-sweep cost projection and remaining scope (top-k knob,
+`MIN_CHUNK_CONTENT_CHARS` knob, contextual chunks, reranker) reported to the
+human for go-ahead; see chat for the numbers. Reranker specifically needs a
+new vendor key (Cohere/Voyage — none currently configured) before it can run
+at all, a separate decision from the cost checkpoint.
+
+**Human approved the full dense+hybrid sweep** (43 questions x 2 configs,
+projected ~$0.41). Ran it — see `docs/decisions/003-hybrid-retrieval-ablation.md`
+for the full analysis.
+
+| config | n | PASS | FAIL | SEVERE | p50 latency | p95 latency | p50 retrieval-only | avg cost/query |
+|---|---|---|---|---|---|---|---|---|
+| dense | 43 | 32 (74.4%) | 7 | 4 | 6,227ms | 8,701ms | 213ms | $0.00643 |
+| hybrid | 43 | 34 (79.1%) | 6 | 3 | 6,178ms | 8,922ms | 204ms | $0.00658 |
+
+Net: +2 PASS / −1 FAIL / −1 SEVERE, at effectively zero added latency
+(retrieval-only 213ms→204ms — BM25+RRF fusion is sub-millisecond in-memory
+work; the extra step is one `match_chunks_multi` call at a bigger
+`match_count`) and inside cost noise (+2.3%, driven by generation-length
+variance, not a systematic hybrid tax). Real per-query cost
+($0.0064–0.0066) replaces the ADR 001 estimate ($0.010–0.014) — about 40%
+lower than estimated, mostly shorter observed generations.
+
+5 of 43 questions changed status: 3 clean wins (F-122-ABL Q13, F-144 Q1,
+F-144 Q7 — BM25 keyword recall catching near-miss dense rankings, matching
+2.2b's finding-4 prediction exactly), 1 partial win (F-122-ABL Q16, SEVERE
+downgraded to FAIL — the invented-citation hallucination stopped, but the
+correct passage still wasn't retrieved), 1 regression (F-123 Q8, PASS→FAIL
+— BM25 apparently displaced a correct dense top-1).
+
+**All 4 remaining SEVEREs (2 dense-only, 2 shared by both configs) trace to
+two root causes already identified in 2.2b, neither fixable by re-ranking:**
+the `MIN_CHUNK_CONTENT_CHARS=50` chunk-drop (invented citation `II.B.1.C`,
+which literally has no chunk in either config's index) and the
+refusal-string-exactness inconsistency (a generation/prompt-adherence issue,
+unrelated to retrieval). Confirms those need their own fixes, not more
+ranking work.
+
+**ADR 003 — Accepted, with caveat:** hybrid is the base config for the
+remaining ablation legs (contextual chunks, reranker) — it earns its keep
+at ~zero cost. **Live path (`match_chunks`/`match_chunks_multi`,
+`lib/qa/pipeline.ts`) untouched throughout — this only changes what the
+ablation itself uses as its next baseline.**
+
+**Root-caused the F-123 Q8 regression** (retrieval-only diagnostic, no
+generation call — free): dense correctly ranked the target chunk
+(`III.B.1.b`) at position 5 of 20; hybrid's RRF fusion bumped it to fused
+rank 8 — 2 short of the top-6 cutoff — because two off-topic-but-jargon-
+heavy chunks (`III.B.3`, `III.B.3.b`, from the same Coverage-B subsection)
+out-ranked it on raw BM25 term density. Hand-checked whether retuning RRF's
+`k` fixes it: it doesn't (k=10 makes it worse, k=200 barely ties). This is
+a real dense-vs-keyword tradeoff, not a fusion bug — logged as evidence for
+Block 2.3's router (dense-vs-hybrid per question) over a blanket
+always-hybrid rule. Full analysis in
+`docs/decisions/003-hybrid-retrieval-ablation.md`.

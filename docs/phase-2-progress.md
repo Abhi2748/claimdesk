@@ -39,11 +39,32 @@ which hadn't been updated past Phase 1 / Block 1.5).
       findings recorded in the build log (a chunk-filter false-positive, a
       stale/non-reproducible F-122 chunk set, refusal-string inconsistency,
       3 retrieval-ranking misses), all evidence for the ablation below.
+- [x] **2.2c (in progress) — ablation harness built + proven on a small
+      sample.** Fresh reproducible F-122 copy ingested (`F-122-ABLATION`,
+      314 chunks, today's parser — live F-122 untouched). Harness
+      (`eval/retrieval-lab.ts` + `eval/bm25.ts`) measures real accuracy/
+      latency/cost per query across configs; dense retrieval always via the
+      real `match_chunks_multi` RPC, BM25+RRF fusion in-process (ADR 002).
+      5-question/2-config proof run done (real API calls): dense 4/5,
+      hybrid 5/5, hybrid also faster and cheaper on this sample. **Stopped
+      at the checkpoint** before the full sweep — cost projection reported
+      to the human, awaiting go-ahead.
+- [x] **Full sweep: baseline dense vs +hybrid across all 43 golden
+      questions.** dense 32/43 PASS (4 SEVERE), hybrid 34/43 PASS (3
+      SEVERE); zero added latency, cost within noise (+2.3%). See
+      `docs/decisions/003-hybrid-retrieval-ablation.md`. Recommendation
+      (Proposed, pending sign-off): hybrid becomes the base config for the
+      remaining legs. All 4 remaining SEVEREs trace to the chunking-knob
+      and refusal-exactness issues below, not retrieval ranking.
+- [ ] Chunking knob: `MIN_CHUNK_CONTENT_CHARS` 50 vs 0 (needs a re-chunk +
+      re-embed variant of all 3 benchmark docs).
+- [ ] Top-k knob: 6 vs higher.
+- [ ] Contextual Retrieval (prepend LLM-generated context per chunk before
+      embedding; indexing cost via `claude-haiku-4-5` per ADR 001).
 - [ ] Embedding model benchmark (3-small vs Gemini/Voyage/Cohere v4/Qwen3/BGE).
 - [ ] Chunking strategy comparison (fixed vs semantic vs contextual).
-- [ ] Contextual Retrieval (prepend LLM-generated context per chunk).
-- [ ] Hybrid search (dense + BM25, fused) — no BM25 anywhere in the repo yet.
-- [ ] Reranker (Cohere/Voyage/BGE/Qwen3) — no reranker dependency added.
+- [ ] Reranker (Cohere/Voyage/BGE/Qwen3) — **no reranker vendor key
+      configured yet**; needs one before this leg can run.
 - [ ] Leaderboard with cost + latency columns; ablation showing marginal value
       per component.
 
