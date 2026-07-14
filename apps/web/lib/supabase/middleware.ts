@@ -31,15 +31,17 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const { pathname } = request.nextUrl;
-  const isAuthRoute = pathname === "/login";
+  const isAuthRoute =
+    pathname === "/login" ||
+    pathname === "/signup" ||
+    pathname === "/signup/check-email";
   const isMfaRoute = pathname === "/mfa";
   const isProtectedRoute =
     pathname.startsWith("/cases") ||
     pathname.startsWith("/lab") ||
     pathname.startsWith("/settings") ||
     pathname.startsWith("/review") ||
-    isMfaRoute ||
-    pathname === "/";
+    isMfaRoute;
 
   let needsMfa = false;
   if (user) {
