@@ -5,6 +5,7 @@ from app.constants import (
     ANTHROPIC_MAX_TOKENS,
     ANTHROPIC_MODEL,
     POLICY_QA_SYSTEM_PROMPT,
+    normalize_refusal_answer,
 )
 from app.observability import claude_generation_span, finish_claude_generation_span
 from app.schemas.qa import PolicyPassage
@@ -65,7 +66,7 @@ def generate_policy_answer_from_passages(
 
         for block in message.content:
             if block.type == "text":
-                answer = block.text.strip()
+                answer = normalize_refusal_answer(block.text)
                 usage_details = None
                 if message.usage is not None:
                     usage_details = {

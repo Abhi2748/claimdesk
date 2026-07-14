@@ -47,7 +47,7 @@ import {
   type GoldenFile,
   type GoldenQuestion,
 } from "./scoring";
-import { REFUSAL_MESSAGE } from "../lib/qa/constants";
+import { REFUSAL_MESSAGE, normalizeRefusalAnswer } from "../lib/qa/constants";
 import {
   QA_TOP_K,
   REFUSAL_SIMILARITY_THRESHOLD,
@@ -200,7 +200,7 @@ async function generateMeasured(
   });
   const ms = Date.now() - t0;
   const block = message.content.find((b) => b.type === "text");
-  const answer = block && block.type === "text" ? block.text.trim() : "";
+  const answer = block && block.type === "text" ? normalizeRefusalAnswer(block.text) : "";
   return {
     answer,
     ms,

@@ -1,4 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
+import { normalizeRefusalAnswer } from "./qa/constants";
 
 export const ANTHROPIC_MODEL = "claude-sonnet-4-6";
 
@@ -65,5 +66,5 @@ export async function generatePolicyAnswerFromPassages(
     throw new Error("No text response from model.");
   }
 
-  return block.text.trim();
+  return normalizeRefusalAnswer(block.text);
 }

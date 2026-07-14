@@ -9,6 +9,18 @@ ANTHROPIC_MAX_TOKENS = 2048
 
 REFUSAL_MESSAGE = "I can't find this in the policy."
 
+
+def normalize_refusal_answer(raw_answer: str) -> str:
+    """Collapse a refusal that carries unsolicited trailing explanation
+    (model opens with the exact REFUSAL_MESSAGE, then explains why) down to
+    the canonical string, mirroring apps/web/lib/qa/constants.ts. Does not
+    change the refuse/answer decision itself.
+    """
+    trimmed = raw_answer.strip()
+    if trimmed != REFUSAL_MESSAGE and trimmed.startswith(REFUSAL_MESSAGE):
+        return REFUSAL_MESSAGE
+    return trimmed
+
 POLICY_QA_SYSTEM_PROMPT = """You are a legal policy analysis assistant for insurance claims attorneys.
 
 Rules:

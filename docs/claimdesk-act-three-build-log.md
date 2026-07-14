@@ -1036,3 +1036,34 @@ stays 50 for every existing document; promoting either to production means
 a one-time re-ingest backfill, out of scope here. Full analysis, leaderboard,
 and per-cell row diffs in `docs/decisions/004-chunking-and-topk-ablation.md`
 and `eval/chunking-topk-leaderboard.md`.
+
+**Refusal-string-exactness fix — the corpus's last 2 SEVEREs.** Diagnosed
+`F-123 Q13` / `F-144 Q10`: the model correctly decides to refuse (liability
+questions outside this property-only policy's scope) and opens its answer
+with the exact `REFUSAL_MESSAGE`, but then appends unsolicited explanation
+for why, breaking the exact-match contract. Tried the obvious fix first —
+tightened the system prompt's refusal rule to forbid any trailing text —
+and it worked on both target cases, but **broke the frozen F-122 gate
+(17/20 → 14/20)**: 3 previously-passing direct-hit questions started
+refusing instead of answering, because removing the model's hedging outlet
+shifted its refuse/answer decision boundary, not just its formatting.
+**Reverted immediately, before committing**, per the "never regress below
+17/20" invariant.
+
+Replaced it with a deterministic post-check instead:
+`normalizeRefusalAnswer()` (`lib/qa/constants.ts`, mirrored in
+`apps/ai/app/constants.py`) collapses any answer that starts with the exact
+`REFUSAL_MESSAGE` plus trailing text down to the canonical string, without
+touching the prompt or the model's decision boundary. Wired into the one
+production call site (`lib/anthropic.ts`), its Python mirror, and the
+retrieval-lab harness's generation path. Frozen F-122 gate confirmed
+unchanged (17/20, 0 SEVERE, same 3 pre-existing FAILs). Re-ran the full
+43-question ablation corpus at ADR 004's best config (MC0+topK10+hybrid):
+**39/43→41/43 PASS, 2 SEVERE→0 SEVERE** — zero SEVEREs remain anywhere in
+either corpus. This is also a real production bug fix, not just an eval
+artifact: the pipeline's citation-attachment logic keys off exact string
+equality, so a padded refusal was silently shipping irrelevant citations
+alongside a should-refuse answer before this fix. Full writeup, the
+rejected prompt-tightening attempt, and the scorecard in
+`docs/decisions/005-refusal-string-exactness-fix.md`;
+`eval/sweep-d-mc0-topk10-refusalfix.md` has the corpus-wide row data.
