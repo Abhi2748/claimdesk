@@ -38,3 +38,24 @@ class PolicyPassage(BaseModel):
     page_start: int | None
     page_end: int | None
     content: str
+
+
+class PolicyQAMatterRequest(BaseModel):
+    document_ids: list[str]
+    question: str
+
+
+class MatterCitation(PolicyCitation):
+    document_id: str
+
+
+class MatchChunkMultiRow(MatchChunkRow):
+    document_id: str
+
+
+class PolicyQAMatterResponse(BaseModel):
+    answer: str
+    citations: list[MatterCitation]
+    retrieved_chunks: list[MatterCitation]
+    refused: bool
+    top_similarity: float | None

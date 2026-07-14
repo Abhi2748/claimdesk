@@ -38,6 +38,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/qa/matter": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Qa Matter */
+        post: operations["qa_matter_qa_matter_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -46,6 +63,23 @@ export interface components {
         HTTPValidationError: {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
+        };
+        /** MatterCitation */
+        MatterCitation: {
+            /** Content */
+            content: string;
+            /** Document Id */
+            document_id: string;
+            /** Id */
+            id: number;
+            /** Page End */
+            page_end: number | null;
+            /** Page Start */
+            page_start: number | null;
+            /** Section Label */
+            section_label: string;
+            /** Similarity */
+            similarity: number;
         };
         /** PolicyCitation */
         PolicyCitation: {
@@ -61,6 +95,26 @@ export interface components {
             section_label: string;
             /** Similarity */
             similarity: number;
+        };
+        /** PolicyQAMatterRequest */
+        PolicyQAMatterRequest: {
+            /** Document Ids */
+            document_ids: string[];
+            /** Question */
+            question: string;
+        };
+        /** PolicyQAMatterResponse */
+        PolicyQAMatterResponse: {
+            /** Answer */
+            answer: string;
+            /** Citations */
+            citations: components["schemas"]["MatterCitation"][];
+            /** Refused */
+            refused: boolean;
+            /** Retrieved Chunks */
+            retrieved_chunks: components["schemas"]["MatterCitation"][];
+            /** Top Similarity */
+            top_similarity: number | null;
         };
         /** PolicyQARequest */
         PolicyQARequest: {
@@ -148,6 +202,41 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PolicyQAResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    qa_matter_qa_matter_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PolicyQAMatterRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PolicyQAMatterResponse"];
                 };
             };
             /** @description Validation Error */

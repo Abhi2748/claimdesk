@@ -1,4 +1,9 @@
-import type { PolicyQARequest, PolicyQAResponse } from "@claimdesk/types";
+import type {
+  PolicyQAMatterRequest,
+  PolicyQAMatterResponse,
+  PolicyQARequest,
+  PolicyQAResponse,
+} from "@claimdesk/types";
 
 export async function askPolicyQuestion(
   baseUrl: string,
@@ -22,4 +27,28 @@ export async function askPolicyQuestion(
   }
 
   return response.json() as Promise<PolicyQAResponse>;
+}
+
+export async function askMatterQuestion(
+  baseUrl: string,
+  accessToken: string,
+  req: PolicyQAMatterRequest
+): Promise<PolicyQAMatterResponse> {
+  const normalizedBase = baseUrl.replace(/\/$/, "");
+  const response = await fetch(`${normalizedBase}/qa/matter`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(req),
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      `Matter QA request failed: ${response.status} ${response.statusText}`
+    );
+  }
+
+  return response.json() as Promise<PolicyQAMatterResponse>;
 }

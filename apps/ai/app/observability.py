@@ -137,6 +137,61 @@ def finish_policy_qa_trace(
 
 
 @contextmanager
+def matter_qa_trace(
+    *,
+    question: str,
+    document_ids: list[str],
+    user_id: str | None,
+) -> Generator[Any | None, None, None]:
+    if not _state.enabled or _state.client is None:
+        yield None
+        return
+
+    try:
+        with propagate_attributes(user_id=user_id):
+            with _state.client.start_as_current_observation(
+                name="matter_qa",
+                as_type="span",
+                input=question,
+                metadata={
+                    "document_ids": document_ids,
+                    "doc_count": len(document_ids),
+                },
+            ) as span:
+                yield span
+    except Exception:
+        logger.debug("Langfuse matter_qa trace failed", exc_info=True)
+        yield None
+
+
+def finish_matter_qa_trace(
+    span: Any | None,
+    *,
+    answer: str,
+    refused: bool,
+    top_similarity: float | None,
+    document_ids: list[str],
+) -> None:
+    if span is None:
+        return
+    try:
+        span.update(
+            output=answer,
+            metadata={
+                "refused": refused,
+                "top_similarity": top_similarity,
+                "document_ids": document_ids,
+                "doc_count": len(document_ids),
+            },
+        )
+        trace_id = getattr(span, "trace_id", None)
+        if trace_id:
+            logger.debug("Langfuse trace: %s", trace_dashboard_url(trace_id))
+    except Exception:
+        logger.debug("Langfuse matter_qa trace update failed", exc_info=True)
+
+
+@contextmanager
 def retrieval_span() -> Generator[Any | None, None, None]:
     if not _state.enabled or _state.client is None:
         yield None

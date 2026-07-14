@@ -14,6 +14,63 @@
         "title": "HTTPValidationError",
         "type": "object"
       },
+      "MatterCitation": {
+        "properties": {
+          "content": {
+            "title": "Content",
+            "type": "string"
+          },
+          "document_id": {
+            "title": "Document Id",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "page_end": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Page End"
+          },
+          "page_start": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Page Start"
+          },
+          "section_label": {
+            "title": "Section Label",
+            "type": "string"
+          },
+          "similarity": {
+            "title": "Similarity",
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "section_label",
+          "page_start",
+          "page_end",
+          "content",
+          "similarity",
+          "document_id"
+        ],
+        "title": "MatterCitation",
+        "type": "object"
+      },
       "PolicyCitation": {
         "properties": {
           "content": {
@@ -64,6 +121,73 @@
           "similarity"
         ],
         "title": "PolicyCitation",
+        "type": "object"
+      },
+      "PolicyQAMatterRequest": {
+        "properties": {
+          "document_ids": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Document Ids",
+            "type": "array"
+          },
+          "question": {
+            "title": "Question",
+            "type": "string"
+          }
+        },
+        "required": [
+          "document_ids",
+          "question"
+        ],
+        "title": "PolicyQAMatterRequest",
+        "type": "object"
+      },
+      "PolicyQAMatterResponse": {
+        "properties": {
+          "answer": {
+            "title": "Answer",
+            "type": "string"
+          },
+          "citations": {
+            "items": {
+              "$ref": "#/components/schemas/MatterCitation"
+            },
+            "title": "Citations",
+            "type": "array"
+          },
+          "refused": {
+            "title": "Refused",
+            "type": "boolean"
+          },
+          "retrieved_chunks": {
+            "items": {
+              "$ref": "#/components/schemas/MatterCitation"
+            },
+            "title": "Retrieved Chunks",
+            "type": "array"
+          },
+          "top_similarity": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Top Similarity"
+          }
+        },
+        "required": [
+          "answer",
+          "citations",
+          "retrieved_chunks",
+          "refused",
+          "top_similarity"
+        ],
+        "title": "PolicyQAMatterResponse",
         "type": "object"
       },
       "PolicyQARequest": {
@@ -254,6 +378,65 @@
           }
         },
         "summary": "Qa Answer",
+        "tags": [
+          "qa"
+        ]
+      }
+    },
+    "/qa/matter": {
+      "post": {
+        "operationId": "qa_matter_qa_matter_post",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PolicyQAMatterRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PolicyQAMatterResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Qa Matter",
         "tags": [
           "qa"
         ]
