@@ -6,6 +6,7 @@ Upload a matter’s policies, ask coverage questions across every ready document
 
 | | |
 |---|---|
+| **Website** | [claimdesk-sage.vercel.app](https://claimdesk-sage.vercel.app/) |
 | **Live demo** | Deployed app → `/login` → **View the live demo** (read-only · fictional matters · no signup) |
 | **Accuracy Lab** | Public `/lab` — retrieval quality on a real golden set |
 | **AI health** | [claimdesk-zkqi.onrender.com/health](https://claimdesk-zkqi.onrender.com/health) |
