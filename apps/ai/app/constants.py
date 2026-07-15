@@ -23,10 +23,18 @@ ANTHROPIC_MAX_TOKENS = 2048
 # Coverage agent (Block 2.5, ADR 009) — retrieve node. Wider than
 # MATTER_QA_TOP_K/POOL because a coverage opinion needs broader context
 # (coverage + conditions + exclusions) than a single Q&A turn, per ADR 009's
-# reasoning. Provisional, not benchmarked: unlike MATTER_QA_TOP_K (measured
-# in ADR 004/007), these are a first guess pending 2.5e's real measurement
-# — expect a post-build correction the same shape as ADR 007's topK 10->8.
-COVERAGE_RETRIEVE_TOP_K = 12
+# reasoning.
+#
+# TOP_K bumped 12->16 per ADR 010: 2.5e's golden set found one reproducible
+# miss (III.A.8, a basement-item limitation) ranked #13 in the fused
+# candidate list -- 1 position outside a 12-cutoff, comfortably inside 16.
+# topK=20 was measured too and rejected: no further accuracy gain (a
+# second miss, IV.5, isn't in the candidate pool at any rank up to 30 --
+# not a depth problem, unaffected by topK) but a real p95 cost (31.6s,
+# the first budget overshoot measured anywhere in Block 2.5). POOL stays
+# at 30, unchanged and unneeded to raise further -- it was never the
+# limiting factor.
+COVERAGE_RETRIEVE_TOP_K = 16
 COVERAGE_RETRIEVE_POOL = 30
 COVERAGE_MAX_TOKENS = 4096
 

@@ -68,15 +68,15 @@ class CoverageAgentState(TypedDict, total=False):
     review_item_id: str
 
 
-def _retrieve_node(supabase: Client):
+def _retrieve_node(supabase: Client, top_k: int, pool: int):
     def node(state: CoverageAgentState) -> dict:
         with retrieval_span() as span:
             retrieved_chunks, top_similarity = retrieve_hybrid(
                 supabase,
                 state["document_ids"],
                 state["claim_summary"],
-                COVERAGE_RETRIEVE_TOP_K,
-                COVERAGE_RETRIEVE_POOL,
+                top_k,
+                pool,
             )
             finish_retrieval_span(
                 span, chunk_count=len(retrieved_chunks), top_similarity=top_similarity
@@ -240,9 +240,14 @@ def _write_review_queue_node(supabase: Client, start_time: float):
     return node
 
 
-def build_coverage_graph(supabase: Client, start_time: float):
+def build_coverage_graph(
+    supabase: Client,
+    start_time: float,
+    retrieve_top_k: int = COVERAGE_RETRIEVE_TOP_K,
+    retrieve_pool: int = COVERAGE_RETRIEVE_POOL,
+):
     graph = StateGraph(CoverageAgentState)
-    graph.add_node("retrieve", _retrieve_node(supabase))
+    graph.add_node("retrieve", _retrieve_node(supabase, retrieve_top_k, retrieve_pool))
     graph.add_node("draft_opinion", _draft_opinion_node)
     graph.add_node("verify_and_score", _verify_and_score_node(supabase))
     graph.add_node("write_review_queue", _write_review_queue_node(supabase, start_time))
@@ -262,6 +267,8 @@ def run_coverage_agent(
     document_ids: list[str],
     claim_summary: str,
     user_id: str | None = None,
+    retrieve_top_k: int = COVERAGE_RETRIEVE_TOP_K,
+    retrieve_pool: int = COVERAGE_RETRIEVE_POOL,
 ) -> CoverageOpinion:
     """Runs the full graph and blocks until it finishes — the caller (the
     /coverage/analyze background task, Block 2.5d) is what makes this
@@ -274,9 +281,15 @@ def run_coverage_agent(
     no router code left to call it afterward, matching qa.py's flush point
     conceptually — just moved to the last thing this function does either
     way.
+
+    retrieve_top_k/retrieve_pool default to the shipped constants — the
+    override exists for Block 2.5e's ablation harness
+    (eval/run_coverage_topk_ablation.py) to sweep without touching the live
+    default, same pattern as retrieve_hybrid()'s own parameterization
+    (Block 2.5a).
     """
     start_time = time.monotonic()
-    app = build_coverage_graph(supabase, start_time)
+    app = build_coverage_graph(supabase, start_time, retrieve_top_k, retrieve_pool)
     config = {"configurable": {"thread_id": f"coverage-{case_id}-{start_time}"}}
 
     with coverage_agent_trace(
