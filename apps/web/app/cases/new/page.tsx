@@ -22,7 +22,7 @@ export default async function NewMatterPage() {
           <p className="mt-4 text-xs font-semibold uppercase tracking-[0.14em] text-ink-mute">
             Intake
           </p>
-          <h1 className="mt-1 text-3xl text-ink">New matter</h1>
+          <h1 className="mt-1 text-3xl text-ink">New case</h1>
           <p className="mt-1 text-sm text-ink-mute">
             Open a case file. You can upload the policy and start asking questions next.
           </p>

@@ -128,7 +128,7 @@ export default async function CaseDetailPage({
                 href={`/cases/${id}/edit`}
                 className="text-sm font-medium text-seal transition hover:text-seal-deep"
               >
-                Edit matter
+                Edit case
               </Link>
             )}
           </div>

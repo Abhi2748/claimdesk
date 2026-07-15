@@ -79,7 +79,7 @@ export default async function CasesPage() {
               href="/cases/new"
               className="inline-flex shrink-0 items-center gap-2 rounded-[10px] bg-seal px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-seal-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-seal-ring focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
             >
-              <span aria-hidden>+</span> New matter
+              <span aria-hidden>+</span> New case
             </Link>
           )}
         </header>
@@ -104,7 +104,7 @@ export default async function CasesPage() {
                 href="/cases/new"
                 className="mt-4 inline-flex items-center gap-2 rounded-[10px] bg-seal px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-seal-deep"
               >
-                <span aria-hidden>+</span> Create your first matter
+                <span aria-hidden>+</span> Create your first case
               </Link>
             )}
           </div>

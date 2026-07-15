@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signOut } from "@/app/login/actions";
 import { createClient } from "@/lib/supabase/client";
@@ -71,14 +72,17 @@ export default function MfaPage() {
   return (
     <div className="flex min-h-full flex-1 items-center justify-center bg-paper px-6 py-12">
       <div className="w-full max-w-sm">
-        <div className="mb-8 flex items-center gap-2.5">
+        <Link
+          href="/"
+          className="mb-8 flex items-center gap-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-seal-ring"
+        >
           <span className="flex h-8 w-8 items-center justify-center rounded-md bg-seal font-serif text-lg font-medium text-white">
             §
           </span>
           <span className="font-serif text-xl font-medium text-ink">
             ClaimDesk
           </span>
-        </div>
+        </Link>
 
         <div className="card-surface px-6 py-6">
           <h1 className="text-xl text-ink">Two-factor authentication</h1>

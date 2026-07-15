@@ -54,7 +54,7 @@ export async function askMatterQuestion(
     throw new Error(
       await readAiErrorMessage(
         response,
-        "Matter Q&A failed. Please try again."
+        "Case Q&A failed. Please try again."
       )
     );
   }

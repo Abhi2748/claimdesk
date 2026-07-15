@@ -27,10 +27,10 @@ export default async function EditMatterPage({
       <main className="mx-auto max-w-3xl space-y-8 px-4 py-8 sm:px-6">
         <header>
           <Link href={`/cases/${id}`} className="text-sm text-ink-mute transition hover:text-ink">
-            ← Back to matter
+            ← Back to case
           </Link>
           <p className="mt-4 text-xs font-semibold uppercase tracking-[0.14em] text-ink-mute">
-            Edit matter
+            Edit case
           </p>
           <h1 className="mt-1 text-3xl text-ink">{matter.title}</h1>
         </header>

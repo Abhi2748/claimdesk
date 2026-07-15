@@ -81,7 +81,7 @@ function ReviewRow({ item, opinion }: { item: ReviewItem; opinion?: CoverageOpin
         </span>
         {item.case_id && (
           <Link href={`/cases/${item.case_id}`} className="text-xs text-seal transition hover:text-seal-deep">
-            View matter →
+            View case →
           </Link>
         )}
       </div>
@@ -139,7 +139,7 @@ export default async function ReviewQueuePage() {
           <h2 className="text-sm font-semibold uppercase tracking-wider text-ink-mute">Awaiting review</h2>
           {pending.length === 0 ? (
             <p className="card-surface px-6 py-8 text-center text-sm text-ink-mute">
-              Nothing awaiting review. Flag an answer from a matter to send it here.
+              Nothing awaiting review. Flag an answer from a case to send it here.
             </p>
           ) : (
             <ul className="space-y-3">

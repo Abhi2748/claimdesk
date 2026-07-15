@@ -204,7 +204,7 @@ export function MatterQAPanel({ caseId, readyCount, isDemo }: { caseId: string; 
   return (
     <section className="card-surface overflow-hidden">
       <div className="border-b border-line px-6 py-4">
-        <h2 className="text-xl text-ink">Ask the matter</h2>
+        <h2 className="text-xl text-ink">Ask the case</h2>
         <p className="mt-1 text-sm text-ink-mute">
           Retrieves across {readyCount} ready document{readyCount === 1 ? "" : "s"} — every answer cites the policy, or refuses.
         </p>
@@ -213,7 +213,7 @@ export function MatterQAPanel({ caseId, readyCount, isDemo }: { caseId: string; 
       <div className="flex max-h-[32rem] flex-col gap-4 overflow-y-auto px-6 py-4">
         {messages.length === 0 && !isPending && (
           <p className="text-sm leading-relaxed text-ink-mute">
-            Ask a question about this matter&apos;s documents. Each citation is verified against the retrieved source, and unverifiable ones are flagged.
+            Ask a question about this case&apos;s documents. Each citation is verified against the retrieved source, and unverifiable ones are flagged.
           </p>
         )}
         {messages.map((msg, i) =>
@@ -229,7 +229,7 @@ export function MatterQAPanel({ caseId, readyCount, isDemo }: { caseId: string; 
         )}
         {isPending && (
           <div className="mr-0 rounded-[10px] border border-dashed border-line bg-card-2 px-4 py-3 sm:mr-8">
-            <p className="text-sm text-ink-mute">Searching the matter and drafting answer…</p>
+            <p className="text-sm text-ink-mute">Searching the case and drafting answer…</p>
             <div className="mt-2 flex gap-1 motion-reduce:hidden" aria-hidden>
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-seal" />
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-seal [animation-delay:150ms]" />

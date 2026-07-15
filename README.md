@@ -2,12 +2,12 @@
 
 Case workspace for policyholder-side insurance attorneys — answers from the actual policy, with citations you can verify, or an honest refusal.
 
-Upload a matter’s policies, ask coverage questions across every ready document, generate a structured coverage opinion for human review, and draft a demand letter that can only cite provisions actually retrieved from the text.
+Upload a case’s policies, ask coverage questions across every ready document, generate a structured coverage opinion for human review, and draft a demand letter that can only cite provisions actually retrieved from the text.
 
 | | |
 |---|---|
 | **Website** | [claimdesk-sage.vercel.app](https://claimdesk-sage.vercel.app/) |
-| **Live demo** | Deployed app → `/login` → **View the live demo** (read-only · fictional matters · no signup) |
+| **Live demo** | Deployed app → `/login` → **View the live demo** (read-only · fictional cases · no signup) |
 | **Accuracy Lab** | Public `/lab` — retrieval quality on a real golden set |
 | **AI health** | [claimdesk-zkqi.onrender.com/health](https://claimdesk-zkqi.onrender.com/health) |
 
@@ -17,8 +17,8 @@ Demo client data is fictional. Policy forms used in evals are public FEMA/NFIP d
 
 ## Features
 
-- **Matter workspace** — clients, disputes, multi-document upload, ingest status, deadline tracking
-- **Ask the matter** — hybrid retrieval (dense + BM25); section+page citations; exact refusal when evidence isn’t there
+- **Case workspace** — clients, disputes, multi-document upload, ingest status, deadline tracking
+- **Ask the case** — hybrid retrieval (dense + BM25); section+page citations; exact refusal when evidence isn’t there
 - **Coverage opinion** — LangGraph agent → `covered` / `excluded` / `partial` / `unclear`, cited findings, human review queue (never auto-approved)
 - **Demand letter draft** — claim-specific retrieval plan; cites only provisions present in retrieved passages
 - **Trust rails** — machine citation verification (verified / unverified), org-scoped RLS, RBAC, MFA, audit trail, demo read-only mode
@@ -31,7 +31,7 @@ ClaimDesk optimizes for *measured* policy intelligence, not chat volume:
 
 | Signal | Result |
 |---|---|
-| Multi-doc golden set (3 NFIP forms) | **41/43** PASS, **0** SEVERE (live matter path) |
+| Multi-doc golden set (3 NFIP forms) | **41/43** PASS, **0** SEVERE (live case Q&A path) |
 | Frozen F-122 CI gate | ≥ **17/20** PASS, **0** SEVERE on every relevant change |
 | Coverage agent golden set | **8/10** PASS, **0** SEVERE |
 | Intentionally skipped | Contextual retrieval + reranker — measured budgets already cleared without them |

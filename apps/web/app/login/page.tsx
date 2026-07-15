@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { LoginForm } from "./login-form";
 import { signInAsDemo } from "./actions";
 
@@ -6,14 +7,17 @@ export default function LoginPage() {
     <div className="flex min-h-full flex-1 flex-col lg:flex-row">
       <div className="relative flex flex-1 flex-col justify-between overflow-hidden bg-ink px-8 py-10 sm:px-12 lg:px-14 lg:py-14">
         <div className="relative z-10 max-w-md">
-          <div className="mb-10 flex items-center gap-2.5">
+          <Link
+            href="/"
+            className="mb-10 flex items-center gap-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-seal-ring"
+          >
             <span className="flex h-8 w-8 items-center justify-center rounded-md bg-seal font-serif text-lg font-medium text-white">
               §
             </span>
             <span className="font-serif text-xl font-medium text-white">
               ClaimDesk
             </span>
-          </div>
+          </Link>
 
           <h1 className="text-3xl leading-snug text-white sm:text-4xl">
             Read any insurance policy. Get answers with{" "}

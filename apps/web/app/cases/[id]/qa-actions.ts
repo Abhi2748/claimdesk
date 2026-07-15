@@ -32,7 +32,7 @@ export async function askMatter(
     .eq("id", caseId)
     .single();
   if (caseErr || !caseData) {
-    return { ok: false, error: "Matter not found or access denied." };
+    return { ok: false, error: "Case not found or access denied." };
   }
 
   const { data: docsData, error: docsError } = await supabase
@@ -109,7 +109,7 @@ export async function askMatter(
       error:
         err instanceof Error
           ? err.message
-          : "Matter Q&A failed. Please try again.",
+          : "Case Q&A failed. Please try again.",
     };
   }
 }
@@ -143,7 +143,7 @@ export async function requestCoverageOpinion(
     .eq("id", caseId)
     .single();
   if (caseErr || !caseData) {
-    return { ok: false, error: "Matter not found or access denied." };
+    return { ok: false, error: "Case not found or access denied." };
   }
 
   const { data: docsData, error: docsError } = await supabase

@@ -51,7 +51,7 @@ function parseMatterForm(formData: FormData): ParseResult {
   const nfipVal = formData.get("is_nfip");
   const is_nfip = nfipVal === "on" || nfipVal === "true";
 
-  if (!title) fieldErrors.title = "Matter title is required.";
+  if (!title) fieldErrors.title = "Case title is required.";
   if (!client_name) fieldErrors.client_name = "Client name is required.";
   if (!CLAIM_TYPES.includes(claim_type as ClaimType)) fieldErrors.claim_type = "Select a claim type.";
   if (!/^[A-Za-z]{2}$/.test(state)) fieldErrors.state = "Use a 2-letter state code.";
@@ -96,7 +96,7 @@ export async function createMatter(
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { error: "You must be signed in." };
-  if (isDemoUser(user)) return { error: "Creating matters is disabled in the public demo." };
+  if (isDemoUser(user)) return { error: "Creating cases is disabled in the public demo." };
 
   const parsed = parseMatterForm(formData);
   if (!parsed.ok) return { fieldErrors: parsed.fieldErrors };
@@ -111,7 +111,7 @@ export async function createMatter(
     .select("id")
     .single();
 
-  if (error || !data) return { error: error?.message ?? "Failed to create matter." };
+  if (error || !data) return { error: error?.message ?? "Failed to create case." };
 
   revalidatePath("/cases");
   redirect(`/cases/${(data as { id: string }).id}`);
@@ -122,12 +122,12 @@ export async function updateMatter(
   formData: FormData
 ): Promise<MatterFormState> {
   const caseId = formData.get("case_id") as string | null;
-  if (!caseId) return { error: "Missing matter id." };
+  if (!caseId) return { error: "Missing case id." };
 
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { error: "You must be signed in." };
-  if (isDemoUser(user)) return { error: "Editing matters is disabled in the public demo." };
+  if (isDemoUser(user)) return { error: "Editing cases is disabled in the public demo." };
 
   const parsed = parseMatterForm(formData);
   if (!parsed.ok) return { fieldErrors: parsed.fieldErrors };

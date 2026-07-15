@@ -1,15 +1,16 @@
 import Link from "next/link";
+import { signInAsDemo } from "@/app/login/actions";
 
 const capabilities = [
   {
     numeral: "01",
-    title: "Matter workspace",
-    body: "Open a case for each client — fire, water, wind, hail, hurricane, underpaid or delayed. Upload every policy, endorsement, and denial letter into one matter; deadlines stay in view beside the facts.",
+    title: "Case workspace",
+    body: "Open a case for each client — fire, water, wind, hail, hurricane, underpaid or delayed. Upload every policy, endorsement, and denial letter into one case; deadlines stay in view beside the facts.",
   },
   {
     numeral: "02",
-    title: "Ask across the matter",
-    body: "Question every ready policy in the matter at once. Answers come back with pinpoint section and page citations — so you can open the form and verify the quote before you rely on it.",
+    title: "Ask across the case",
+    body: "Question every ready policy in the case at once. Answers come back with pinpoint section and page citations — so you can open the form and verify the quote before you rely on it.",
   },
   {
     numeral: "03",
@@ -93,12 +94,14 @@ export default function Home() {
               >
                 Log in
               </Link>
-              <Link
-                href="/login"
-                className="inline-flex px-2 py-2.5 text-sm font-medium text-seal-tint underline-offset-4 transition hover:text-white hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-seal-ring"
-              >
-                View the live demo
-              </Link>
+              <form action={signInAsDemo}>
+                <button
+                  type="submit"
+                  className="inline-flex px-2 py-2.5 text-sm font-medium text-seal-tint underline-offset-4 transition hover:text-white hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-seal-ring"
+                >
+                  View the live demo
+                </button>
+              </form>
             </div>
           </div>
           <span
@@ -117,11 +120,11 @@ export default function Home() {
                 What counsel can do
               </p>
               <h2 className="mt-3 font-serif text-2xl text-ink sm:text-3xl">
-                From matter file to cited first draft
+                From case file to cited first draft
               </h2>
               <p className="mt-3 text-sm leading-relaxed text-ink-soft sm:text-base">
                 One workspace for the file — not four tools stitched together.
-                Jurisdiction-aware deadline tracking sits beside every matter so
+                Jurisdiction-aware deadline tracking sits beside every case so
                 limitation periods stay visible while you work the claim.
               </p>
             </div>
@@ -299,7 +302,7 @@ export default function Home() {
           <div className="mx-auto flex max-w-5xl flex-col items-start justify-between gap-8 px-6 py-14 sm:flex-row sm:items-center sm:px-8 sm:py-16">
             <div className="max-w-md">
               <h2 className="font-serif text-2xl text-white">
-                Open a matter. Ask the policy.
+                Open a case. Ask the policy.
               </h2>
               <p className="mt-2 text-sm leading-relaxed text-white/60">
                 Try the read-only live demo with fictional cases, or create an
@@ -319,12 +322,14 @@ export default function Home() {
               >
                 Log in
               </Link>
-              <Link
-                href="/login"
-                className="inline-flex rounded-[10px] px-5 py-2.5 text-sm font-medium text-seal-tint transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-seal-ring"
-              >
-                View the live demo
-              </Link>
+              <form action={signInAsDemo}>
+                <button
+                  type="submit"
+                  className="inline-flex rounded-[10px] px-5 py-2.5 text-sm font-medium text-seal-tint transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-seal-ring"
+                >
+                  View the live demo
+                </button>
+              </form>
             </div>
           </div>
         </section>

@@ -38,7 +38,7 @@ export function MatterForm({ mode, initial }: { mode: "create" | "edit"; initial
       {mode === "edit" && initial && <input type="hidden" name="case_id" value={initial.id} />}
 
       <div>
-        <label htmlFor="title" className={labelClass}>Matter title</label>
+        <label htmlFor="title" className={labelClass}>Case title</label>
         <input id="title" name="title" required defaultValue={initial?.title ?? ""}
           className={inputClass} placeholder="Alvarez v. Shield Mutual — Flood Underpayment" />
         <FieldError msg={fe.title} />
@@ -138,7 +138,7 @@ export function MatterForm({ mode, initial }: { mode: "create" | "edit"; initial
       <div className="flex items-center gap-3 pt-2">
         <button type="submit" disabled={pending}
           className="rounded-[10px] bg-seal px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-seal-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-seal-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card disabled:opacity-50">
-          {pending ? "Saving…" : mode === "create" ? "Create matter" : "Save changes"}
+          {pending ? "Saving…" : mode === "create" ? "Create case" : "Save changes"}
         </button>
         <Link href={mode === "edit" && initial ? `/cases/${initial.id}` : "/cases"}
           className="text-sm text-ink-mute transition hover:text-ink-soft">

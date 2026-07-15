@@ -88,7 +88,7 @@ export function CoverageOpinionPanel({
 
             {!isPending && !accepted && (
               <p className="text-sm leading-relaxed text-ink-mute">
-                Describe what happened — the agent retrieves from the matter&apos;s
+                Describe what happened — the agent retrieves from the case&apos;s
                 policies, drafts a cited verdict, and queues it for human review.
               </p>
             )}
