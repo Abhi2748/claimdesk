@@ -1,5 +1,6 @@
-from fastapi import APIRouter, Depends, Header, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 
+from app.deps import get_access_token
 from app.observability import (
     finish_matter_qa_trace,
     finish_policy_qa_trace,
@@ -18,18 +19,6 @@ from app.services.qa_pipeline import answer_matter_question, answer_policy_quest
 from app.services.supabase_client import create_user_supabase_client
 
 router = APIRouter(prefix="/qa", tags=["qa"])
-
-
-def get_access_token(authorization: str | None = Header(default=None)) -> str:
-    if not authorization or not authorization.startswith("Bearer "):
-        raise HTTPException(
-            status_code=401,
-            detail="Authorization header must be Bearer <token>.",
-        )
-    token = authorization.removeprefix("Bearer ").strip()
-    if not token:
-        raise HTTPException(status_code=401, detail="Bearer token is required.")
-    return token
 
 
 @router.post("/answer", response_model=PolicyQAResponse)

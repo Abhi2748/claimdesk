@@ -192,6 +192,145 @@ def finish_matter_qa_trace(
 
 
 @contextmanager
+def coverage_agent_trace(
+    *,
+    claim_summary: str,
+    case_id: str,
+    document_ids: list[str],
+    user_id: str | None,
+) -> Generator[Any | None, None, None]:
+    """Top-level span for one coverage-agent run (Block 2.5d). Entered
+    around the whole graph invocation (app/services/coverage_agent.py's
+    run_coverage_agent), so the per-node spans below — retrieval_span
+    (reused as-is) and the two new ones — nest under it via Langfuse's
+    ambient current-observation context, the same mechanism matter_qa_trace
+    already relies on for retrieval_span/claude_generation_span.
+    """
+    if not _state.enabled or _state.client is None:
+        yield None
+        return
+
+    try:
+        with propagate_attributes(user_id=user_id):
+            with _state.client.start_as_current_observation(
+                name="coverage_agent",
+                as_type="span",
+                input=claim_summary,
+                metadata={"case_id": case_id, "document_ids": document_ids},
+            ) as span:
+                yield span
+    except Exception:
+        logger.debug("Langfuse coverage_agent trace failed", exc_info=True)
+        yield None
+
+
+def finish_coverage_agent_trace(
+    span: Any | None,
+    *,
+    verdict: str | None,
+    overall_grounding_score: float | None,
+    finding_count: int,
+    unverified_count: int,
+    latency_ms: int,
+    error: str | None = None,
+) -> None:
+    if span is None:
+        return
+    try:
+        span.update(
+            output=verdict,
+            metadata={
+                "overall_grounding_score": overall_grounding_score,
+                "finding_count": finding_count,
+                "unverified_count": unverified_count,
+                "latency_ms": latency_ms,
+                "error": error,
+            },
+        )
+        trace_id = getattr(span, "trace_id", None)
+        if trace_id:
+            logger.debug("Langfuse trace: %s", trace_dashboard_url(trace_id))
+    except Exception:
+        logger.debug("Langfuse coverage_agent trace update failed", exc_info=True)
+
+
+@contextmanager
+def verify_and_score_span() -> Generator[Any | None, None, None]:
+    if not _state.enabled or _state.client is None:
+        yield None
+        return
+
+    try:
+        with _state.client.start_as_current_observation(
+            name="verify_and_score",
+            as_type="span",
+        ) as span:
+            yield span
+    except Exception:
+        logger.debug("Langfuse verify_and_score span failed", exc_info=True)
+        yield None
+
+
+def finish_verify_and_score_span(
+    span: Any | None,
+    *,
+    verified_count: int,
+    unverified_count: int,
+    overall_grounding_score: float,
+    embedding_calls: int,
+) -> None:
+    if span is None:
+        return
+    try:
+        span.update(
+            metadata={
+                "verified_count": verified_count,
+                "unverified_count": unverified_count,
+                "overall_grounding_score": overall_grounding_score,
+                "embedding_calls": embedding_calls,
+            }
+        )
+    except Exception:
+        logger.debug("Langfuse verify_and_score span update failed", exc_info=True)
+
+
+@contextmanager
+def write_review_queue_span() -> Generator[Any | None, None, None]:
+    if not _state.enabled or _state.client is None:
+        yield None
+        return
+
+    try:
+        with _state.client.start_as_current_observation(
+            name="write_review_queue",
+            as_type="span",
+        ) as span:
+            yield span
+    except Exception:
+        logger.debug("Langfuse write_review_queue span failed", exc_info=True)
+        yield None
+
+
+def finish_write_review_queue_span(
+    span: Any | None,
+    *,
+    coverage_opinion_id: str,
+    review_item_id: str,
+) -> None:
+    if span is None:
+        return
+    try:
+        span.update(
+            metadata={
+                "coverage_opinion_id": coverage_opinion_id,
+                "review_item_id": review_item_id,
+            }
+        )
+    except Exception:
+        logger.debug("Langfuse write_review_queue span update failed", exc_info=True)
+
+
+@contextmanager
 def retrieval_span() -> Generator[Any | None, None, None]:
     if not _state.enabled or _state.client is None:
         yield None

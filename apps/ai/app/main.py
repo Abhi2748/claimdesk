@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import get_settings
 from app.observability import init_observability, shutdown_observability
-from app.routers import health, qa
+from app.routers import coverage, health, qa
 
 
 @asynccontextmanager
@@ -42,3 +42,4 @@ app.add_middleware(
 
 app.include_router(health.router)
 app.include_router(qa.router)
+app.include_router(coverage.router)

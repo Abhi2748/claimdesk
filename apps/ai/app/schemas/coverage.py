@@ -47,3 +47,13 @@ class CoverageOpinion(BaseModel):
     model: str
     latency_ms: int
     generated_at: str
+
+
+class CoverageAnalyzeRequest(BaseModel):
+    case_id: str
+    document_ids: list[str]
+    claim_summary: str
+
+
+class CoverageAnalyzeAcceptedResponse(BaseModel):
+    status: Literal["accepted"]
