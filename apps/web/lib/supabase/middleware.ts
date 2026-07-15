@@ -38,7 +38,6 @@ export async function updateSession(request: NextRequest) {
   const isMfaRoute = pathname === "/mfa";
   const isProtectedRoute =
     pathname.startsWith("/cases") ||
-    pathname.startsWith("/lab") ||
     pathname.startsWith("/settings") ||
     pathname.startsWith("/review") ||
     isMfaRoute;

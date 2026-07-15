@@ -22,7 +22,8 @@ const ibmPlexMono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   title: "ClaimDesk",
-  description: "AI-powered insurance claim management",
+  description:
+    "Case workspace for policyholder-side insurance attorneys — cited answers from the actual policy, structured coverage opinions, and demand-letter drafts that refuse rather than guess.",
 };
 
 export default function RootLayout({

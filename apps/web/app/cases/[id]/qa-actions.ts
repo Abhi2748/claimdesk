@@ -1,75 +1,12 @@
 "use server";
 
-import { askMatterQuestion } from "@/lib/ai/client";
+import { analyzeCoverage, askMatterQuestion } from "@/lib/ai/client";
 import { isDemoUser } from "@/lib/demo";
 import { enforceDemoRateLimit } from "@/lib/demo-rate-limit";
-import { answerPolicyQuestion as runPolicyQA } from "@/lib/qa/pipeline";
 import type { PolicyCitation } from "@/lib/qa/types";
 import { verifyCitations } from "@/lib/qa/verify";
 import { createClient } from "@/lib/supabase/server";
-import type { AskMatterResult, AskPolicyResult } from "./qa-types";
-
-export async function askPolicy(
-  documentId: string,
-  caseId: string,
-  question: string
-): Promise<AskPolicyResult> {
-  const trimmed = question.trim();
-  if (!trimmed) {
-    return { ok: false, error: "Please enter a question." };
-  }
-
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return { ok: false, error: "You must be signed in." };
-  }
-
-  if (isDemoUser(user)) {
-    const guard = await enforceDemoRateLimit(supabase);
-    if (!guard.ok) {
-      return { ok: false, error: guard.message };
-    }
-  }
-
-  const { data: docData, error: docError } = await supabase
-    .from("documents")
-    .select("id, ingest_status")
-    .eq("id", documentId)
-    .eq("case_id", caseId)
-    .single();
-
-  if (docError || !docData) {
-    return { ok: false, error: "Document not found or access denied." };
-  }
-
-  const doc = docData as { id: string; ingest_status: string };
-
-  if (doc.ingest_status !== "ready") {
-    return { ok: false, error: "This document has not been processed yet." };
-  }
-
-  try {
-    const result = await runPolicyQA(supabase, documentId, trimmed);
-
-    return {
-      ok: true,
-      answer: result.answer,
-      citations: result.citations,
-      refused: result.refused,
-    };
-  } catch (err) {
-    console.error("Policy Q&A failed:", err);
-    return {
-      ok: false,
-      error: err instanceof Error ? err.message : "Something went wrong.",
-    };
-  }
-}
+import type { AskMatterResult, RequestCoverageOpinionResult } from "./qa-types";
 
 export async function askMatter(
   caseId: string,
@@ -166,6 +103,87 @@ export async function askMatter(
     };
   } catch (err) {
     console.error("Matter Q&A failed:", err);
+    return {
+      ok: false,
+      error: err instanceof Error ? err.message : "Something went wrong.",
+    };
+  }
+}
+
+export async function requestCoverageOpinion(
+  caseId: string,
+  claimSummary: string
+): Promise<RequestCoverageOpinionResult> {
+  const trimmed = claimSummary.trim();
+  if (!trimmed) {
+    return { ok: false, error: "Please describe the claim." };
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { ok: false, error: "You must be signed in." };
+
+  // Writes coverage_opinions + review_items — demo stays read-only.
+  if (isDemoUser(user)) {
+    return {
+      ok: false,
+      error: "Coverage analysis is disabled in the demo.",
+    };
+  }
+
+  const { data: caseData, error: caseErr } = await supabase
+    .from("cases")
+    .select("id")
+    .eq("id", caseId)
+    .single();
+  if (caseErr || !caseData) {
+    return { ok: false, error: "Matter not found or access denied." };
+  }
+
+  const { data: docsData, error: docsError } = await supabase
+    .from("documents")
+    .select("id")
+    .eq("case_id", caseId)
+    .eq("ingest_status", "ready");
+  if (docsError) {
+    return {
+      ok: false,
+      error: `Document lookup failed: ${docsError.message}`,
+    };
+  }
+
+  const documentIds = ((docsData ?? []) as { id: string }[]).map((d) => d.id);
+  if (documentIds.length === 0) {
+    return {
+      ok: false,
+      error: "No ready documents available for coverage analysis.",
+    };
+  }
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (!session?.access_token) {
+    return { ok: false, error: "You must be signed in." };
+  }
+
+  const aiBaseUrl = process.env.AI_BASE_URL;
+  if (!aiBaseUrl) {
+    return { ok: false, error: "AI service is not configured." };
+  }
+
+  try {
+    const result = await analyzeCoverage(aiBaseUrl, session.access_token, {
+      case_id: caseId,
+      document_ids: documentIds,
+      claim_summary: trimmed,
+    });
+
+    return { ok: true, status: result.status };
+  } catch (err) {
+    console.error("Coverage analysis request failed:", err);
     return {
       ok: false,
       error: err instanceof Error ? err.message : "Something went wrong.",

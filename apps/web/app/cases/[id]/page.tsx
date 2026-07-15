@@ -11,6 +11,7 @@ import { buildDeadlineDisplay } from "@/lib/deadlines";
 import { isDemoUser } from "@/lib/demo";
 import { createClient } from "@/lib/supabase/server";
 import { formatDateOnly } from "@/lib/utils";
+import { CoverageOpinionPanel } from "./coverage-opinion-panel";
 import { DocumentUploadForm } from "./document-upload-form";
 import { DemandLetterPanel } from "./demand-letter-panel";
 import { LetterRetrievalPlan } from "./letter-retrieval-plan";
@@ -327,6 +328,14 @@ export default async function CaseDetailPage({
 
         {readyDocuments.length > 0 && (
           <MatterQAPanel caseId={id} readyCount={readyDocuments.length} isDemo={isDemo} />
+        )}
+
+        {readyDocuments.length > 0 && (
+          <CoverageOpinionPanel
+            caseId={id}
+            readyCount={readyDocuments.length}
+            isDemo={isDemo}
+          />
         )}
 
         <DemandLetterPanel

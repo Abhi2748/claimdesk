@@ -1,6 +1,6 @@
 # Eval Failure Transcripts
 
-Run: 2026-07-15T00:04:43.519Z
+Run: 2026-07-15T05:58:09.405Z
 
 3 FAIL(s) — full question, model answer, and retrieved chunks.
 
@@ -35,11 +35,11 @@ Our in-ground swimming pool and its pump equipment were wrecked by the flood. Co
 
 ### Model answer
 
-Based on the policy passages provided, I can't find this in the policy.
+Based on the policy passages provided, I can't find specific language addressing swimming pools or their associated pump equipment under Coverage A—Building Property.
 
-The only passage addressing Coverage A—Building Property states that the policy insures against "direct physical loss by or from flood" [III.A Coverage A—Building Property, p.3], but the passages provided do not include the specific list of what structures or items qualify as covered building property. Without those definitional provisions, I cannot determine whether an in-ground swimming pool and its pump equipment fall within or outside the scope of coverage.
+The only relevant passage states that Coverage A insures "against direct physical loss by or from flood" [III.A Coverage A—Building Property, p.3], but the passages do not include the itemized list of what structures or systems qualify as covered building property under that coverage. Without that definitional language, I cannot confirm whether an in-ground swimming pool and its pump equipment fall within or outside the scope of coverage.
 
-To properly evaluate this claim, you would need to review the complete policy language defining covered building property, as well as any applicable exclusions sections, which are not among the passages provided here.
+I can't find this in the policy.
 
 ### Retrieved chunks (6)
 
@@ -60,23 +60,13 @@ My finished basement rec room — painted drywall, taped seams, and wall-to-wall
 
 ### Model answer
 
-Based on the policy passages provided, I can address the dwelling coverage payment standards, but I must be transparent about an important limitation:
+Based on the policy passages provided, I can only speak to building coverage generally — the passages you've shared don't contain specific provisions addressing finished basement spaces, their components (drywall, carpet, seams), or any basement-specific limitations or exclusions.
 
-**The provided passages do not contain the specific provisions governing basement finishing materials** (such as drywall, carpet, or similar interior finishes). These items are typically addressed in sections defining what constitutes covered building property and what basement-specific limitations apply — neither of which appears in the passages given to me.
-
----
-
-**What the passages *do* tell us about payment methodology for dwelling losses generally:**
-
-- If repair is economically feasible, the policy pays the **least of**: the building limit of liability, the replacement cost of the damaged portion with like kind and quality materials, or the amount actually spent on repair — **without depreciation deduction** [VII.R.2.a, p.26].
-
-- If the dwelling is **totally destroyed or not economically feasible to repair**, payment is the **least of**: the lesser of replacement cost or 1.5× actual cash value, or the building limit of liability [VII.R.3.b, p.27].
-
-- If your coverage is **below 80% of full replacement cost** and below the NFIP maximum, a **coinsurance-type proportion** applies and may reduce your recovery [VII.R.4.a, p.27].
+I can't find this in the policy.
 
 ---
 
-**Regarding your specific basement finishes and carpet**, I can't find this in the policy from the passages provided. You should request the complete policy form — particularly the building property definitions and basement coverage limitation sections — for a complete analysis.
+**Note for counsel:** NFIP Standard Flood Insurance Policies contain well-known basement coverage restrictions (typically found in definitions and coverage limitation sections) that significantly limit what is payable for finished basement improvements. You would want to locate and review those specific passages — commonly found in the definitions section and the building property coverage section — to fully advise your client on what finished basement elements are and are not eligible for payment. The passages provided here address replacement cost methodology [VII.R.2.a, p.26], total destruction scenarios [VII.R.3.b, p.27], and underinsurance proportionality rules [VII.R.4.a, p.27], but none of these speak directly to basement-specific coverage rules.
 
 ### Retrieved chunks (6)
 
