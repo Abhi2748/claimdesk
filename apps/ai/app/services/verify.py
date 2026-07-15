@@ -75,6 +75,29 @@ def _label_matches(chunk_label: str, raw_label: str, roman_label: str | None) ->
     return bool(b) and (a == b or a.startswith(b) or b.startswith(a))
 
 
+def find_citation_source(
+    label: str, retrieved_chunks: list[PolicyCitation]
+) -> PolicyCitation | None:
+    """Structural check for a citation that already comes as a clean label
+    rather than extracted from free-text prose — e.g. the coverage agent's
+    structured findings (app/services/coverage_agent.py), whose citations
+    are tool-use fields, not [LABEL, p.PAGE] markers embedded in an answer.
+    Reuses the same label-matching rule verify_citations uses internally.
+    No page-overlap check: a CoverageCitation carries no page number.
+    """
+    raw_label = label.strip()
+    section_match = _SECTION_REF.search(raw_label)
+    roman_label = section_match.group(0).upper() if section_match else None
+    return next(
+        (
+            c
+            for c in retrieved_chunks
+            if _label_matches(c.section_label, raw_label, roman_label)
+        ),
+        None,
+    )
+
+
 def verify_citations(
     answer: str, retrieved_chunks: list[PolicyCitation]
 ) -> VerificationResult:

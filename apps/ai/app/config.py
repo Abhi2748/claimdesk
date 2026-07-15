@@ -11,6 +11,8 @@ class Settings(BaseSettings):
     anthropic_api_key: str
     eval_user_email: str
     eval_user_password: str
+    demo_user_email: str | None = None
+    demo_user_password: str | None = None
     langfuse_public_key: str | None = None
     langfuse_secret_key: str | None = None
     langfuse_host: str = Field(default="https://cloud.langfuse.com")
