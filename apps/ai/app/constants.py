@@ -8,7 +8,12 @@ QA_TOP_K = 6
 # deliberately stays on QA_TOP_K=6 dense-only; nothing live depends on it
 # today, so it's left untouched rather than silently changed. See ADR 007
 # for the "what would change this" note on eventually aligning it.
-MATTER_QA_TOP_K = 10
+#
+# MATTER_QA_TOP_K dropped 10->8 post-deploy: the real Render measurement
+# (not just the local pre-deploy proxy) came in at p50=8,019ms, over ADR
+# 001's 8s budget — this is the first mitigation ADR 007 named. See ADR 007
+# for the real before/after numbers.
+MATTER_QA_TOP_K = 8
 MATTER_QA_POOL = 20
 
 EMBEDDING_MODEL = "text-embedding-3-small"
