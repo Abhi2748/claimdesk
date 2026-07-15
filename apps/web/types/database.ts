@@ -68,6 +68,43 @@ export interface ReviewItem {
   created_at: string;
 }
 
+// Mirrors apps/ai/app/schemas/coverage.py's CoverageCitation/CoverageFinding
+// and migration 015's coverage_opinions row shape. Not part of the generated
+// @claimdesk/types contract — coverage_opinions is a storage table the
+// coverage agent writes to directly, not an API request/response body, so
+// there's no OpenAPI schema for pnpm gen:types to pick up.
+export type CoverageVerdict = "covered" | "excluded" | "partial" | "unclear";
+export type CoverageFindingType = "coverage" | "condition" | "exclusion";
+
+export interface CoverageCitation {
+  section_label: string;
+  document_id: string;
+  quoted_text: string;
+}
+
+export interface CoverageFinding {
+  type: CoverageFindingType;
+  statement: string;
+  citation: CoverageCitation;
+  verified: boolean;
+  grounding_score: number;
+}
+
+export interface CoverageOpinion {
+  id: string;
+  org_id: string;
+  case_id: string;
+  document_ids: string[];
+  claim_summary: string;
+  verdict: CoverageVerdict;
+  findings: CoverageFinding[];
+  overall_grounding_score: number;
+  model: string;
+  latency_ms: number;
+  created_by: string;
+  created_at: string;
+}
+
 export interface Document {
   id: string;
   case_id: string;

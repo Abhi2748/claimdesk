@@ -78,16 +78,44 @@ costs real p95 headroom.
 
 **`IV.5` (claim 2) is not fixed by this change, and won't be fixed by
 raising topK/pool further** — the root-cause check proves the ceiling.
-Left as an open, separate problem, not silently accepted: candidate fixes
-belong to a different part of the stack — a query-reformation step (ADR
-009 explicitly deferred this: "no query-decomposition node... before
-there's evidence single-pass retrieval misses a facet" — this is exactly
-that evidence, for one case), a reranker (ADR 006 deferred this for the
-same "no earned problem yet" reason — same caveat), or accepting it as a
-residual limitation the human reviewer's judgment covers (the review queue
-exists precisely because the agent isn't meant to be the final word). Not
-decided here — recorded as the next block's clearest lead, same posture
-ADR 009 took toward this ablation itself.
+Left as an open, separate problem, not silently accepted — see the next
+section for exactly which fix this evidence does and doesn't support.
+
+## `IV.5` is earned evidence for query reformation specifically — not for a reranker
+
+This is worth being precise about, because the two candidate fixes are not
+interchangeable and the full-pool dump above draws a sharp line between
+them:
+
+- **A reranker re-scores candidates already in the pool.** ADR 006 deferred
+  it for lack of an earned problem — every FAIL on this corpus, until now,
+  traced to ranking depth (topK cutoff) or generation, not to the pool's
+  *contents*. `IV.5` is a different failure mode: it never enters the
+  30-candidate pool in the first place, at any rank, by either signal
+  (dense or BM25). **A reranker cannot promote a candidate that was never
+  retrieved.** This case doesn't move the reranker decision at all — ADR
+  006's "no earned problem yet" stands for it specifically.
+- **Query reformation acts before retrieval, not after.** The failure here
+  is a vocabulary/semantic gap between the claim's language ("riding lawn
+  mower," "attached garage") and the clause's ("self-propelled vehicles or
+  machines... not licensed for use on public roads"). A step that expands
+  or rewrites the retrieval query — e.g. asking the model to enumerate the
+  categories of property/peril a claim touches before retrieving, or
+  issuing more than one retrieval pass with reformulated terms — could
+  plausibly pull `IV.5` into the pool where a reranker never gets the
+  chance. ADR 009 deferred exactly this ("no query-decomposition node...
+  before there's evidence single-pass retrieval misses a facet") for lack
+  of evidence. **This is that evidence — for one case, not yet a pattern**
+  (per "What would change this" below), but it's evidence of the specific
+  kind ADR 009 named as the trigger, and it points at query reformation,
+  not the reranker, as the fix that could actually reach this failure mode.
+
+Recorded as the next block's clearest lead, not decided here — same
+posture ADR 009 took toward this ablation itself. Also not decided here:
+accepting `IV.5`-shaped misses as a residual limitation the human
+reviewer's judgment covers, which the review queue exists precisely to
+catch (the agent isn't meant to be the final word) — a legitimate option
+if query reformation turns out not worth its own complexity once measured.
 
 ## Scorecard (§5A factors)
 
@@ -102,10 +130,13 @@ ADR 009 took toward this ablation itself.
 
 ## What would change this
 
-- **A larger/different claim set showing `IV.5`'s miss recurring as a
-  pattern** (not just this one case) would be the trigger to actually build
-  a fix (query reformation or a reranker) rather than just recording it —
-  same "recurs vs. one-off" test ADR 003 applied to the F-123 Q8 regression.
+- **A larger/different claim set showing `IV.5`-shaped misses (controlling
+  clause absent from the full candidate pool, not just past the cutoff)
+  recurring as a pattern** would be the trigger to actually build query
+  reformation rather than just recording it — same "recurs vs. one-off"
+  test ADR 003 applied to the F-123 Q8 regression. A reranker is not on
+  this list — the section above explains why it can't reach this failure
+  mode regardless of how often it recurs.
 - **If a future accuracy pass shows topK=16 introducing new noise** (a
   chunk-count-driven hallucination, the same failure mode ADR 004's MC0-
   alone cell hit before topK absorbed it) on a larger corpus — this
