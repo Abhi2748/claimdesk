@@ -83,6 +83,39 @@ LangGraph's actual payoff over a plain function chain: checkpointed state
 instead of re-paying for retrieval) and per-node Langfuse tracing, extending
 `observability.py`'s existing fail-open context-manager pattern.
 
+## Known property: generation non-determinism (recorded, not fixed)
+
+`apps/ai/app/services/anthropic.py` pins no `temperature` or seed, so
+`draft_opinion`'s Sonnet call — like every generation call in this
+service — is not deterministic run-to-run. Observed directly during 2.5a's
+verification: rerunning ADR 007's 43-question harness against the
+refactored-but-behaviorally-identical retrieval produced one hallucinated
+citation (`III.D.8.A`, a subsection that doesn't exist in the document) on
+a question ADR 007's own measurement run had answered cleanly; 3 isolated
+reruns of that exact question came back clean with byte-identical retrieved
+chunks each time, confirming retrieval is deterministic and the flip is
+generation-sampling noise, not a retrieval defect.
+
+Practical implications for this ADR: (1) every latency/cost/accuracy number
+here and in ADR 001/003/004/007 is a sample, not a constant — a rerun can
+land a different count on the margin from generation variance alone, with
+retrieval held fixed; large aggregate deltas (e.g. ADR 004's 34→39 PASS)
+are far bigger than this noise floor and stay trustworthy, but a single
+flipped question near a threshold shouldn't be over-read without a rerun.
+(2) `verify_and_score`'s structural check (node 3) is exactly the
+product's existing defense against this failure class — an invented
+citation fails the "does this section exist" check and the finding renders
+unverified/amber, not a silently-trusted bad answer. This is a reason the
+current 4-node shape is adequate as-is, not a reason to add a node.
+
+**Not fixed now.** Pinning `temperature=0` (or a seed, where the API
+supports one) is a future option, tracked here rather than acted on,
+because it trades away response diversity/quality for determinism the
+product doesn't yet need — the verifier already catches the failure mode
+this would prevent. Revisit if variance becomes a practical problem, e.g.
+once grounding scores need to be stable run-to-run for the same input, not
+just individually correct.
+
 ## Budget (estimate — see Status)
 
 | | Estimate | Basis |

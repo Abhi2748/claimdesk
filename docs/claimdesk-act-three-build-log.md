@@ -1130,3 +1130,79 @@ final numbers and the corrected shipped config (topK=8, not the originally
 planned 10) — full sequence, all four measured configurations, and updated
 "what would change this" in
 `docs/decisions/007-ship-hybrid-retrieval-to-live-matter-qa.md`.
+
+### Block 2.5 — Coverage agent (LangGraph) — ⏳ IN PROGRESS
+
+**ADR 008 — Accepted: skip Block 2.3 (router) and Block 2.4 (extractor
+upgrade).** ADR 007's shipped config resolved the router's only concrete
+motivating case (the ADR 003 F-123 Q8 regression) as a side effect, live —
+no remaining case where a single retriever loses and switching would help.
+The current rules-based parser hit a perfect 1.000 `labeled_ratio` (100%
+section-label coverage, full page detection) on both new real-world forms
+(F-123, F-144) during Block 2.2b's ingest — no extraction-accuracy gap for
+Docling/VLM to close. Both blocks skipped, not deferred-and-forgotten; full
+scorecard and "what would change this" in
+`docs/decisions/008-skip-router-and-extractor-upgrade.md`.
+
+**ADR 009 — Proposed: coverage-agent shape and budget.** 4-node LangGraph
+(`retrieve → draft_opinion → verify_and_score → write_review_queue`), run as
+a background job rather than blocking the UI — the live Q&A path is already
+at ~95% of its own 8s budget (ADR 007), and a multi-finding structured
+opinion does materially more generation work than one question. Estimated
+budget (to be replaced by 2.5e's real measurement): p50 ≤ 20s / p95 ≤ 30s /
+≤ $0.05 per opinion. Deliberately no query-decomposition node, no
+LLM-as-judge grounding node, no retry loop, and no routing node — none has
+an earned problem yet; reasoning in
+`docs/decisions/009-coverage-agent-shape-and-budget.md`.
+
+### Block 2.5a ✅ — Extract `retrieve_hybrid()` + coverage-opinion schemas
+
+**What it does:** Pulled the hybrid dense+BM25 retrieval (RPC call, BM25
+fetch, RRF fusion, top-k slicing) out of `answer_matter_question` into a
+standalone `retrieve_hybrid(supabase, document_ids, query, top_k, pool)`
+(`apps/ai/app/services/qa_pipeline.py`) so the coverage agent's `retrieve`
+node can reuse it — zero behavior change, same RPC/fusion/slicing logic,
+now parameterized instead of hardcoded to `MATTER_QA_TOP_K`/`MATTER_QA_POOL`.
+Added the coverage-opinion Pydantic schemas from ADR 009
+(`CoverageOpinion`/`CoverageFinding`/`CoverageCitation`,
+`apps/ai/app/schemas/coverage.py`) — defined, not yet wired to anything.
+
+**Verification:** `apps/ai` pytest suite (3/3) and a clean import check,
+then ADR 007's 43-question `live-matter-eval.ts` harness run against a
+local server on the refactored code (not the frozen `/qa/answer` gate,
+which doesn't touch this path): **40 PASS / 2 FAIL / 1 SEVERE.** The 2
+FAILs are ADR 007's exact known baseline (`Q4`, `Q18`). The 1 SEVERE — see
+"Known issue: generation non-determinism" below.
+
+**Known issue: generation non-determinism (not fixed, recorded for the
+record).** `apps/ai/app/services/anthropic.py`'s `messages.create` call
+pins no `temperature` or seed, so generation runs at the Anthropic API's
+non-zero default — outputs, including which citations get invented, are
+not deterministic across runs. This was already true before 2.5a; the
+2.5a verification run is simply the first time it was directly observed on
+this corpus. The one SEVERE above (`F-122-ABLATION-MC0` Q7, invented
+citation `III.D.8.A` — a subsection that doesn't exist anywhere in the
+document) reran clean 3/3 times in isolation, with byte-identical retrieved
+chunks every time, confirming the refactored retrieval is deterministic and
+the hallucination is a generation-sampling artifact, not a retrieval
+regression.
+
+**Practical implication:** any single eval/ablation run (including every
+number in ADR 001/003/004/007) is a sample, not a constant — a rerun can
+land a different PASS/FAIL/SEVERE count on the margin, purely from
+generation variance, with retrieval held fixed. This doesn't invalidate
+past results (large aggregate deltas like ADR 004's 34→39 PASS are far
+bigger than single-question noise), but a single flipped question near a
+decision boundary shouldn't be over-read without a rerun.
+
+**Why this isn't an urgent fix:** the citation verifier already catches
+this exact failure class in production — an invented section fails the
+structural "does this citation exist in the document" check and renders
+amber ("couldn't verify"), not a silent bad answer presented as trustworthy.
+The eval's SEVERE scoring is intentionally stricter than what a live user
+sees. Recorded as a known property, not fixed now; pinning `temperature=0`
+(or a seed, where the API supports one) is a future option if variance
+becomes a practical problem, e.g. once the coverage agent's grounding-score
+node makes run-to-run consistency matter more than it does for a single
+Q&A turn. Noted in `docs/decisions/009-coverage-agent-shape-and-budget.md`
+("What would change this").
