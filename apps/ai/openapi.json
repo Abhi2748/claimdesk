@@ -1,6 +1,46 @@
 {
   "components": {
     "schemas": {
+      "CoverageAnalyzeAcceptedResponse": {
+        "properties": {
+          "status": {
+            "const": "accepted",
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "title": "CoverageAnalyzeAcceptedResponse",
+        "type": "object"
+      },
+      "CoverageAnalyzeRequest": {
+        "properties": {
+          "case_id": {
+            "title": "Case Id",
+            "type": "string"
+          },
+          "claim_summary": {
+            "title": "Claim Summary",
+            "type": "string"
+          },
+          "document_ids": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Document Ids",
+            "type": "array"
+          }
+        },
+        "required": [
+          "case_id",
+          "document_ids",
+          "claim_summary"
+        ],
+        "title": "CoverageAnalyzeRequest",
+        "type": "object"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -302,6 +342,65 @@
   },
   "openapi": "3.1.0",
   "paths": {
+    "/coverage/analyze": {
+      "post": {
+        "operationId": "coverage_analyze_coverage_analyze_post",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CoverageAnalyzeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CoverageAnalyzeAcceptedResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Coverage Analyze",
+        "tags": [
+          "coverage"
+        ]
+      }
+    },
     "/health": {
       "get": {
         "operationId": "health_health_get",
