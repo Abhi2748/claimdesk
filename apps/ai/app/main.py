@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import get_settings
+from app.errors import register_exception_handlers
 from app.observability import init_observability, shutdown_observability
 from app.routers import coverage, health, qa
 
@@ -27,6 +28,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+register_exception_handlers(app)
 
 # WEB_ORIGIN: comma-separated allowed origins. Default "*" for now;
 # Phase 1 will lock this to the web app's domain.

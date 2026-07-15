@@ -20,7 +20,7 @@ from fastapi import APIRouter, BackgroundTasks, Depends
 from app.deps import get_access_token
 from app.observability import user_id_from_access_token
 from app.schemas.coverage import CoverageAnalyzeAcceptedResponse, CoverageAnalyzeRequest
-from app.services.coverage_agent import run_coverage_agent
+from app.services.coverage_agent import record_coverage_failure, run_coverage_agent
 from app.services.supabase_client import create_user_supabase_client
 
 logger = logging.getLogger(__name__)
@@ -40,13 +40,20 @@ def _run_and_log(
     # failures to the Langfuse trace before re-raising; this is a second,
     # independent safety net so a failure is never silent even if tracing
     # itself is disabled or erroring (fail-open, same posture as
-    # observability.py throughout).
+    # observability.py throughout). ADR 011 also persists a review_items
+    # failure row so the attorney sees the miss in /review.
     supabase = create_user_supabase_client(access_token)
     try:
         run_coverage_agent(supabase, case_id, document_ids, claim_summary, user_id)
-    except Exception:
+    except Exception as exc:
         logger.error(
             "Coverage agent run failed for case_id=%s", case_id, exc_info=True
+        )
+        record_coverage_failure(
+            supabase,
+            case_id=case_id,
+            claim_summary=claim_summary,
+            error_message=str(exc),
         )
 
 

@@ -14,6 +14,7 @@ interface AssistantMessage {
   refused: boolean;
   verification: VerificationResult | null;
   sourceDocuments: { id: string; title: string }[];
+  injectionWarnings: string[];
 }
 interface UserMessage { role: "user"; content: string }
 type ChatMessage = UserMessage | AssistantMessage;
@@ -66,6 +67,19 @@ function MatterAnswer({ msg, caseId, isDemo }: { msg: AssistantMessage; caseId: 
       <div>
         <p className="whitespace-pre-wrap text-sm leading-relaxed text-ink-soft">{msg.answer}</p>
         <p className="mt-3"><TrustBar v={null} refused /></p>
+        {msg.injectionWarnings.length > 0 && (
+          <div className="mt-3 rounded-[10px] bg-flag-tint px-3 py-2 text-xs leading-relaxed text-flag">
+            <p className="font-medium">
+              Possible prompt-injection phrasing was found in retrieved policy
+              text (passages were kept, not dropped):
+            </p>
+            <ul className="mt-1 list-disc space-y-0.5 pl-4">
+              {msg.injectionWarnings.map((w, i) => (
+                <li key={i}>{w}</li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     );
   }
@@ -101,6 +115,20 @@ function MatterAnswer({ msg, caseId, isDemo }: { msg: AssistantMessage; caseId: 
       </div>
 
       <TrustBar v={msg.verification} refused={false} />
+
+      {msg.injectionWarnings.length > 0 && (
+        <div className="rounded-[10px] bg-flag-tint px-3 py-2 text-xs leading-relaxed text-flag">
+          <p className="font-medium">
+            Possible prompt-injection phrasing was found in retrieved policy
+            text (passages were kept, not dropped):
+          </p>
+          <ul className="mt-1 list-disc space-y-0.5 pl-4">
+            {msg.injectionWarnings.map((w, i) => (
+              <li key={i}>{w}</li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {cites.length > 0 && (
         <div className="rounded-[10px] border border-line bg-card-2">
@@ -168,6 +196,7 @@ export function MatterQAPanel({ caseId, readyCount, isDemo }: { caseId: string; 
         refused: result.refused,
         verification: result.verification,
         sourceDocuments: result.sourceDocuments,
+        injectionWarnings: result.injectionWarnings,
       }]);
     });
   }

@@ -9,7 +9,9 @@ a schema letting it guess at them.
 
 from typing import Literal
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, field_validator
+
+from app.services.input_limits import CLAIM_SUMMARY_MAX_LEN, sanitize_user_text
 
 
 class CoverageCitation(BaseModel):
@@ -50,9 +52,16 @@ class CoverageOpinion(BaseModel):
 
 
 class CoverageAnalyzeRequest(BaseModel):
-    case_id: str
-    document_ids: list[str]
+    case_id: str = Field(min_length=1, max_length=64)
+    document_ids: list[str] = Field(min_length=1, max_length=50)
     claim_summary: str
+
+    @field_validator("claim_summary", mode="before")
+    @classmethod
+    def _validate_claim_summary(cls, value: object) -> str:
+        return sanitize_user_text(
+            value, max_len=CLAIM_SUMMARY_MAX_LEN, field_name="claim_summary"
+        )
 
 
 class CoverageAnalyzeAcceptedResponse(BaseModel):

@@ -1,6 +1,6 @@
 # Eval Failure Transcripts
 
-Run: 2026-07-15T05:58:09.405Z
+Run: 2026-07-15T06:27:11.667Z
 
 3 FAIL(s) — full question, model answer, and retrieved chunks.
 
@@ -35,11 +35,11 @@ Our in-ground swimming pool and its pump equipment were wrecked by the flood. Co
 
 ### Model answer
 
-Based on the policy passages provided, I can't find specific language addressing swimming pools or their associated pump equipment under Coverage A—Building Property.
+Based on the policy passages provided, I can't find this in the policy.
 
-The only relevant passage states that Coverage A insures "against direct physical loss by or from flood" [III.A Coverage A—Building Property, p.3], but the passages do not include the itemized list of what structures or systems qualify as covered building property under that coverage. Without that definitional language, I cannot confirm whether an in-ground swimming pool and its pump equipment fall within or outside the scope of coverage.
+The only passage addressing Coverage A—Building Property states that the policy insures against "direct physical loss by or from flood" [III.A Coverage A—Building Property, p.3], but the passages provided do not include the specific list of what structures or items qualify as insured property under Coverage A or Coverage B. Without those definitional provisions, I cannot determine whether an in-ground swimming pool and its pump equipment are covered or excluded under this policy.
 
-I can't find this in the policy.
+You would need to review the complete list of covered building property and any applicable exclusions — sections that are not among the passages provided here — to make that determination.
 
 ### Retrieved chunks (6)
 
@@ -60,13 +60,30 @@ My finished basement rec room — painted drywall, taped seams, and wall-to-wall
 
 ### Model answer
 
-Based on the policy passages provided, I can only speak to building coverage generally — the passages you've shared don't contain specific provisions addressing finished basement spaces, their components (drywall, carpet, seams), or any basement-specific limitations or exclusions.
+Based on the provided policy passages, I cannot give you a complete answer about basement finishing coverage specifically, as the passages do not contain definitions or rules addressing basement interior finishing materials (drywall, carpet, painted surfaces, etc.).
 
-I can't find this in the policy.
+However, regarding the **general payment structure** for dwelling damage that *is* addressed in the passages, the following framework would apply to any covered building loss:
 
 ---
 
-**Note for counsel:** NFIP Standard Flood Insurance Policies contain well-known basement coverage restrictions (typically found in definitions and coverage limitation sections) that significantly limit what is payable for finished basement improvements. You would want to locate and review those specific passages — commonly found in the definitions section and the building property coverage section — to fully advise your client on what finished basement elements are and are not eligible for payment. The passages provided here address replacement cost methodology [VII.R.2.a, p.26], total destruction scenarios [VII.R.3.b, p.27], and underinsurance proportionality rules [VII.R.4.a, p.27], but none of these speak directly to basement-specific coverage rules.
+**If the dwelling is repairable**, the policy pays the least of:
+- The building limit of liability on your Declarations Page,
+- The replacement cost of the damaged part with materials of like kind and quality, or
+- The necessary amount actually spent to repair or replace the damaged part
+
+[VII.R.2.a, p.26]
+
+**If the dwelling is totally destroyed or not economically feasible to repair**, the policy pays the least of:
+- The lesser of replacement cost or 1.5 times actual cash value, or
+- The building limit of liability on your Declarations Page
+
+[VII.R.3.b, p.27]
+
+**If your coverage is below 80% of full replacement cost** at the time of loss, a proportional payment formula applies rather than full replacement cost. [VII.R.4.a, p.27]
+
+---
+
+For the **specific question of what interior basement finishing materials are covered or excluded**, I can't find this in the policy based on the passages provided. You would need to review the policy's definitions and property coverage sections for that detail.
 
 ### Retrieved chunks (6)
 

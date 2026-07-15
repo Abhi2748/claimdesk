@@ -21,6 +21,10 @@ from app.schemas.qa import (
 from app.services.anthropic import generate_policy_answer_from_passages
 from app.services.bm25 import BM25Chunk, BM25Index, reciprocal_rank_fusion
 from app.services.embeddings import embed_query, embedding_to_vector
+from app.services.injection import (
+    detect_injection_in_passages,
+    format_injection_warnings,
+)
 
 
 def _chunk_to_citation(chunk: MatchChunkRow) -> PolicyCitation:
@@ -81,6 +85,12 @@ def answer_policy_question(
             top_similarity=top_similarity,
         )
 
+    injection_warnings = format_injection_warnings(
+        detect_injection_in_passages(
+            [(c.section_label, c.content) for c in retrieved_chunks]
+        )
+    )
+
     if not chunks or (chunks[0].similarity if chunks else 0) < REFUSAL_SIMILARITY_THRESHOLD:
         return PolicyQAResponse(
             answer=REFUSAL_MESSAGE,
@@ -88,6 +98,7 @@ def answer_policy_question(
             retrieved_chunks=retrieved_chunks,
             refused=True,
             top_similarity=top_similarity,
+            injection_warnings=injection_warnings,
         )
 
     citations = retrieved_chunks
@@ -111,6 +122,7 @@ def answer_policy_question(
         retrieved_chunks=retrieved_chunks,
         refused=refused,
         top_similarity=top_similarity,
+        injection_warnings=injection_warnings,
     )
 
 
@@ -221,6 +233,7 @@ def answer_matter_question(
             retrieved_chunks=[],
             refused=True,
             top_similarity=None,
+            injection_warnings=[],
         )
 
     with retrieval_span() as ret_span:
@@ -233,6 +246,12 @@ def answer_matter_question(
             top_similarity=top_similarity,
         )
 
+    injection_warnings = format_injection_warnings(
+        detect_injection_in_passages(
+            [(c.section_label, c.content) for c in retrieved_chunks]
+        )
+    )
+
     if top_similarity is None or top_similarity < REFUSAL_SIMILARITY_THRESHOLD:
         return PolicyQAMatterResponse(
             answer=REFUSAL_MESSAGE,
@@ -240,6 +259,7 @@ def answer_matter_question(
             retrieved_chunks=retrieved_chunks,
             refused=True,
             top_similarity=top_similarity,
+            injection_warnings=injection_warnings,
         )
 
     citations = retrieved_chunks
@@ -263,4 +283,5 @@ def answer_matter_question(
         retrieved_chunks=retrieved_chunks,
         refused=refused,
         top_similarity=top_similarity,
+        injection_warnings=injection_warnings,
     )

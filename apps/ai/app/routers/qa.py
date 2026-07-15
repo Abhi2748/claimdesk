@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 
 from app.deps import get_access_token
+from app.errors import http_detail
 from app.observability import (
     finish_matter_qa_trace,
     finish_policy_qa_trace,
@@ -39,9 +40,15 @@ def qa_answer(
                 supabase, body.document_id, body.question
             )
         except ValueError as exc:
-            raise HTTPException(status_code=400, detail=str(exc)) from exc
+            raise HTTPException(
+                status_code=400,
+                detail=http_detail("bad_request", str(exc)),
+            ) from exc
         except RuntimeError as exc:
-            raise HTTPException(status_code=502, detail=str(exc)) from exc
+            raise HTTPException(
+                status_code=502,
+                detail=http_detail("upstream_error", str(exc)),
+            ) from exc
 
         finish_policy_qa_trace(
             trace_span,
@@ -72,9 +79,15 @@ def qa_matter(
                 supabase, body.document_ids, body.question
             )
         except ValueError as exc:
-            raise HTTPException(status_code=400, detail=str(exc)) from exc
+            raise HTTPException(
+                status_code=400,
+                detail=http_detail("bad_request", str(exc)),
+            ) from exc
         except RuntimeError as exc:
-            raise HTTPException(status_code=502, detail=str(exc)) from exc
+            raise HTTPException(
+                status_code=502,
+                detail=http_detail("upstream_error", str(exc)),
+            ) from exc
 
         finish_matter_qa_trace(
             trace_span,

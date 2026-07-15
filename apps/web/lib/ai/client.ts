@@ -6,6 +6,7 @@ import type {
   PolicyQARequest,
   PolicyQAResponse,
 } from "@claimdesk/types";
+import { readAiErrorMessage } from "./errors";
 
 export async function askPolicyQuestion(
   baseUrl: string,
@@ -24,7 +25,10 @@ export async function askPolicyQuestion(
 
   if (!response.ok) {
     throw new Error(
-      `Policy QA request failed: ${response.status} ${response.statusText}`
+      await readAiErrorMessage(
+        response,
+        "Policy Q&A failed. Please try again."
+      )
     );
   }
 
@@ -48,7 +52,10 @@ export async function askMatterQuestion(
 
   if (!response.ok) {
     throw new Error(
-      `Matter QA request failed: ${response.status} ${response.statusText}`
+      await readAiErrorMessage(
+        response,
+        "Matter Q&A failed. Please try again."
+      )
     );
   }
 
@@ -72,7 +79,10 @@ export async function analyzeCoverage(
 
   if (!response.ok) {
     throw new Error(
-      `Coverage analyze request failed: ${response.status} ${response.statusText}`
+      await readAiErrorMessage(
+        response,
+        "Coverage analysis could not be started. Please try again."
+      )
     );
   }
 

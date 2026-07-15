@@ -100,12 +100,16 @@ export async function askMatter(
       refused: result.refused,
       sourceDocuments,
       verification,
+      injectionWarnings: result.injection_warnings ?? [],
     };
   } catch (err) {
     console.error("Matter Q&A failed:", err);
     return {
       ok: false,
-      error: err instanceof Error ? err.message : "Something went wrong.",
+      error:
+        err instanceof Error
+          ? err.message
+          : "Matter Q&A failed. Please try again.",
     };
   }
 }
@@ -186,7 +190,10 @@ export async function requestCoverageOpinion(
     console.error("Coverage analysis request failed:", err);
     return {
       ok: false,
-      error: err instanceof Error ? err.message : "Something went wrong.",
+      error:
+        err instanceof Error
+          ? err.message
+          : "Coverage analysis could not be started. Please try again.",
     };
   }
 }

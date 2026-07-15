@@ -81,7 +81,8 @@ export function CoverageOpinionPanel({
                 >
                   review queue
                 </Link>{" "}
-                in ~20 seconds.
+                in ~20 seconds. If something goes wrong, a failure notice is
+                posted there instead of vanishing silently.
               </p>
             )}
 

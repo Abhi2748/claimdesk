@@ -143,6 +143,8 @@ export interface components {
             answer: string;
             /** Citations */
             citations: components["schemas"]["MatterCitation"][];
+            /** Injection Warnings */
+            injection_warnings?: string[];
             /** Refused */
             refused: boolean;
             /** Retrieved Chunks */
@@ -163,6 +165,8 @@ export interface components {
             answer: string;
             /** Citations */
             citations: components["schemas"]["PolicyCitation"][];
+            /** Injection Warnings */
+            injection_warnings?: string[];
             /** Refused */
             refused: boolean;
             /** Retrieved Chunks */

@@ -1,9 +1,18 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, field_validator
+
+from app.services.input_limits import QUESTION_MAX_LEN, sanitize_user_text
 
 
 class PolicyQARequest(BaseModel):
-    document_id: str
+    document_id: str = Field(min_length=1, max_length=64)
     question: str
+
+    @field_validator("question", mode="before")
+    @classmethod
+    def _validate_question(cls, value: object) -> str:
+        return sanitize_user_text(
+            value, max_len=QUESTION_MAX_LEN, field_name="question"
+        )
 
 
 class PolicyCitation(BaseModel):
@@ -21,6 +30,7 @@ class PolicyQAResponse(BaseModel):
     retrieved_chunks: list[PolicyCitation]
     refused: bool
     top_similarity: float | None
+    injection_warnings: list[str] = Field(default_factory=list)
 
 
 class MatchChunkRow(BaseModel):
@@ -41,8 +51,15 @@ class PolicyPassage(BaseModel):
 
 
 class PolicyQAMatterRequest(BaseModel):
-    document_ids: list[str]
+    document_ids: list[str] = Field(min_length=1, max_length=50)
     question: str
+
+    @field_validator("question", mode="before")
+    @classmethod
+    def _validate_question(cls, value: object) -> str:
+        return sanitize_user_text(
+            value, max_len=QUESTION_MAX_LEN, field_name="question"
+        )
 
 
 class MatterCitation(PolicyCitation):
@@ -59,3 +76,4 @@ class PolicyQAMatterResponse(BaseModel):
     retrieved_chunks: list[MatterCitation]
     refused: bool
     top_similarity: float | None
+    injection_warnings: list[str] = Field(default_factory=list)

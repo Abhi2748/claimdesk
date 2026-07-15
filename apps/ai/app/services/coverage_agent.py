@@ -47,6 +47,10 @@ from app.schemas.coverage import CoverageFinding, CoverageOpinion
 from app.schemas.qa import MatterCitation
 from app.services.anthropic import draft_coverage_opinion
 from app.services.embeddings import cosine_similarity, embed_query, vector_from_string
+from app.services.injection import (
+    detect_injection_in_passages,
+    format_injection_warnings,
+)
 from app.services.qa_pipeline import retrieve_hybrid
 from app.services.verify import find_citation_source
 
@@ -57,6 +61,7 @@ class CoverageAgentState(TypedDict, total=False):
     claim_summary: str
 
     retrieved_chunks: list[MatterCitation]
+    injection_warnings: list[str]
     draft_verdict: str
     draft_claim_summary: str
     draft_findings: list[dict]  # DraftFinding.model_dump() each
@@ -81,7 +86,15 @@ def _retrieve_node(supabase: Client, top_k: int, pool: int):
             finish_retrieval_span(
                 span, chunk_count=len(retrieved_chunks), top_similarity=top_similarity
             )
-        return {"retrieved_chunks": retrieved_chunks}
+        warnings = format_injection_warnings(
+            detect_injection_in_passages(
+                [(c.section_label, c.content) for c in retrieved_chunks]
+            )
+        )
+        return {
+            "retrieved_chunks": retrieved_chunks,
+            "injection_warnings": warnings,
+        }
 
     return node
 
@@ -208,6 +221,12 @@ def _write_review_queue_node(supabase: Client, start_time: float):
                 f"{unverified_count} unverified. Overall grounding "
                 f"{state['overall_grounding_score']:.2f}."
             )
+            injection_warnings = state.get("injection_warnings") or []
+            if injection_warnings:
+                summary += (
+                    "\n\n⚠ Injection flags (passages retained, not dropped):\n"
+                    + "\n".join(f"- {w}" for w in injection_warnings)
+                )
             try:
                 review_resp = (
                     supabase.table("review_items")
@@ -259,6 +278,45 @@ def build_coverage_graph(
     graph.add_edge("write_review_queue", END)
 
     return graph.compile(checkpointer=MemorySaver())
+
+
+def record_coverage_failure(
+    supabase: Client,
+    case_id: str,
+    claim_summary: str,
+    error_message: str,
+) -> None:
+    """Write a review_items row so a failed background job is visible.
+
+    No coverage_opinions row (there is no partial verdict to persist). The
+    item stays pending so counsel sees it in the review queue rather than
+    a silent 202 with nothing arriving.
+    """
+    clipped_claim = claim_summary.strip()
+    if len(clipped_claim) > 280:
+        clipped_claim = clipped_claim[:277] + "…"
+    clipped_error = error_message.strip() or "Unknown error"
+    if len(clipped_error) > 500:
+        clipped_error = clipped_error[:497] + "…"
+    summary = (
+        f"Claim: {clipped_claim}\n\n"
+        f"The coverage analysis did not complete.\n"
+        f"Error: {clipped_error}\n\n"
+        "You can retry from the matter page."
+    )
+    try:
+        supabase.table("review_items").insert(
+            {
+                "case_id": case_id,
+                "kind": "coverage_analysis",
+                "title": "Coverage analysis failed",
+                "summary": summary,
+            }
+        ).execute()
+    except APIError:
+        # Fail-open: the caller already logged the original exception.
+        # Losing the queue row is better than masking the primary failure.
+        pass
 
 
 def run_coverage_agent(
