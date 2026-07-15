@@ -1107,15 +1107,26 @@ over HTTP — first accidentally against the still-live, not-yet-updated
 Render deployment (a useful "before" data point: dense-only/topK=6 against
 the MC0 docs, 37/43 PASS, 0 SEVERE, p50 6,866ms), then against a local
 `uvicorn` run of the new code (real DB/Anthropic/OpenAI, same code Render
-would run) for "after": **41/43 PASS, 0 SEVERE, p50 7,440ms, p95 9,868ms**
-— accuracy matches ADR 004/005 exactly. Per the second hard gate, p50 is
-under ADR 001's 8s budget but with a much thinner margin (~7%) than the TS
-harness suggested (~19%), and this is a pre-deploy local proxy, not an
-actual Render measurement (deploying requires a push, out of scope this
-session). Flagged rather than absorbed — full tradeoff and two mitigation
-options (accept and re-check post-deploy vs. pre-emptively trim
-`MATTER_QA_TOP_K`/`MATTER_QA_POOL`) in
-`docs/decisions/007-ship-hybrid-retrieval-to-live-matter-qa.md`. Frozen
-F-122 gate reconfirmed unchanged (17/20, 0 SEVERE) throughout — none of
-this touches that path. **Not yet deployed** — code complete, stopped
-before committing per instruction.
+would run) for a pre-deploy proxy: 41/43 PASS, 0 SEVERE, p50 7,440ms —
+under ADR 001's 8s budget but by a much thinner margin (~7%) than the TS
+harness suggested (~19%), flagged explicitly rather than assumed safe.
+Frozen F-122 gate reconfirmed unchanged (17/20, 0 SEVERE) throughout —
+none of this touches that path.
+
+**Deployed, and the flagged margin turned out to matter.** Committed and
+pushed ADR 006 + 007. Polled Render until the new hybrid code was
+confirmed live (`retrieved_chunks.length` jumping from 6 to 10 on a real
+request), then ran `eval/live-matter-eval.ts` against the actual deployed
+service: **41/43 PASS, 0 SEVERE, but p50=8,019ms and p95=12,164ms — both
+over ADR 001's budget.** The local pre-deploy proxy had underestimated real
+Render latency by ~580ms at p50 and ~2,300ms at p95. Applied the first
+named mitigation — `MATTER_QA_TOP_K` 10→8, `MATTER_QA_POOL` unchanged at
+20 — committed, pushed, waited for redeploy, re-measured: **p50=7,576ms,
+p95=11,278ms, both back in budget, accuracy unchanged at 41/43 PASS, 0
+SEVERE.** topK=8 wasn't isolated in ADR 004's ablation, so recovering the
+full topK=10 accuracy at zero cost was a genuine (favorable) open question,
+not an assumed-safe fallback. ADR 007 updated with the real before/interim/
+final numbers and the corrected shipped config (topK=8, not the originally
+planned 10) — full sequence, all four measured configurations, and updated
+"what would change this" in
+`docs/decisions/007-ship-hybrid-retrieval-to-live-matter-qa.md`.

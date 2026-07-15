@@ -1,11 +1,11 @@
-# ADR 007 — Ship ADR 004's hybrid + topK=10 retrieval to live "Ask the matter"; MC0 chunking for new documents only
+# ADR 007 — Ship ADR 004's hybrid retrieval to live "Ask the matter" (topK=8, not 10); MC0 chunking for new documents only
 
-**Status:** Accepted, code complete, **not yet deployed**. All changes are
-committed to the working tree and validated against real APIs (Supabase,
-Anthropic, OpenAI) and, for the "before" measurement, the actual live Render
-deployment — but nothing has been pushed, so the live service is still
-running the pre-this-ADR code as of writing. Deploy is the next step, gated
-on this ADR's review.
+**Status:** Accepted and **deployed**. Shipped, measured live on Render,
+found over budget at `MATTER_QA_TOP_K=10`, mitigated to `MATTER_QA_TOP_K=8`
+per this ADR's own contingency plan, redeployed, and reconfirmed in budget
+with unchanged accuracy. Both the failure and the fix happened in production
+review, not hypothetically — this ADR documents the real sequence, not just
+the intended one.
 
 ## Question
 
@@ -17,7 +17,8 @@ the actual code real users hit, with two constraints set by the plan review:
 (1) a hard parity gate — the Python port of the TS BM25/RRF harness must be
 bit-identical on a shared fixture before it ships; (2) a hard latency gate —
 if live p50 exceeds ADR 001's 8s budget, stop and report rather than ship
-silently.
+silently, and apply the named mitigation (`MATTER_QA_TOP_K=8` first) if it
+does.
 
 ## Where "live" actually is (recap from the planning step)
 
@@ -65,14 +66,15 @@ loudly instead of silently drifting.
 
 ## Gate 2 (hard): live-path latency vs. the 8s budget
 
-Deploying to Render requires a git push, which this session was explicitly
-told to stop short of. The next-best validation: run the actual `apps/ai`
-service locally (`uvicorn app.main:app`) against the real Supabase DB, real
-OpenAI embeddings, and real Anthropic model — the identical code and
-identical external dependencies Render would run, differing only in network
-path (local machine → Supabase/Anthropic cloud, vs. Render → same clouds)
-and host hardware. **This is a pre-deploy proxy for the Render number, not
-the Render number itself** — flagged explicitly below, not glossed over.
+Before deploying, ran the actual `apps/ai` service locally (`uvicorn
+app.main:app`) against the real Supabase DB, real OpenAI embeddings, and
+real Anthropic model — the identical code and identical external
+dependencies Render would run, differing only in network path. That
+pre-deploy proxy measured p50=7,440ms — under budget, but flagged
+explicitly as unconfirmed on the real deployment, with a much thinner
+margin (~7%) than ADR 004's TS harness implied (~19%). The decision at that
+point was to ship and re-measure for real rather than guess. That's what
+happened next, and the guess would have been wrong:
 
 A new harness, `eval/live-matter-eval.ts`, exercises the real
 `POST /qa/matter` endpoint over HTTP for all 43 ablation-corpus questions
@@ -80,55 +82,47 @@ A new harness, `eval/live-matter-eval.ts`, exercises the real
 with the same `eval/scoring.ts` logic as every other eval in this repo —
 directly comparable to `eval/sweep-d-mc0-topk10-refusalfix.md`.
 
-| | PASS/43 | SEVERE | p50 | p95 |
-|---|---|---|---|---|
-| **Before** — real Render, current deployed code (dense-only, `QA_TOP_K=6`), same MC0 docs | 37 | 0 | 6,866ms | 9,312ms |
-| **After** — local pre-deploy proxy, new hybrid code (`MATTER_QA_TOP_K=10`, `MATTER_QA_POOL=20`), same docs | **41** | **0** | **7,440ms** | 9,868ms |
-| Reference — TS retrieval-lab harness, same config, in-process (no HTTP hop) | 41 | 0 | 6,341–6,451ms | 8,781–9,385ms |
+| | PASS/43 | SEVERE | p50 | p95 | vs. 8s/12s budget |
+|---|---|---|---|---|---|
+| **Before** — real Render, pre-ADR-007 code (dense-only, `QA_TOP_K=6`), MC0 docs | 37 | 0 | 6,866ms | 9,312ms | in budget |
+| Local pre-deploy proxy — new hybrid code, `MATTER_QA_TOP_K=10` | 41 | 0 | 7,440ms | 9,868ms | in budget (thin margin, unconfirmed) |
+| **Real Render, `MATTER_QA_TOP_K=10`** | 41 | 0 | **8,019ms** | **12,164ms** | **OVER budget on both** |
+| **Real Render, `MATTER_QA_TOP_K=8`** (shipped) | **41** | **0** | **7,576ms** | 11,278ms | in budget |
 
-Full row-level data: `eval/live-matter-results-before-render.md` (before),
-`eval/live-matter-results.md` (after). Accuracy matches ADR 004/005 exactly
-— same 41/43, same 2 remaining FAILs (`F-122-ABLATION-MC0` Q4, Q18, both
-pre-diagnosed in ADR 004), 0 SEVERE.
+Full row-level data: `eval/live-matter-results-before-render.md` (dense/
+topK=6 baseline), `eval/live-matter-results-render-topk10.md` (over
+budget), `eval/live-matter-results-render-topk8.md` (final, shipped).
+Accuracy is identical across every hybrid configuration measured — 41/43,
+the same 2 pre-diagnosed FAILs (`F-122-ABLATION-MC0` Q4, Q18), 0 SEVERE
+whether topK is 10 or 8. **The local pre-deploy proxy underestimated real
+Render latency by ~580ms at p50 and ~2,300ms at p95** — Render's actual
+network path to Supabase/Anthropic (or its instance sizing) is measurably
+slower than this session's local-machine path, the opposite of what seemed
+like the more likely direction beforehand. This is exactly why the review
+required a real post-deploy re-check rather than accepting the local proxy
+as sufficient.
 
-**p50 = 7,440ms is under the 8,000ms budget — gate technically passes — but
-the margin shrank from what ADR 004 measured.** The TS harness's in-process
-call saw ~6.3–6.5s p50 (≥19% headroom under budget); the actual Python HTTP
-service adds roughly ~1s (BM25 computation + an extra chunk `SELECT` for
-the BM25 corpus + real HTTP/FastAPI overhead + the extra request hop this
-eval script adds), leaving **only ~7% (560ms) of headroom**, not 19%. This
-is close enough that Render's specific network path (its region vs.
-Supabase's/Anthropic's, vs. this session's local-machine path) could
-plausibly push real p50 either side of 8s — **not yet confirmed on the
-actual deployed service.**
+**Mitigation applied per the gate's own contingency plan:** dropped
+`MATTER_QA_TOP_K` from 10 to 8 (`MATTER_QA_POOL` left at 20, unchanged),
+redeployed, re-measured against the real Render URL. Result: **p50=7,576ms,
+p95=11,278ms — both back in budget, and accuracy is unchanged (41/43, 0
+SEVERE)**. topK=8 wasn't isolated in ADR 004's ablation (only 6 and 10 were
+tested), so this was a genuine open question, not an assumed-safe fallback
+— it happened to recover the full topK=10 accuracy win on this corpus while
+cutting enough retrieval/generation cost (fewer passages sent to the
+answerer) to close the latency gap.
 
 ## Decision
 
-**Accepted, ship the code — but flagging the thin latency margin rather
-than treating Gate 2 as cleanly passed.** Per the review instructions:
-Gate 1 is unambiguous (exact parity, hard pass). Gate 2's number is under
-budget but by a much smaller margin than ADR 004 implied, and it's a
-pre-deploy proxy, not the real Render measurement. This is presented for a
-decision, not silently shipped:
-
-- **Option A:** Deploy as-is (`MATTER_QA_TOP_K=10`, `MATTER_QA_POOL=20`),
-  then immediately re-run `eval/live-matter-eval.ts` against the real
-  Render URL to get the true number. If real Render p50 also clears 8s
-  (plausible — Render's network path to Supabase/Anthropic may be *better*
-  than a home connection, not worse), no further action.
-- **Option B:** Pre-emptively trim the margin before deploying —
-  `MATTER_QA_TOP_K=8` (per ADR 004's data, most of the topK=10 win came
-  from recovering 2–3 specific fusion-rank and chunk-drop misses; topK=8
-  wasn't isolated in that ablation, so this would need a quick reconfirm)
-  or `MATTER_QA_POOL=12–15` (cuts BM25 computation cost, which scales with
-  candidate pool size, without changing the final topK).
-- **Recommendation: Option A.** The measured number is under budget, the
-  local-proxy path (home network → cloud) is a reasonable worst-case stand-
-  in for Render → cloud (same-cloud-region hops are typically *faster*, not
-  slower), and Option B would spend engineering effort tuning against a
-  number that hasn't been shown to actually be a problem yet. But this is
-  the human's call per the review constraint — **not deploying
-  automatically on this ADR being written.**
+**Accepted and shipped at `MATTER_QA_TOP_K=8`, not the originally-planned
+10.** Gate 1 (parity) passed cleanly and unconditionally. Gate 2 (latency)
+initially failed for real on the actual deployment — not hypothetically,
+not on a proxy — at topK=10 (p50 8,019ms, p95 12,164ms, both over budget).
+The named first mitigation (topK=8) was applied, redeployed, and
+re-confirmed in budget with zero accuracy cost. `MATTER_QA_POOL=20` (the
+BM25/dense candidate pool size) is unchanged; if a future latency
+regression reappears, that's the next lever, per ADR 004's original
+mitigation list.
 
 `answer_policy_question` / `/qa/answer` is explicitly left on the old
 dense-only, `QA_TOP_K=6` config. Nothing live calls it (confirmed in the
@@ -139,20 +133,19 @@ instructions explicitly declined.
 
 | Factor | Reading |
 |---|---|
-| Quality | Live-path accuracy (measured via real HTTP calls, not just the TS approximation) matches ADR 004/005: 37→41/43 PASS, 0 SEVERE before and after |
-| Latency | p50 6,866ms→7,440ms (+574ms), still under the 8s budget but margin fell from ~19% (TS harness estimate) to ~7% (real pre-deploy measurement) — genuinely worth watching post-deploy, not a rubber stamp |
-| Cost | Not independently re-measured live (the `/qa/matter` response doesn't return token usage; would need a Langfuse pull post-deploy). Expected to closely track the TS harness's $0.00769/query — same model, same system prompt, same passage format, same token counts — but flagged as unconfirmed rather than assumed |
-| Complexity | One new ~90-line module (`bm25.py`, a straight port) + ~50 changed lines in `qa_pipeline.py` + a 4-line constants addition + one flipped default + a parity-guard line in two historical scripts. No new dependency, no new vendor |
+| Quality | Live-path accuracy (measured via real HTTP calls against real Render, not a proxy) matches ADR 004/005 exactly: 37→41/43 PASS, 0 SEVERE, and **identical at topK=10 and topK=8** — the mitigation cost zero accuracy on this corpus |
+| Latency | p50 6,866ms→**8,019ms at topK=10 (over budget)**→**7,576ms at topK=8 (shipped, in budget)**. The local pre-deploy proxy (7,440ms) underestimated real Render latency by ~580ms — proxy measurements are directionally useful but not a substitute for a real post-deploy check, exactly as this gate's design assumed |
+| Cost | Not independently re-measured live (the `/qa/matter` response doesn't return token usage; would need a Langfuse pull). topK=8 sends fewer passages to the answerer than topK=10, so real cost is expected to be at or below the TS harness's $0.00769/query estimate — still unconfirmed, not assumed |
+| Complexity | One new ~90-line module (`bm25.py`, a straight port) + ~50 changed lines in `qa_pipeline.py` + a 6-line constants change + one flipped chunking default + a parity-guard line in two historical scripts. No new dependency, no new vendor |
 | Operational burden | None new — same Supabase RPC/table, same Anthropic/OpenAI clients already in use |
-| Reversibility | Trivial — revert the `apps/ai` commit, redeploy; `MATTER_QA_TOP_K`/`MATTER_QA_POOL` are two constants |
+| Reversibility | Trivial — revert the `apps/ai` commits, redeploy; `MATTER_QA_TOP_K`/`MATTER_QA_POOL` are two constants. Already exercised once in this ADR (10→8) |
 
 ## What would change this
 
-- **Real Render p50 exceeds 8s** once actually deployed and re-measured —
-  per the review's hard gate, that's a stop-and-report, not a silent
-  absorb. `MATTER_QA_POOL` reduction is the first lever (cuts BM25 cost
-  without touching the topK=10 accuracy win); `MATTER_QA_TOP_K=8` is the
-  second, pending a quick reconfirm eval.
+- **`MATTER_QA_POOL=20` reduction** is the next lever if a future latency
+  regression reappears (e.g. corpus growth, Render instance changes) —
+  cuts BM25 computation cost without changing the final topK, per ADR 004's
+  original mitigation list. Not yet needed; topK=8 alone recovered budget.
 - **A live Langfuse cost pull** showing real per-query cost meaningfully
   above the TS harness's $0.00769 estimate — would need investigating
   whether the Python HTTP layer is somehow inflating token counts (it
@@ -165,3 +158,13 @@ instructions explicitly declined.
   benchmarked here. Not a blocker (today's fixture data is small-N
   documents per case), but worth a dedicated measurement if matters grow
   large before this is revisited.
+- **If topK=8 vs. 10's accuracy parity doesn't hold on a larger/different
+  corpus** (this ADR's 43-question sample showed zero difference, which
+  could be a corpus-size coincidence rather than a robust result) —
+  worth re-checking once the golden corpus grows.
+- **The gap between the local pre-deploy proxy and real Render** (~580ms at
+  p50, ~2,300ms at p95) is itself worth understanding before relying on
+  local measurements again for a latency-sensitive decision — possible
+  causes not investigated here: Render instance CPU/memory tier, network
+  hop count/region distance to Supabase or Anthropic, or cold-start effects
+  on the specific requests measured.
