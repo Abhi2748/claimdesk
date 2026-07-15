@@ -37,13 +37,18 @@ const ROMAN_TO_INT: Record<string, number> = {
 const CHARS_PER_TOKEN = 4;
 /**
  * Drop heading-only or whitespace stubs that pollute retrieval and the ToC
- * tree. Overridable via CHUNK_MIN_CONTENT_CHARS for the Block 2.2 chunking-knob
- * ablation leg only — unset in every live/frozen path, so the default (50)
- * is what production and the frozen F-122 eval always use.
+ * tree. Default is 0 (MIN_CHUNK_CONTENT_CHARS=0, "MC0") per ADR 004/007 —
+ * every dropped sub-50-char stub becomes its own retrievable, citable
+ * chunk, with zero measured regressions once paired with topK=10 hybrid
+ * retrieval. Applies to documents ingested from now on only:
+ * already-ingested documents (including the frozen F-122 doc) keep their
+ * existing 50-char chunks in the DB — nothing here re-chunks them.
+ * Overridable via CHUNK_MIN_CONTENT_CHARS for ablation/benchmark scripts
+ * that need the old 50-char behavior for comparison.
  */
 const MIN_CHUNK_CONTENT_CHARS = process.env.CHUNK_MIN_CONTENT_CHARS
   ? Number(process.env.CHUNK_MIN_CONTENT_CHARS)
-  : 50;
+  : 0;
 
 export function romanToInt(numeral: string): number | null {
   return ROMAN_TO_INT[numeral] ?? null;

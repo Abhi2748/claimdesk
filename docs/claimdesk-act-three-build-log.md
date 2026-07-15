@@ -1067,3 +1067,55 @@ alongside a should-refuse answer before this fix. Full writeup, the
 rejected prompt-tightening attempt, and the scorecard in
 `docs/decisions/005-refusal-string-exactness-fix.md`;
 `eval/sweep-d-mc0-topk10-refusalfix.md` has the corpus-wide row data.
+
+**ADR 006 — Accepted: skip contextual retrieval and the reranker.** With
+0 SEVERE and 41/43 PASS already clearing ADR 001's budgets at 79%
+(latency)/26% (cost), the last two ablation-ladder rungs (Contextual
+Retrieval, cross-encoder reranker) have no measured failure mode left to
+fix — both remaining FAILs are pre-diagnosed ranking misses, not chunk-
+context or ranking-depth problems. Full scorecard and "what would change
+this" in `docs/decisions/006-skip-contextual-retrieval-and-reranker.md`.
+
+**Shipped ADR 004's hybrid+topK10 retrieval and MC0 chunking to the live
+path (ADR 007).** First confirmed where "live" actually runs: "Ask the
+matter" hits `apps/ai`'s `POST /qa/matter` (Python) — a different code
+path from the TS pipeline the frozen F-122 eval gate exercises; the
+single-doc TS `answerMatterQuestion` is dead code.
+
+Ported `eval/bm25.ts` to Python (`apps/ai/app/services/bm25.py`) as a
+line-for-line translation, validated against a shared fixture generated
+*from* the real TS implementation (`eval/bm25-parity-fixture.json`,
+`scripts/gen-bm25-parity-fixture.ts`) — a hard gate per review: parity
+passed exactly (id order + scores) on the first implementation, checked by
+both a new Python test (`tests/test_bm25_parity.py`) and a TS regression
+test (`eval/bm25-parity.test.ts`) so future drift on either side fails
+loudly. Wired hybrid dense+BM25 (RRF-fused) retrieval into
+`answer_matter_question` only, behind new `MATTER_QA_TOP_K=10` /
+`MATTER_QA_POOL=20` constants — `answer_policy_question` (`/qa/answer`,
+unused by any live UI) stays on the old `QA_TOP_K=6` dense-only config,
+left as an explicit open item rather than expanded scope. Flipped
+`MIN_CHUNK_CONTENT_CHARS`'s default 50→0 in `chunk-policy.ts` for documents
+ingested from now on; F-122 and every other already-ingested doc keep
+their existing chunks untouched. Added a `CHUNK_MIN_CONTENT_CHARS=50` guard
+to the two historical ablation ingest scripts (`ingest-golden-docs.ts`,
+`ingest-f122-ablation.ts`) so a rerun can't silently re-chunk the ADR
+003/004 baseline rows at the new default.
+
+Validated the actual shipped code, not just the TS approximation of it: a
+new harness (`eval/live-matter-eval.ts`) hit the real `POST /qa/matter`
+over HTTP — first accidentally against the still-live, not-yet-updated
+Render deployment (a useful "before" data point: dense-only/topK=6 against
+the MC0 docs, 37/43 PASS, 0 SEVERE, p50 6,866ms), then against a local
+`uvicorn` run of the new code (real DB/Anthropic/OpenAI, same code Render
+would run) for "after": **41/43 PASS, 0 SEVERE, p50 7,440ms, p95 9,868ms**
+— accuracy matches ADR 004/005 exactly. Per the second hard gate, p50 is
+under ADR 001's 8s budget but with a much thinner margin (~7%) than the TS
+harness suggested (~19%), and this is a pre-deploy local proxy, not an
+actual Render measurement (deploying requires a push, out of scope this
+session). Flagged rather than absorbed — full tradeoff and two mitigation
+options (accept and re-check post-deploy vs. pre-emptively trim
+`MATTER_QA_TOP_K`/`MATTER_QA_POOL`) in
+`docs/decisions/007-ship-hybrid-retrieval-to-live-matter-qa.md`. Frozen
+F-122 gate reconfirmed unchanged (17/20, 0 SEVERE) throughout — none of
+this touches that path. **Not yet deployed** — code complete, stopped
+before committing per instruction.

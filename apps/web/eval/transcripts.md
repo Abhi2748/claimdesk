@@ -1,6 +1,6 @@
 # Eval Failure Transcripts
 
-Run: 2026-07-14T23:31:29.043Z
+Run: 2026-07-15T00:04:43.519Z
 
 3 FAIL(s) — full question, model answer, and retrieved chunks.
 
@@ -37,9 +37,9 @@ Our in-ground swimming pool and its pump equipment were wrecked by the flood. Co
 
 Based on the policy passages provided, I can't find this in the policy.
 
-The only passage addressing Coverage A—Building Property states that the policy insures against "direct physical loss by or from flood" [III.A Coverage A—Building Property, p.3], but the passages provided do not define what property qualifies as a "building" or enumerate specific structures or items covered or excluded under Coverage A. There is no language in the provided passages that specifically addresses in-ground swimming pools or their associated pump equipment, either confirming or denying coverage for such items.
+The only passage addressing Coverage A—Building Property states that the policy insures against "direct physical loss by or from flood" [III.A Coverage A—Building Property, p.3], but the passages provided do not include the specific list of what structures or items qualify as covered building property. Without those definitional provisions, I cannot determine whether an in-ground swimming pool and its pump equipment fall within or outside the scope of coverage.
 
-To properly answer your question, the relevant definitional sections (such as the definition of "building" and the specific lists of covered and excluded property under Coverage A) would need to be reviewed, as they are not included in the passages provided.
+To properly evaluate this claim, you would need to review the complete policy language defining covered building property, as well as any applicable exclusions sections, which are not among the passages provided here.
 
 ### Retrieved chunks (6)
 
@@ -60,30 +60,23 @@ My finished basement rec room — painted drywall, taped seams, and wall-to-wall
 
 ### Model answer
 
-Based on the policy passages provided, I can address the building structure portions of your question, but I must be transparent about the limits of what these specific passages cover.
+Based on the policy passages provided, I can address the dwelling coverage payment standards, but I must be transparent about an important limitation:
 
-## What the Policy Passages Do Address
-
-For the **building structure itself** (the dwelling), the policy will pay the least of:
-
-- The building limit of liability on your Declarations Page;
-- The replacement cost of the damaged part with **materials of like kind and quality and for like use**; or
-- The necessary amount actually spent to repair or replace the damaged part for like use.
-
-[VII.R.2.a, p.26]
-
-However, if your dwelling was **underinsured** (coverage is both below 80% of full replacement cost AND below the NFIP maximum), a proportional payment formula applies instead, potentially reducing your recovery to either actual cash value or a proportional share of replacement cost. [VII.R.4.a, p.27]
-
-## Critical Gap in These Passages
-
-The passages provided do **not** contain information specifically addressing **finished basement components** such as:
-- Painted drywall and taped seams
-- Wall-to-wall carpet over concrete
-
-NFIP policies typically have specific basement finishing limitations, but **I can't find this in the policy** passages you've provided, and I will not speculate beyond what is included.
+**The provided passages do not contain the specific provisions governing basement finishing materials** (such as drywall, carpet, or similar interior finishes). These items are typically addressed in sections defining what constitutes covered building property and what basement-specific limitations apply — neither of which appears in the passages given to me.
 
 ---
-**Recommendation:** Request the complete policy text addressing basement coverage definitions and contents coverage sections, as those provisions are essential to fully evaluating this claim.
+
+**What the passages *do* tell us about payment methodology for dwelling losses generally:**
+
+- If repair is economically feasible, the policy pays the **least of**: the building limit of liability, the replacement cost of the damaged portion with like kind and quality materials, or the amount actually spent on repair — **without depreciation deduction** [VII.R.2.a, p.26].
+
+- If the dwelling is **totally destroyed or not economically feasible to repair**, payment is the **least of**: the lesser of replacement cost or 1.5× actual cash value, or the building limit of liability [VII.R.3.b, p.27].
+
+- If your coverage is **below 80% of full replacement cost** and below the NFIP maximum, a **coinsurance-type proportion** applies and may reduce your recovery [VII.R.4.a, p.27].
+
+---
+
+**Regarding your specific basement finishes and carpet**, I can't find this in the policy from the passages provided. You should request the complete policy form — particularly the building property definitions and basement coverage limitation sections — for a complete analysis.
 
 ### Retrieved chunks (6)
 

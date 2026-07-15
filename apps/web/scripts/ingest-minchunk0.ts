@@ -1,15 +1,19 @@
 /**
  * Block 2.2c (chunking-knob leg) — ingest fresh copies of all 3 benchmark
- * docs (F-122-ABLATION, F-123, F-144 source PDFs) with
- * MIN_CHUNK_CONTENT_CHARS=0 instead of the default 50, under NEW document
- * rows, so the retrieval-lab ablation can compare the two chunking settings
- * without touching the 50-char rows (still needed as the baseline) or the
+ * docs (F-122-ABLATION, F-123, F-144 source PDFs) at
+ * MIN_CHUNK_CONTENT_CHARS=0, under NEW document rows, so the retrieval-lab
+ * ablation can compare the two chunking settings without touching the
+ * 50-char rows (still needed as the ADR 003/004 baseline) or the
  * live/frozen F-122 document.
+ *
+ * Note (ADR 007): MIN_CHUNK_CONTENT_CHARS=0 is now the ingestion default
+ * for all new documents — this script's explicit override predates that
+ * and is kept for clarity/reproducibility of exactly what the 2.2c ablation
+ * ran, not because it's still needed to get 0-char behavior.
  *
  * MIN_CHUNK_CONTENT_CHARS is overridden via the CHUNK_MIN_CONTENT_CHARS env
  * var, which chunk-policy.ts reads at module-load time — this process must
- * be launched with that env var set (see the Run line below); it is never
- * set in any live/frozen ingest path.
+ * be launched with that env var set (see the Run line below).
  *
  * Idempotent: reruns reuse the existing MC0 document row if one exists.
  * Merges new keys into eval/documents.json; never overwrites existing keys.

@@ -2,6 +2,8 @@ from postgrest.exceptions import APIError
 from supabase import Client
 
 from app.constants import (
+    MATTER_QA_POOL,
+    MATTER_QA_TOP_K,
     QA_TOP_K,
     REFUSAL_MESSAGE,
     REFUSAL_SIMILARITY_THRESHOLD,
@@ -17,6 +19,7 @@ from app.schemas.qa import (
     PolicyQAResponse,
 )
 from app.services.anthropic import generate_policy_answer_from_passages
+from app.services.bm25 import BM25Chunk, BM25Index, reciprocal_rank_fusion
 from app.services.embeddings import embed_query, embedding_to_vector
 
 
@@ -114,6 +117,14 @@ def answer_policy_question(
 def answer_matter_question(
     supabase: Client, document_ids: list[str], question: str
 ) -> PolicyQAMatterResponse:
+    """Live "Ask the matter" path. Hybrid retrieval (dense + BM25, RRF-fused)
+    at MATTER_QA_TOP_K=10, per ADR 004/007 — ships only here, not to
+    answer_policy_question, which nothing live calls today (see ADR 007).
+    The refusal gate stays on the dense pool's top-1 similarity, matching
+    ADR 003/004's calibration; BM25/fusion never affects the refusal
+    decision, only which passages get sent to the answerer once retrieval
+    has already decided not to refuse.
+    """
     trimmed = question.strip()
     if not trimmed:
         raise ValueError("Question is required.")
@@ -131,33 +142,81 @@ def answer_matter_question(
         query_embedding = embed_query(trimmed)
 
         try:
-            response = supabase.rpc(
+            dense_response = supabase.rpc(
                 "match_chunks_multi",
                 {
                     "query_embedding": embedding_to_vector(query_embedding),
                     "doc_ids": document_ids,
-                    "match_count": QA_TOP_K,
+                    "match_count": MATTER_QA_POOL,
                     "min_similarity": 0,
                 },
             ).execute()
         except APIError as exc:
             raise RuntimeError(f"Search failed: {exc.message}") from exc
 
-        if response.data is None:
+        if dense_response.data is None:
             raise RuntimeError(
                 "Search failed: no data returned from match_chunks_multi."
             )
 
-        chunks = [MatchChunkMultiRow.model_validate(row) for row in response.data]
-        top_similarity = chunks[0].similarity if chunks else None
-        retrieved_chunks = [_multi_chunk_to_citation(chunk) for chunk in chunks]
+        dense_chunks = [
+            MatchChunkMultiRow.model_validate(row) for row in dense_response.data
+        ]
+        top_similarity = dense_chunks[0].similarity if dense_chunks else None
+
+        try:
+            bm25_response = (
+                supabase.table("chunks")
+                .select("id, section_label, page_start, page_end, content, document_id")
+                .in_("document_id", document_ids)
+                .execute()
+            )
+        except APIError as exc:
+            raise RuntimeError(f"BM25 chunk fetch failed: {exc.message}") from exc
+
+        bm25_rows = bm25_response.data or []
+        bm25_row_by_id = {row["id"]: row for row in bm25_rows}
+        bm25_index = BM25Index(
+            [BM25Chunk(id=row["id"], content=row["content"]) for row in bm25_rows]
+        )
+        bm25_results = bm25_index.search(trimmed, MATTER_QA_POOL)
+
+        dense_by_id = {chunk.id: chunk for chunk in dense_chunks}
+        fused = reciprocal_rank_fusion(
+            [
+                [chunk.id for chunk in dense_chunks],
+                [r["id"] for r in bm25_results],
+            ]
+        )
+
+        retrieved_chunks: list[MatterCitation] = []
+        for item in fused[:MATTER_QA_TOP_K]:
+            dense_chunk = dense_by_id.get(item["id"])
+            if dense_chunk is not None:
+                retrieved_chunks.append(_multi_chunk_to_citation(dense_chunk))
+                continue
+            row = bm25_row_by_id.get(item["id"])
+            if row is None:
+                continue
+            retrieved_chunks.append(
+                MatterCitation(
+                    id=row["id"],
+                    section_label=row.get("section_label") or "Section",
+                    page_start=row.get("page_start"),
+                    page_end=row.get("page_end"),
+                    content=row["content"],
+                    similarity=0.0,
+                    document_id=row["document_id"],
+                )
+            )
+
         finish_retrieval_span(
             ret_span,
-            chunk_count=len(chunks),
+            chunk_count=len(retrieved_chunks),
             top_similarity=top_similarity,
         )
 
-    if not chunks or (chunks[0].similarity if chunks else 0) < REFUSAL_SIMILARITY_THRESHOLD:
+    if not dense_chunks or (top_similarity or 0) < REFUSAL_SIMILARITY_THRESHOLD:
         return PolicyQAMatterResponse(
             answer=REFUSAL_MESSAGE,
             citations=[],

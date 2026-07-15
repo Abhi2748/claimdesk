@@ -12,7 +12,14 @@
  *
  * Idempotent: reruns reuse the existing ablation document row if one exists.
  *
- * Run: pnpm --filter web exec tsx scripts/ingest-f122-ablation.ts
+ * Note (ADR 007): the ingestion default flipped to MIN_CHUNK_CONTENT_CHARS=0
+ * for new documents. F-122-ABLATION is the ADR 003/004 50-char baseline —
+ * rerunning this script (idempotent: reuses the existing row and re-chunks
+ * it) must keep producing that same baseline, so it now requires
+ * CHUNK_MIN_CONTENT_CHARS=50 explicitly rather than silently inheriting the
+ * new default.
+ *
+ * Run: CHUNK_MIN_CONTENT_CHARS=50 pnpm --filter web exec tsx scripts/ingest-f122-ablation.ts
  */
 import { createClient } from "@supabase/supabase-js";
 import { readFileSync, existsSync, writeFileSync } from "node:fs";
@@ -23,6 +30,17 @@ import { chunkPolicyText } from "../lib/ingestion/chunk-policy";
 import { extractPdfPages } from "../lib/ingestion/extract-pdf";
 
 loadEnvLocal();
+
+if (process.env.CHUNK_MIN_CONTENT_CHARS !== "50") {
+  throw new Error(
+    "This script reproduces the ADR 003/004 50-char chunking baseline for " +
+      "F-122-ABLATION — run with CHUNK_MIN_CONTENT_CHARS=50 explicitly (got " +
+      `${JSON.stringify(process.env.CHUNK_MIN_CONTENT_CHARS)}). The ` +
+      "ingestion default flipped to 0 (MC0) in ADR 007; new documents don't " +
+      "need this override, but rerunning this script does, or it would " +
+      "silently re-chunk the baseline row at the new default."
+  );
+}
 
 // Same org + case as the F-123/F-144 ablation ingest (Block 2.2b) and the
 // frozen F-122 eval document.

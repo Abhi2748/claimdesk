@@ -3,6 +3,14 @@
 REFUSAL_SIMILARITY_THRESHOLD = 0.35
 QA_TOP_K = 6
 
+# Matter-scoped ("Ask the matter") retrieval only — the live path, per
+# ADR 004/007. Single-document QA (answer_policy_question, /qa/answer)
+# deliberately stays on QA_TOP_K=6 dense-only; nothing live depends on it
+# today, so it's left untouched rather than silently changed. See ADR 007
+# for the "what would change this" note on eventually aligning it.
+MATTER_QA_TOP_K = 10
+MATTER_QA_POOL = 20
+
 EMBEDDING_MODEL = "text-embedding-3-small"
 ANTHROPIC_MODEL = "claude-sonnet-4-6"
 ANTHROPIC_MAX_TOKENS = 2048

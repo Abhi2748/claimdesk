@@ -1,0 +1,467 @@
+{
+  "chunks": [
+    {
+      "id": 1,
+      "content": "Flood, as used in this flood insurance policy, means a general and temporary condition of partial or complete inundation of two or more acres of normally dry land area or of two or more properties."
+    },
+    {
+      "id": 2,
+      "content": "We will pay you for direct physical loss by or from flood to your insured building or personal property if you have purchased the appropriate coverage."
+    },
+    {
+      "id": 3,
+      "content": "The deductible does NOT apply to the cost of removing debris, the cost of complying with an increased cost of compliance provision, or condominium loss assessments."
+    },
+    {
+      "id": 4,
+      "content": "Personal property in a building that is not fully enclosed must be secured to prevent flotation out of the building during a flood event."
+    },
+    {
+      "id": 5,
+      "content": "Coverage A - Building Property covers the insured building, its foundation, and permanently installed fixtures such as plumbing and electrical systems."
+    },
+    {
+      "id": 6,
+      "content": "Coverage B - Personal Property covers personal belongings that are inside the fully enclosed insured building at the time of the flood loss."
+    },
+    {
+      "id": 7,
+      "content": "Sandbags, supplies, and labor used to protect the insured building from flood water are covered up to the limit shown in the declarations page."
+    },
+    {
+      "id": 8,
+      "content": "Any renewal certificate indicating that coverage has been bound is subject to the terms and conditions of the standard flood insurance policy."
+    },
+    {
+      "id": 9,
+      "content": "This policy insures only one building. If you own more than one building, each building requires a separate policy and a separate premium payment."
+    },
+    {
+      "id": 10,
+      "content": "Assessments made by a condominium association against unit owners for a flood loss to commonly owned building elements may be covered under Coverage D."
+    },
+    {
+      "id": 11,
+      "content": "When a building insured under this policy is a residential condominium building, the association's policy is primary over any unit owner's policy."
+    },
+    {
+      "id": 12,
+      "content": "Requirements in case of loss include prompt written notice, protecting the property from further damage, and separating damaged from undamaged property for inspection."
+    },
+    {
+      "id": 13,
+      "content": "Appraisal is available if you and we disagree on the amount of loss; each party selects a competent, impartial appraiser and the two appraisers select an umpire."
+    },
+    {
+      "id": 14,
+      "content": "If an insured building has been flooded by rising waters continuously for 90 days or more, this policy will pay the lesser of the building limit or the deductible amount."
+    },
+    {
+      "id": 15,
+      "content": "Water that backs up through sewers or drains is covered only when a flood, as defined by this policy, is the proximate cause of the sewer or drain backup."
+    }
+  ],
+  "queries": [
+    "How does this policy define a flood?",
+    "Which coverages are not subject to the deductible?",
+    "Can a condo association get paid before the building is rebuilt?",
+    "Is personal property covered if the building isn't fully enclosed?",
+    "Does the policy cover sewer backup during a flood?"
+  ],
+  "topK": 10,
+  "expectedBm25": {
+    "How does this policy define a flood?": [
+      {
+        "id": 11,
+        "score": 2.7299249714409446
+      },
+      {
+        "id": 1,
+        "score": 2.4680402128260064
+      },
+      {
+        "id": 9,
+        "score": 2.4413637885823407
+      },
+      {
+        "id": 15,
+        "score": 2.4327299671280382
+      },
+      {
+        "id": 3,
+        "score": 2.293406961788418
+      },
+      {
+        "id": 14,
+        "score": 1.7794395128472675
+      },
+      {
+        "id": 8,
+        "score": 1.6005865038306248
+      },
+      {
+        "id": 6,
+        "score": 0.6733095814669916
+      },
+      {
+        "id": 10,
+        "score": 0.6733095814669916
+      },
+      {
+        "id": 4,
+        "score": 0.6602759144899277
+      }
+    ],
+    "Which coverages are not subject to the deductible?": [
+      {
+        "id": 3,
+        "score": 4.873928506332058
+      },
+      {
+        "id": 8,
+        "score": 3.774870103660277
+      },
+      {
+        "id": 7,
+        "score": 3.56948937304621
+      },
+      {
+        "id": 4,
+        "score": 3.1357494676319595
+      },
+      {
+        "id": 6,
+        "score": 2.4017598525671815
+      },
+      {
+        "id": 14,
+        "score": 2.0663924196270127
+      },
+      {
+        "id": 2,
+        "score": 1.1119067630294823
+      },
+      {
+        "id": 10,
+        "score": 0.9588720646384005
+      },
+      {
+        "id": 13,
+        "score": 0.34474225347046
+      },
+      {
+        "id": 15,
+        "score": 0.3360398966607157
+      }
+    ],
+    "Can a condo association get paid before the building is rebuilt?": [
+      {
+        "id": 11,
+        "score": 4.690040653769376
+      },
+      {
+        "id": 10,
+        "score": 2.530909632097102
+      },
+      {
+        "id": 4,
+        "score": 2.1401469644582027
+      },
+      {
+        "id": 15,
+        "score": 1.78964494273586
+      },
+      {
+        "id": 8,
+        "score": 1.4782675549751154
+      },
+      {
+        "id": 13,
+        "score": 1.3793283309804245
+      },
+      {
+        "id": 14,
+        "score": 1.0806340368429699
+      },
+      {
+        "id": 5,
+        "score": 1.0741363811466178
+      },
+      {
+        "id": 6,
+        "score": 0.9806737631079863
+      },
+      {
+        "id": 7,
+        "score": 0.936454465221751
+      }
+    ],
+    "Is personal property covered if the building isn't fully enclosed?": [
+      {
+        "id": 4,
+        "score": 8.71684756861546
+      },
+      {
+        "id": 6,
+        "score": 8.338741503792539
+      },
+      {
+        "id": 2,
+        "score": 4.480324287255172
+      },
+      {
+        "id": 15,
+        "score": 3.2110647124248795
+      },
+      {
+        "id": 11,
+        "score": 2.674251666618159
+      },
+      {
+        "id": 13,
+        "score": 2.6083358435402237
+      },
+      {
+        "id": 7,
+        "score": 2.4638331906854902
+      },
+      {
+        "id": 5,
+        "score": 2.2575554382953267
+      },
+      {
+        "id": 14,
+        "score": 2.2272397544211087
+      },
+      {
+        "id": 9,
+        "score": 2.2137720009018107
+      }
+    ],
+    "Does the policy cover sewer backup during a flood?": [
+      {
+        "id": 15,
+        "score": 6.197783229069646
+      },
+      {
+        "id": 4,
+        "score": 3.388954044432526
+      },
+      {
+        "id": 3,
+        "score": 2.697622294073957
+      },
+      {
+        "id": 8,
+        "score": 1.9641595095642903
+      },
+      {
+        "id": 11,
+        "score": 1.8384067108400548
+      },
+      {
+        "id": 1,
+        "score": 1.563469607006845
+      },
+      {
+        "id": 9,
+        "score": 1.3266692393408905
+      },
+      {
+        "id": 14,
+        "score": 1.20270688203082
+      },
+      {
+        "id": 6,
+        "score": 1.0990715732560246
+      },
+      {
+        "id": 7,
+        "score": 1.0482328505892875
+      }
+    ]
+  },
+  "expectedRrf": [
+    {
+      "label": "two-list-fusion",
+      "k": 60,
+      "rankings": [
+        [
+          5,
+          1,
+          7,
+          2,
+          9,
+          6,
+          3
+        ],
+        [
+          1,
+          7,
+          5,
+          6,
+          2,
+          9,
+          8
+        ]
+      ],
+      "expected": [
+        {
+          "id": 1,
+          "score": 0.03252247488101534
+        },
+        {
+          "id": 5,
+          "score": 0.032266458495966696
+        },
+        {
+          "id": 7,
+          "score": 0.03200204813108039
+        },
+        {
+          "id": 2,
+          "score": 0.031009615384615385
+        },
+        {
+          "id": 6,
+          "score": 0.030776515151515152
+        },
+        {
+          "id": 9,
+          "score": 0.030536130536130537
+        },
+        {
+          "id": 3,
+          "score": 0.014925373134328358
+        },
+        {
+          "id": 8,
+          "score": 0.014925373134328358
+        }
+      ]
+    },
+    {
+      "label": "three-list-fusion-with-partial-overlap",
+      "k": 60,
+      "rankings": [
+        [
+          14,
+          15,
+          2,
+          1,
+          12
+        ],
+        [
+          15,
+          3,
+          14,
+          4
+        ],
+        [
+          2,
+          14,
+          1,
+          15,
+          3,
+          12
+        ]
+      ],
+      "expected": [
+        {
+          "id": 14,
+          "score": 0.04839549075403121
+        },
+        {
+          "id": 15,
+          "score": 0.04814747488101534
+        },
+        {
+          "id": 2,
+          "score": 0.032266458495966696
+        },
+        {
+          "id": 3,
+          "score": 0.0315136476426799
+        },
+        {
+          "id": 1,
+          "score": 0.03149801587301587
+        },
+        {
+          "id": 12,
+          "score": 0.030536130536130537
+        },
+        {
+          "id": 4,
+          "score": 0.015625
+        }
+      ]
+    },
+    {
+      "label": "disjoint-lists",
+      "k": 60,
+      "rankings": [
+        [
+          1,
+          2,
+          3
+        ],
+        [
+          4,
+          5,
+          6
+        ]
+      ],
+      "expected": [
+        {
+          "id": 1,
+          "score": 0.01639344262295082
+        },
+        {
+          "id": 4,
+          "score": 0.01639344262295082
+        },
+        {
+          "id": 2,
+          "score": 0.016129032258064516
+        },
+        {
+          "id": 5,
+          "score": 0.016129032258064516
+        },
+        {
+          "id": 3,
+          "score": 0.015873015873015872
+        },
+        {
+          "id": 6,
+          "score": 0.015873015873015872
+        }
+      ]
+    },
+    {
+      "label": "explicit-tie",
+      "k": 60,
+      "rankings": [
+        [
+          10,
+          11
+        ],
+        [
+          11,
+          10
+        ]
+      ],
+      "expected": [
+        {
+          "id": 10,
+          "score": 0.03252247488101534
+        },
+        {
+          "id": 11,
+          "score": 0.03252247488101534
+        }
+      ]
+    }
+  ]
+}
