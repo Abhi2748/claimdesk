@@ -1,0 +1,199 @@
+{
+  "scoring_rules": {
+    "pass": "verdict matches expected_verdict exactly, every finding in the opinion has verified=true (the pipeline's own structural check, reused — not re-implemented in the scorer), and at least one finding's citation section-prefix-matches each label in must_cite.",
+    "fail": "verdict doesn't match expected_verdict but isn't a flat covered<->excluded reversal, or a required citation from must_cite is missing.",
+    "severe": "any finding has verified=false (an invented citation reached the review queue), or the verdict is a flat covered<->excluded reversal of expected_verdict (the single worst failure mode for a claims-coverage product)."
+  },
+  "claims": [
+    {
+      "id": 1,
+      "form": "F-122-ABLATION-MC0",
+      "document_id": "6f072668-b493-4d33-bd80-dad27fe5989e",
+      "claim_summary": "Rising floodwater from a nearby creek entered the insured dwelling and damaged the drywall and flooring on the main living level.",
+      "expected_verdict": "covered",
+      "must_cite": ["III.A"],
+      "expected_findings": [
+        {
+          "type": "coverage",
+          "section_label": "III.A",
+          "source_quote": "A. Coverage A—Building Property\nWe insure against direct physical loss by or from flood to:"
+        },
+        {
+          "type": "coverage",
+          "section_label": "III.A.1",
+          "source_quote": "1. The dwelling at the described location, or for a period of 45 days at another location as set forth in III.C.2.b, Property Removed to Safety."
+        }
+      ],
+      "notes": "Clean, uncomplicated direct flood loss to the dwelling itself — the baseline 'covered' case, no exclusions or limits in play."
+    },
+    {
+      "id": 2,
+      "form": "F-122-ABLATION-MC0",
+      "document_id": "6f072668-b493-4d33-bd80-dad27fe5989e",
+      "claim_summary": "The insured's riding lawn mower, stored in the attached garage, was destroyed when floodwater entered the garage.",
+      "expected_verdict": "excluded",
+      "must_cite": ["IV.5"],
+      "expected_findings": [
+        {
+          "type": "exclusion",
+          "section_label": "IV.5",
+          "source_quote": "5. Self-propelled vehicles or machines, including their parts and equipment. However, we do cover self-propelled vehicles or machines not licensed for use on public roads that are: [used mainly to service the described location, or designed to assist handicapped persons]"
+        }
+      ],
+      "notes": "A personal riding mower doesn't fit either IV.5 exception (not servicing the property commercially, not a mobility aid) — should read as excluded, not covered. Trap: a weaker model might see 'stored in garage, inside the building' and default to Coverage A without checking the vehicle exclusion."
+    },
+    {
+      "id": 3,
+      "form": "F-122-ABLATION-MC0",
+      "document_id": "6f072668-b493-4d33-bd80-dad27fe5989e",
+      "claim_summary": "Floodwater filled the insured's finished basement, damaging the drywall, a built-in wet bar with cabinetry, and wall-to-wall carpet.",
+      "expected_verdict": "partial",
+      "must_cite": ["III.A.8"],
+      "expected_findings": [
+        {
+          "type": "condition",
+          "section_label": "III.A.8",
+          "source_quote": "8. Items of property below the lowest elevated floor of an elevated post-FIRM building located in Zones A1–A30, AE, AH, AR, AR/A, AR/AE, AR/AH, AR/A1–A30, V1–V30, or VE, or in a basement regardless of the zone. Coverage is limited to the following:"
+        },
+        {
+          "type": "condition",
+          "section_label": "III.A.8.a",
+          "source_quote": "a. Any of the following items, if installed in their functioning locations and, if necessary for operation, connected to a power source: ... (3) Drywall for walls and ceilings in a basement and the cost of labor to nail it, unfinished and unfloated and not taped, to the framing; ..."
+        }
+      ],
+      "notes": "The classic NFIP basement trap: III.A.8/III.A.8.a caps basement coverage to a short enumerated list (unfinished, untaped drywall is on it; a built-in wet bar and carpet are not). Expect PARTIAL — some of the claim (basic drywall) is covered, the wet bar and carpet are not. A model that says flatly 'covered' or flatly 'excluded' for the whole claim is wrong either way; this is the case most likely to separate 'reads carefully' from 'pattern-matches.'"
+    },
+    {
+      "id": 4,
+      "form": "F-122-ABLATION-MC0",
+      "document_id": "6f072668-b493-4d33-bd80-dad27fe5989e",
+      "claim_summary": "Sewage backed up through a floor drain into the insured's basement during a heavy overnight rainstorm, causing significant damage. The insured is not sure whether there was general flooding in the neighborhood at the time.",
+      "expected_verdict": "unclear",
+      "must_cite": ["V.D.5.a"],
+      "expected_findings": [
+        {
+          "type": "exclusion",
+          "section_label": "V.D.5.a",
+          "source_quote": "a. Backs up through sewers or drains; ... unless there is a flood in the area and the flood is the proximate cause of the sewer or drain backup, sump pump discharge or overflow, or the seepage of water;"
+        }
+      ],
+      "notes": "Deliberately withholds the one fact the policy's own language makes outcome-determinative (was there a flood in the area?). The passages show the rule but the claim doesn't supply the fact — this should come back UNCLEAR, with the agent saying so and citing the proximate-cause condition, not guessing an answer either way. This is the set's one intentional 'the passages don't resolve it' case."
+    },
+    {
+      "id": 5,
+      "form": "F-123-MC0",
+      "document_id": "d8a30acf-4da5-416e-81e0-224171415462",
+      "claim_summary": "The condominium association's insured building sustained direct flood damage to common-area drywall and flooring after a river overflowed its banks.",
+      "expected_verdict": "covered",
+      "must_cite": ["III.A"],
+      "expected_findings": [
+        {
+          "type": "coverage",
+          "section_label": "III.A",
+          "source_quote": "A. Coverage A—Building Property\nWe insure against direct physical loss by or from flood to:"
+        },
+        {
+          "type": "coverage",
+          "section_label": "III.A.1",
+          "source_quote": "1. The building described on the Declarations Page at the described location. If the building is a condominium building and the named insured is the condominium association, Coverage A includes all units within the building and the improvements within the units, provided the unit..."
+        }
+      ],
+      "notes": "F-123's condo-association equivalent of claim 1 — clean direct flood loss, no complications. Confirms the same baseline reading holds on a second document."
+    },
+    {
+      "id": 6,
+      "form": "F-123-MC0",
+      "document_id": "d8a30acf-4da5-416e-81e0-224171415462",
+      "claim_summary": "A boathouse on the insured property, along with a boat floated into it, was destroyed by flood surge.",
+      "expected_verdict": "excluded",
+      "must_cite": ["IV.3"],
+      "expected_findings": [
+        {
+          "type": "exclusion",
+          "section_label": "IV.3",
+          "source_quote": "3. Open structures, including a building used as a boathouse or any structure or building into which boats are floated, and personal property located in, on, or over water."
+        }
+      ],
+      "notes": "A flat, unambiguous exclusion — boathouses and property floated into them are carved out entirely, regardless of cause of loss."
+    },
+    {
+      "id": 7,
+      "form": "F-123-MC0",
+      "document_id": "d8a30acf-4da5-416e-81e0-224171415462",
+      "claim_summary": "Flood damage inside one unit of the insured office condominium association's building destroyed the built-in kitchen cabinets installed in that unit, and separately the unit owner's own desk and file cabinets stored there.",
+      "expected_verdict": "partial",
+      "must_cite": ["III.A.4.p"],
+      "expected_findings": [
+        {
+          "type": "coverage",
+          "section_label": "III.A.4.p",
+          "source_quote": "p. In the units within the building, installed: (1) Built-in dishwashers; (2) Built-in microwave ovens; (3) Garbage disposal units; (4) Hot water heaters, including solar water heaters; (5) Kitchen cabinets; (6) Plumbing fixtures; (7) Radiators; (8) Ranges; (9) Refrigerators; and (10) Stoves."
+        },
+        {
+          "type": "exclusion",
+          "section_label": "IV.16",
+          "source_quote": "16. Personal property owned by or in the care, custody or control of a unit owner, except for property of the type and under the circumstances set forth under III. Coverage B—Personal Property of this policy."
+        }
+      ],
+      "notes": "Revised after human review caught a defect in the original draft: it described a residential condo association, but F-123 also has IV.17 ('A residential condominium building located in a Regular Program community'), which excludes exactly that scenario from this form — a real contradiction, not a citation error (both III.A.4.p and IV.16 are verbatim-accurate for F-123; F-144's IV.16 is unrelated content, so this couldn't be fixed by reassigning to F-144). Recast as an office/commercial condo association, which IV.17 doesn't reach and which F-123's III.B.3.b ('other than household personal property') explicitly supports. Same split logic as before: a built-in fixture inside a unit is Coverage A property under the association's policy (III.A.4.p) even though it's inside a privately-owned unit; the unit owner's own movable furniture is excluded unless the association separately purchased Coverage B for it (IV.16). Expect PARTIAL."
+    },
+    {
+      "id": 8,
+      "form": "F-144-MC0",
+      "document_id": "d618734d-d45a-45d2-83f3-10e213b9562d",
+      "claim_summary": "The insured residential condominium building sustained direct flood damage to its structure and common-area improvements after a hurricane storm surge.",
+      "expected_verdict": "covered",
+      "must_cite": ["III.A"],
+      "expected_findings": [
+        {
+          "type": "coverage",
+          "section_label": "III.A",
+          "source_quote": "A. Coverage A—Building Property\nWe insure against direct physical loss by or from flood to:"
+        },
+        {
+          "type": "coverage",
+          "section_label": "III.A.1",
+          "source_quote": "1. The residential condominium building described on the Declarations Page at the described location, including all units within the building and the improvements within the units."
+        }
+      ],
+      "notes": "RCBAP's clean baseline case, same shape as claims 1 and 5 on the third document."
+    },
+    {
+      "id": 9,
+      "form": "F-144-MC0",
+      "document_id": "d618734d-d45a-45d2-83f3-10e213b9562d",
+      "claim_summary": "Days of heavy rain caused a hillside behind the insured condominium building to give way; the resulting landslide cracked the building's foundation.",
+      "expected_verdict": "excluded",
+      "must_cite": ["V.C"],
+      "expected_findings": [
+        {
+          "type": "exclusion",
+          "section_label": "V.C",
+          "source_quote": "C. We do not insure for loss to property caused directly by earth movement even if the earth movement is caused by flood. Some examples of earth movement that we do not cover are:"
+        }
+      ],
+      "notes": "The corpus's classic mudflow-vs-landslide trap (flagged since ADR 003 on the Q&A side). 'Mudflow' is itself a covered flood peril elsewhere in the policy, but a landslide/earth-movement loss is excluded outright — even where rain (a flood-adjacent cause) triggered it. A model that pattern-matches 'water-caused damage' to 'covered' without reading V.C's 'even if... caused by flood' clause will get this wrong."
+    },
+    {
+      "id": 10,
+      "form": "F-144-MC0",
+      "document_id": "d618734d-d45a-45d2-83f3-10e213b9562d",
+      "claim_summary": "The condominium association's building has a replacement value of $250,000 and carries $180,000 of flood insurance (required minimum is 80% of replacement value, i.e. $200,000). A flood caused $150,000 of covered building damage; the deductible is $500. How much of the loss will the policy pay, and does the full $150,000 get reimbursed?",
+      "expected_verdict": "partial",
+      "must_cite": ["VII.C"],
+      "expected_findings": [
+        {
+          "type": "condition",
+          "section_label": "VII.B",
+          "source_quote": "B. We will impose a penalty on loss payment unless the amount of insurance applicable to the damaged building is: 1. At least 80 percent of its replacement cost; or 2. The maximum amount of insurance available for that building under the NFIP, whichever is less."
+        },
+        {
+          "type": "condition",
+          "section_label": "VII.C",
+          "source_quote": "C. If the actual amount of insurance on the building is less than the required amount ... then loss payment is determined as follows: 1. Divide the actual amount of insurance carried ... by the required amount ... 2. Multiply the amount of loss ... by the figure ... 3. Subtract the deductible ..."
+        }
+      ],
+      "notes": "The flagship coinsurance trap, verbatim from the policy's own worked Example #1 (same numbers: $250k replacement, $200k required, $180k carried, $150k loss, $500 deductible -> 180,000/200,000=.90; 150,000x.90=135,000; minus the $500 deductible = $134,500 paid, not the full $150,000). Correct answer is PARTIAL with the arithmetic shown, not a flat 'covered' that ignores the coinsurance penalty. This is the highest-difficulty claim in the set — it requires the agent to actually apply a multi-step formula from the passages, not just locate and cite a clause. If it's beyond what a coverage opinion should attempt, say so when reviewing the sample rather than let a wrong-but-confident number pass unnoticed."
+    }
+  ]
+}

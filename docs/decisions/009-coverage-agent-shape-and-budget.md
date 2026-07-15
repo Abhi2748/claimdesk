@@ -1,11 +1,16 @@
 # ADR 009 — Coverage agent: 4-node LangGraph, background-job budget
 
-**Status:** Proposed. Sets the target Block 2.5 is built and measured
-against, same posture as ADR 001 for the retrieval ablation — an estimate to
-be replaced with real numbers once 2.5e's golden eval runs, not a number the
-build is gated on in advance. Expect a post-build correction in the same
-shape as ADR 007's topK 10→8 (ship the estimate, measure for real, adjust
-the knob that's actually over budget).
+**Status:** Accepted. Block 2.5e ran a 10-claim golden set against the real
+graph (real retrieval, real Anthropic calls) and pulled a real per-node
+latency breakdown from the Langfuse spans Block 2.5d added. Unlike ADR 007's
+topK 10→8 — a real, necessary correction — this estimate held up: p50
+landed at 20.1s against the ≤20s estimate (a 0.6% difference, inside
+measurement noise for n=10, not a budget bust) and p95 at 27.8s against the
+≤30s estimate. **No knob correction applied.** Full numbers and reasoning in
+"Real measurement (Block 2.5e)" below. A separate, real finding did surface
+during this run — a reproducible retrieval-coverage gap on 2/10 claims — but
+it's an accuracy question, not a latency/budget one; recorded in its own
+section rather than folded into this decision.
 
 ## Question
 
@@ -116,7 +121,7 @@ this would prevent. Revisit if variance becomes a practical problem, e.g.
 once grounding scores need to be stable run-to-run for the same input, not
 just individually correct.
 
-## Budget (estimate — see Status)
+## Budget (original estimate, pre-2.5e)
 
 | | Estimate | Basis |
 |---|---|---|
@@ -125,27 +130,125 @@ just individually correct.
 | Hard timeout | 60s | Background job, not blocking a render — generous relative to the p95 estimate |
 | Cost | ≤ $0.05/opinion | ADR 001's single-query estimate (~$0.012) scaled for larger input (~3,000–5,500 tokens vs. ~2,700) and output (~600–1,200 tokens vs. ~150–400) at `claude-sonnet-4-6` pricing → est. $0.018–0.035; $0.05 leaves real headroom rather than ADR 001's tight $0.03 |
 
+## Real measurement (Block 2.5e)
+
+10-claim golden set (`apps/ai/eval/golden-coverage.json`) across all three
+benchmark forms (F-122/F-123/F-144, MC0 chunking — ADR 007's shipped
+config), covering `covered`/`excluded`/`partial`/`unclear` verdicts, run
+twice independently (`apps/ai/eval/run_coverage_eval.py`, calling
+`run_coverage_agent()` directly — the same function the background task
+calls) against real retrieval and real Anthropic calls. Full row data and
+per-node table in `apps/ai/eval/coverage-eval-results.md`.
+
+| | Measured | vs. estimate |
+|---|---|---|
+| Latency p50 | 20,118ms | ≤ 20,000ms estimate — 0.6% over, inside n=10 noise |
+| Latency p95 | 27,785ms | ≤ 30,000ms estimate — comfortably under |
+| Cost/opinion | ~$0.023 mean ($0.016–$0.031 range) | ≤ $0.05 estimate — 46% of budget, real headroom |
+
+**Per-node latency (seconds, from the Block 2.5d Langfuse spans — this is
+the number ADR 007-style budget corrections need, and it wasn't available
+until this block):**
+
+| node | p50 | p95 | share of p50 |
+|---|---|---|---|
+| `retrieve` | 0.52s | 1.73s | 2.6% |
+| `draft_opinion` (`claude_answer` generation) | 15.31s | 25.25s | 76.1% |
+| `verify_and_score` | 1.50s | 4.71s | 7.5% |
+| `write_review_queue` | 0.16s | 0.22s | 0.8% |
+
+`draft_opinion`'s single Sonnet call is, as predicted, almost the entire
+budget — three-quarters of p50, over 90% of p95. Retrieval, verification,
+and the DB writes are collectively under 2.2s at p50. This matches the
+original estimate's structure (retrieval sub-second, generation dominant)
+closely enough that the estimate's *shape* was right; only the exact number
+needed confirming.
+
+Cost: Langfuse's `observations.get_many()` (the v2 list endpoint used for
+the latency pull) doesn't return usage/cost fields, and this SDK version has
+no per-observation detail fetch — so the cost figure above is the same
+char/4 estimate method ADR 001 used, but grounded in this run's real data:
+input side from one actual `retrieve_hybrid()` call's real retrieved
+passages (not a guessed passage count), output side from every opinion's
+real serialized JSON size. Embedding cost (1 query embedding + 1 per
+verified finding) isn't included — negligible per ADR 001's existing
+reasoning, unchanged here.
+
 ## Decision
 
-**Proposed.** Build the 4-node graph as a background job against these
-budgets. Per the user's note approving this plan: **2.5e's real measurement
-is the moment of truth**, not this estimate — if real latency or cost blows
-through the budget the way `MATTER_QA_TOP_K=10` did in ADR 007, the fix is
-the same shape (tune the knob that's actually over — likely `topK`/`pool`
-on the `retrieve` node, or `ANTHROPIC_MAX_TOKENS` on `draft_opinion` — not a
-redesign of the graph).
+**Accepted, budget confirmed as originally estimated — no knob correction.**
+p50 at 20.1s against a 20.0s estimate is not a real overshoot: with n=10,
+the median is inherently noisy (one claim landing a second either side
+changes which value is "p50"), and it's nowhere near ADR 007's actual
+budget bust (topK=10 measured 8,019ms against an 8,000ms *hard* p50 budget
+on a synchronous, page-blocking path — a real, unambiguous overshoot this
+isn't). p95 (27.8s) and cost ($0.023 mean) both have real headroom against
+their budgets (30s, $0.05).
+
+Per the user's framing going in — correct the budget with justification, or
+tune a knob, if p50 busts the estimate — the justified call here is
+**neither**: the estimate wasn't wrong enough to need correcting, and there
+is no knob to tune that wouldn't trade away something already spoken for.
+`draft_opinion` dominating at 76% of p50 is structural (a multi-finding
+cited legal opinion requires more generation than a one-line Q&A answer),
+not a misconfiguration — cutting `COVERAGE_MAX_TOKENS` risks truncating
+findings, and cutting `COVERAGE_RETRIEVE_TOP_K`/`POOL` would save at most
+~1s at `retrieve` (2.6% of p50) while directly working against the
+retrieval-coverage finding below, which points the opposite direction.
+
+## Separate finding: a reproducible retrieval-coverage gap (not a latency issue)
+
+3/10 claims scored FAIL across **both** independent 2.5e runs, with the
+**same** claims failing the **same** way each time (not generation noise —
+contrast the isolated, non-reproducible SEVERE from Block 2.5a's
+verification). Two of the three are the concerning kind: the agent's
+opinion never engages with the actual controlling clause at all, and
+instead builds plausible-sounding alternative reasoning from real (not
+hallucinated — every citation passed `verified=true`) but wrong-for-this-
+question chunks:
+
+- **Claim 2** (a riding mower destroyed by floodwater in an attached
+  garage; expected `excluded` under `IV.5`, self-propelled vehicles) — the
+  opinion never cites or mentions `IV.5` at all. It reasons instead from
+  personal-property coverage (`III.B.1`) and attached-vs-detached garage
+  sublimits (`III.A.2`/`III.A.3`), reaching `partial` — a real miss in the
+  harmful direction (implying some coverage exists for property the policy
+  excludes outright).
+- **Claim 3** (finished-basement flood damage — drywall, a built-in wet
+  bar, carpet; expected `partial` under `III.A.8`/`III.A.8.a`'s basement
+  item limitation) — the opinion never cites `III.A.8`. It instead
+  constructs coverage for the wet bar via `III.A.7.c` (built-in
+  dishwashers — not a wet bar) and for the carpet via a differently-worded
+  carpet clause, reaching a more generous `partial` than the actual
+  controlling limitation supports.
+
+Working hypothesis: `COVERAGE_RETRIEVE_TOP_K=12` — a first guess per this
+ADR's own original estimate, never benchmarked — doesn't reliably surface
+the controlling clause for claim-*narrative* queries the way it does for
+the golden Q&A set's narrower, more targeted questions (ADR 003/004's
+corpus). `retrieve`'s own latency (0.52s p50) means there's real room to
+raise `COVERAGE_RETRIEVE_TOP_K`/`POOL` without a meaningful latency cost —
+but that's an accuracy decision requiring its own measurement (does a
+higher topK actually fix these two cases without adding noise, the same
+question ADR 004 asked and answered for the QA path), not something to
+change inside this latency-focused ADR on the strength of 2 data points.
+**Not fixed now** — recorded as the clearest lead for whichever block picks
+up coverage-agent accuracy next.
 
 ## What would change this
 
-- **2.5e's real measurement** (the whole point of "Proposed" status) —
-  replace every estimate above with real Langfuse/harness numbers, exactly
-  as ADR 007 replaced ADR 004's local-proxy estimate with real Render
-  numbers and corrected `topK` 10→8.
-- If `draft_opinion`'s structured output is materially smaller or larger
-  than the 600–1,200 token estimate once real opinions are drafted, both the
-  latency and cost estimates move proportionally — this is the single
-  biggest source of estimate error here, same as ADR 001 flagged for the
-  original single-question cost estimate.
-- If the coverage agent's retrieval step (broader claim-language queries,
-  not narrow golden questions) surfaces a systematic single-retriever weak
-  spot, that's new router evidence per ADR 008's "what would change this."
+- **2.5e's real measurement** — done; this ADR's Status now reflects it.
+- **The retrieval-coverage finding above, if it recurs on a larger claim
+  set** — the clearest next step is re-running the golden set (or a larger
+  one) at `COVERAGE_RETRIEVE_TOP_K=16-20` to see whether claims 2 and 3
+  resolve without new noise, the same ablation shape ADR 004 already ran
+  once for the QA path.
+- If `draft_opinion`'s structured output size drifts materially from this
+  run's observed 548-1,537 output tokens (e.g. once real users submit
+  longer, messier claim descriptions than this golden set's clean
+  single-issue claims), both latency and cost move proportionally — revisit
+  then, not preemptively.
+- If the coverage agent's retrieval step surfaces a systematic single-
+  retriever weak spot (dense vs. hybrid, not just topK depth), that's new
+  router evidence per ADR 008's "what would change this" — not yet observed
+  here; the 2.5e misses trace to retrieval *depth*, not retriever *choice*.

@@ -1206,3 +1206,56 @@ becomes a practical problem, e.g. once the coverage agent's grounding-score
 node makes run-to-run consistency matter more than it does for a single
 Q&A turn. Noted in `docs/decisions/009-coverage-agent-shape-and-budget.md`
 ("What would change this").
+
+### Block 2.5e ✅ — Golden coverage set, human-reviewed, + real latency/cost
+
+**What it does:** `apps/ai/eval/golden-coverage.json` — 10 hand-labeled
+claims across F-122/F-123/F-144 (MC0 chunking), covering all four verdicts
+(`covered`/`excluded`/`partial`/`unclear`), every citation quoted verbatim
+from the real ingested chunks. `apps/ai/eval/run_coverage_eval.py` calls
+`run_coverage_agent()` directly (the same function the background task
+calls) and scores each opinion: SEVERE on any unverified citation or a flat
+`covered`↔`excluded` reversal (mirroring the QA eval's worst-failure-mode
+bar), PASS on an exact verdict match plus every `must_cite` section covered.
+
+**Human review caught a real defect before the set was trusted.** Per the
+project's golden-set discipline (same as the Q&A sets), the human checked
+every claim's citations against the source PDFs before relying on the
+results. 8/10 confirmed correct verbatim. Claim 7 was wrong: it described a
+*residential* condo association on F-123, but F-123 has its own `IV.17`
+exclusion — "a residential condominium building located in a Regular
+Program community" — that rules out exactly that scenario. Both cited
+clauses (`III.A.4.p`, `IV.16`) turned out to be verbatim-accurate for
+F-123 (verified directly against the ingested `chunks` table — reassigning
+to F-144 wasn't the fix, since F-144's real `IV.16` is unrelated content
+with no unit-owner-personal-property equivalent); the defect was the
+claim's premise, not a bad citation. Fixed by recasting the same claim as
+an office/commercial condo association, which `IV.17` doesn't reach and
+which F-123's own Coverage B text explicitly supports — same two real
+citations, same split-verdict test, contradiction removed.
+
+**Latency/cost, measured twice (a tracing bug meant the first run's
+Langfuse data was empty — `init_observability()` is only called by
+`app/main.py`'s FastAPI lifespan, and this script never ran it; fixed,
+re-ran clean, both runs' PASS/FAIL/SEVERE agreed exactly):** p50 20,118ms
+(vs. ADR 009's ≤20s estimate — 0.6% over, inside n=10 noise), p95 27,785ms
+(vs. ≤30s), ~$0.023/opinion mean (vs. ≤$0.05). Per-node Langfuse breakdown
+(Block 2.5d's spans, the reason this was answerable at all):
+`draft_opinion`'s generation call is 76% of p50, 91%+ of p95 — retrieval,
+verification, and the DB writes are collectively under 2.2s. ADR 009
+updated Proposed → Accepted; budget confirmed as originally estimated, no
+knob correction (unlike ADR 007's real topK 10→8 fix, this overshoot wasn't
+real).
+
+**A separate, real finding: reproducible retrieval-coverage gap, not
+generation noise.** 3/10 claims FAILed identically across both runs. Two
+are concerning: the agent's opinion never cites the actual controlling
+clause (`IV.5` for a vehicle-exclusion claim, `III.A.8` for a basement-
+limitation claim) and instead builds plausible-but-wrong reasoning from
+real, `verified=true` citations that just aren't the right ones for the
+question. Working hypothesis: `COVERAGE_RETRIEVE_TOP_K=12` — never
+benchmarked, a first guess from ADR 009 — doesn't reliably surface the
+controlling clause for claim-narrative queries the way it does for the
+golden Q&A set's narrower questions. Recorded in ADR 009 as the clearest
+lead for the next accuracy pass, not fixed inside that (latency-focused)
+ADR.
