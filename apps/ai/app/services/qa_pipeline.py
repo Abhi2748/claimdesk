@@ -274,7 +274,7 @@ def answer_matter_question(
         for i, citation in enumerate(citations)
     ]
 
-    answer = generate_policy_answer_from_passages(trimmed, passages)
+    answer = generate_policy_answer_from_passages(trimmed, passages, guarded=True)
     refused = answer == REFUSAL_MESSAGE
 
     return PolicyQAMatterResponse(
